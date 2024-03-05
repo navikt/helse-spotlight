@@ -1,8 +1,9 @@
 private val rapidsAndRiversVersion = "2024022311041708682651.01821651ed22"
+
+private val mainClass = "no.nav.helse.AppKt"
 plugins {
     kotlin("jvm") version "1.9.22"
 }
-
 
 repositories {
     val githubPassword: String by project
@@ -26,5 +27,21 @@ dependencies {
 tasks {
     test {
         useJUnitPlatform()
+    }
+
+    withType<Jar> {
+        archiveBaseName.set("app")
+        manifest {
+            attributes["Main-Class"] = "no.nav.helse.AppKt"
+            attributes["Class-Path"] = configurations.runtimeClasspath.get().joinToString(separator = " ") {
+                it.name
+            }
+        }
+        doLast {
+            configurations.runtimeClasspath.get().forEach {
+                val file = File("${layout.buildDirectory.get()}/libs/${it.name}")
+                if (!file.exists()) it.copyTo(file)
+            }
+        }
     }
 }
