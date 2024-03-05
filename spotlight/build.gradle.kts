@@ -5,8 +5,17 @@ plugins {
 
 
 repositories {
-    // Use Maven Central for resolving dependencies.
+    val githubPassword: String by project
+
     mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/navikt/*")
+        credentials {
+            username = "x-access-token"
+            password = githubPassword
+        }
+    }
+    maven("https://github-package-registry-mirror.gc.nav.no/cached/maven-release")
 }
 
 dependencies {
