@@ -3,13 +3,15 @@
  */
 package no.nav.helse
 
+import no.nav.helse.rapids_rivers.RapidApplication
+
 class App {
-    val greeting: String
-        get() {
-            return "Hello World!"
-        }
+    private val rapidsConnection = RapidApplication.create(System.getenv())
+
+    fun start() = rapidsConnection.start()
 }
 
 fun main() {
-    println(App().greeting)
+    App().start()
 }
+
