@@ -24,6 +24,13 @@ spec:
     pool: nav-dev
   secureLogs:
     enabled: true
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_15
+        diskAutoresize: true
+        databases:
+          - name: spotlight
+            envVarPrefix: DATABASE
   env:
     - name: KAFKA_RAPID_TOPIC
       value: tbd.rapid.v1

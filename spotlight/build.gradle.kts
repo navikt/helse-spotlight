@@ -1,4 +1,8 @@
 private val rapidsAndRiversVersion = "2024022311041708682651.01821651ed22"
+private val postgresqlVersion = "42.7.2"
+private val hikariCPVersion = "5.1.0"
+private val flywayCoreVersion = "10.7.1"
+private val kotliqueryVersion = "1.9.0"
 
 private val mainClass = "no.nav.helse.AppKt"
 plugins {
@@ -21,6 +25,12 @@ repositories {
 
 dependencies {
     implementation("com.github.navikt:rapids-and-rivers:$rapidsAndRiversVersion")
+
+    implementation("org.postgresql:postgresql:$postgresqlVersion")
+    implementation("com.zaxxer:HikariCP:$hikariCPVersion")
+    implementation("org.flywaydb:flyway-core:$flywayCoreVersion")
+    implementation("com.github.seratch:kotliquery:$kotliqueryVersion")
+
     testImplementation(kotlin("test"))
 }
 
