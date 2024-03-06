@@ -13,7 +13,7 @@ class App {
         Mediator(rapidsConnection, dataSource)
     }
     internal fun start() {
-        //datasourceBuilder.migrate()
+        datasourceBuilder.migrate()
         rapidsConnection.start()
     }
 
