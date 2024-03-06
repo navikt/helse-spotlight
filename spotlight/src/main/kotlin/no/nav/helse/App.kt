@@ -7,6 +7,7 @@ class App {
 
     init {
         KommandokjedeFerdigstiltRiver(rapidsConnection)
+        KommandokjedeSuspendertRiver(rapidsConnection)
     }
     internal fun start() = rapidsConnection.start()
 
