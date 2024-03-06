@@ -3,7 +3,7 @@ private val postgresqlVersion = "42.7.2"
 private val hikariCPVersion = "5.1.0"
 private val flywayCoreVersion = "10.7.1"
 private val kotliqueryVersion = "1.9.0"
-private val testcontainersPostgresqlVersion = "1.19.0"
+private val testcontainersPostgresqlVersion = "1.19.6"
 private val junitVersion = "5.10.2"
 
 private val mainClass = "no.nav.helse.AppKt"
