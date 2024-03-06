@@ -23,6 +23,7 @@ internal class KommandokjedeSuspendertRiver(rapidsConnection: RapidsConnection, 
     }
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         sikkerlogg.info("Leser melding ${packet.toJson()}")
+        mediator.kommandokjedeSuspendert()
     }
 
     companion object {

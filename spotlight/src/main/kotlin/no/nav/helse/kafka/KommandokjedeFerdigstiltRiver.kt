@@ -22,6 +22,7 @@ internal class KommandokjedeFerdigstiltRiver(rapidsConnection: RapidsConnection,
     }
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         sikkerlogg.info("Leser melding ${packet.toJson()}")
+        mediator.kommandokjedeFerdigstilt()
     }
 
     companion object {

@@ -4,7 +4,8 @@ private val hikariCPVersion = "5.1.0"
 private val flywayCoreVersion = "10.7.1"
 private val kotliqueryVersion = "1.9.0"
 private val testcontainersPostgresqlVersion = "1.19.6"
-private val junitVersion = "5.10.2"
+private val junitJupiterVersion = "5.10.2"
+private val mockkVersion = "1.13.9"
 
 private val mainClass = "no.nav.helse.AppKt"
 plugins {
@@ -34,16 +35,20 @@ dependencies {
     implementation("org.flywaydb:flyway-database-postgresql:$flywayCoreVersion")
     implementation("com.github.seratch:kotliquery:$kotliqueryVersion")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.testcontainers:postgresql:$testcontainersPostgresqlVersion")
+    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
     testImplementation(kotlin("test"))
+
 }
 
 tasks {
+    kotlin {
+        jvmToolchain(21)
+    }
     test {
         useJUnitPlatform()
     }
-
     withType<Jar> {
         archiveBaseName.set("app")
         manifest {

@@ -17,4 +17,12 @@ class Mediator(
         KommandokjedeSuspendertRiver(rapidsConnection, this)
     }
 
+    internal fun kommandokjedeFerdigstilt() {
+        TODO("kall passende dao-metode")
+    }
+
+    internal fun kommandokjedeSuspendert() {
+        TODO("kall passende dao-metode")
+    }
+
 }
