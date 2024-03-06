@@ -1,12 +1,13 @@
-package no.nav.helse
+package no.nav.helse.kafka
 
+import no.nav.helse.Mediator
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
 import org.slf4j.LoggerFactory
 
-internal class KommandokjedeFerdigstiltRiver(rapidsConnection: RapidsConnection): River.PacketListener {
+internal class KommandokjedeFerdigstiltRiver(rapidsConnection: RapidsConnection, private val mediator: Mediator): River.PacketListener {
 
     init {
         River(rapidsConnection).apply {

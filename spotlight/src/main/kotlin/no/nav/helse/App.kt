@@ -6,8 +6,7 @@ class App {
     private val rapidsConnection = RapidApplication.create(System.getenv())
 
     init {
-        KommandokjedeFerdigstiltRiver(rapidsConnection)
-        KommandokjedeSuspendertRiver(rapidsConnection)
+        Mediator(rapidsConnection)
     }
     internal fun start() = rapidsConnection.start()
 
