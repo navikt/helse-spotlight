@@ -17,7 +17,7 @@ internal class KommandokjedeFerdigstiltRiver(rapidsConnection: RapidsConnection)
                 it.requireKey("command")
                 it.requireKey("@opprettet")
             }
-        }
+        }.register(this)
     }
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         sikkerlogg.info("Leser melding ${packet.toJson()}")
