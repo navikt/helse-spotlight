@@ -3,6 +3,8 @@ private val postgresqlVersion = "42.7.2"
 private val hikariCPVersion = "5.1.0"
 private val flywayCoreVersion = "10.7.1"
 private val kotliqueryVersion = "1.9.0"
+private val testcontainersPostgresqlVersion = "1.19.0"
+private val junitVersion = "5.10.2"
 
 private val mainClass = "no.nav.helse.AppKt"
 plugins {
@@ -29,8 +31,11 @@ dependencies {
     implementation("org.postgresql:postgresql:$postgresqlVersion")
     implementation("com.zaxxer:HikariCP:$hikariCPVersion")
     implementation("org.flywaydb:flyway-core:$flywayCoreVersion")
+    implementation("org.flywaydb:flyway-database-postgresql:$flywayCoreVersion")
     implementation("com.github.seratch:kotliquery:$kotliqueryVersion")
 
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testImplementation("org.testcontainers:postgresql:$testcontainersPostgresqlVersion")
     testImplementation(kotlin("test"))
 }
 
