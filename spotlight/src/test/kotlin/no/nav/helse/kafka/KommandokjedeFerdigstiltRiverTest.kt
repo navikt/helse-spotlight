@@ -21,7 +21,7 @@ class KommandokjedeFerdigstiltRiverTest {
     @Test
     fun `kan lese inn kommandokjede_ferdigstilt`() {
         testRapid.sendTestMessage(kommandokjedeFerdigstilt())
-        verify(exactly = 1) { mediator.kommandokjedeFerdigstilt() }
+        verify(exactly = 1) { mediator.kommandokjedeFerdigstilt(any()) }
     }
 
     @Language("JSON")

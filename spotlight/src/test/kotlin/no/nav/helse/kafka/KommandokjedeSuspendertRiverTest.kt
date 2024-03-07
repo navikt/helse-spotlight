@@ -7,7 +7,7 @@ import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 class KommandokjedeSuspendertRiverTest {
 
@@ -21,7 +21,7 @@ class KommandokjedeSuspendertRiverTest {
     @Test
     fun `kan lese inn kommandokjede_suspendert`() {
         testRapid.sendTestMessage(kommandokjedeSuspendert())
-        verify(exactly = 1) { mediator.kommandokjedeSuspendert() }
+        verify(exactly = 1) { mediator.kommandokjedeSuspendert(any()) }
     }
 
     @Language("JSON")
@@ -32,7 +32,7 @@ class KommandokjedeSuspendertRiverTest {
               "commandContextId": "${UUID.randomUUID()}",
               "meldingId": "${UUID.randomUUID()}",
               "command": "OpprettVedtaksperiodeCommand",
-              "sti": [13],
+              "sti": [2,2,0],
               "@opprettet": "${LocalDateTime.now()}"
             }
         """.trimIndent()
