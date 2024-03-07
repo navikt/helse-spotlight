@@ -24,6 +24,6 @@ internal class HelTimeRiver(rapidsConnection: RapidsConnection, private val medi
     }
 
     companion object {
-        private val logg = LoggerFactory.getLogger(KommandokjedeFerdigstiltRiver::class.java)
+        private val logg = LoggerFactory.getLogger(HelTimeRiver::class.java)
     }
 }
