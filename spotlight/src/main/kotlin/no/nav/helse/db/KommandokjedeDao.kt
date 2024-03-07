@@ -14,9 +14,10 @@ class KommandokjedeDao(dataSource: DataSource): AbstractDao(dataSource) {
         ).update()
     }
 
-    fun ferdigstilt(kommandokjedeFerdigstilt: KommandokjedeFerdigstiltForDatabase) {
-        TODO("Not yet implemented")
-    }
+    fun ferdigstilt(kommandokjedeFerdigstilt: KommandokjedeFerdigstiltForDatabase) = query(
+        "delete from kommandokjede_ikke_ferdigstilt where command_context_id = :commandContextId",
+        "commandContextId" to kommandokjedeFerdigstilt.commandContextId,
+    ).update()
 
 
 }
