@@ -2,12 +2,9 @@ package no.nav.helse
 
 import com.zaxxer.hikari.HikariDataSource
 import no.nav.helse.db.KommandokjedeDao
-import no.nav.helse.kafka.KommandokjedeFerdigstiltMessage
+import no.nav.helse.kafka.*
 import no.nav.helse.kafka.KommandokjedeFerdigstiltMessage.Companion.tilDatabase
-import no.nav.helse.kafka.KommandokjedeFerdigstiltRiver
-import no.nav.helse.kafka.KommandokjedeSuspendertMessage
 import no.nav.helse.kafka.KommandokjedeSuspendertMessage.Companion.tilDatabase
-import no.nav.helse.kafka.KommandokjedeSuspendertRiver
 import no.nav.helse.rapids_rivers.RapidsConnection
 
 class Mediator(
@@ -19,6 +16,7 @@ class Mediator(
     init {
         KommandokjedeFerdigstiltRiver(rapidsConnection, this)
         KommandokjedeSuspendertRiver(rapidsConnection, this)
+        HelTimeRiver(rapidsConnection, this)
     }
 
     internal fun kommandokjedeFerdigstilt(message: KommandokjedeFerdigstiltMessage) {
