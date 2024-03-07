@@ -17,7 +17,7 @@ class KommandokjedeSuspendertMessage(packet: JsonMessage) {
     companion object {
         internal fun KommandokjedeSuspendertMessage.tilDatabase() =
             KommandokjedeSuspendertForDatabase(
-                commandoContext = commandContextId,
+                commandContextId = commandContextId,
                 meldingId = meldingId,
                 command = command,
                 sti = sti,

@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 data class KommandokjedeSuspendertForDatabase(
-    val commandoContext: UUID,
+    val commandContextId: UUID,
     val meldingId: UUID,
     val command: String,
     val sti: List<Int>,
@@ -12,7 +12,7 @@ data class KommandokjedeSuspendertForDatabase(
 )
 
 data class KommandokjedeFerdigstiltForDatabase(
-    val commandoContext: UUID,
+    val commandContextId: UUID,
     val meldingId: UUID,
     val command: String,
     val opprettet: LocalDateTime

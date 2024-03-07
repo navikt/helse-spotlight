@@ -16,7 +16,7 @@ class KommandokjedeFerdigstiltMessage(packet: JsonMessage) {
     companion object {
         internal fun KommandokjedeFerdigstiltMessage.tilDatabase() =
             KommandokjedeFerdigstiltForDatabase(
-                commandoContext = commandContextId,
+                commandContextId = commandContextId,
                 meldingId = meldingId,
                 command = command,
                 opprettet = opprettet
