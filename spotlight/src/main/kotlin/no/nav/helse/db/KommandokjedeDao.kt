@@ -2,7 +2,7 @@ package no.nav.helse.db
 
 import javax.sql.DataSource
 
-class KommandokjedeDao(dataSource: DataSource): Dao(dataSource) {
+class KommandokjedeDao(dataSource: DataSource): AbstractDao(dataSource) {
     fun lagreSuspendert(kommandokjedeSuspendert: KommandokjedeSuspendertForDatabase): Int {
         val stiForDatabase = kommandokjedeSuspendert.sti.joinToString { """ $it """ }
         return query(

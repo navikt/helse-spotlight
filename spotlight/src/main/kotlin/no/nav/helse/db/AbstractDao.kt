@@ -8,7 +8,7 @@ import kotliquery.queryOf
 import kotliquery.sessionOf
 import org.intellij.lang.annotations.Language
 
-abstract class Dao(private val dataSource: DataSource) {
+abstract class AbstractDao(private val dataSource: DataSource) {
     fun query(@Language("postgresql") query: String, vararg params: Pair<String, Any?>) = queryOf(query, params.toMap())
     fun <T> Query.single(mapper: (Row) -> T?) = map(mapper).asSingle.runInSession()
     fun <T> Query.list(mapper: (Row) -> T?) = map(mapper).asList.runInSession()
