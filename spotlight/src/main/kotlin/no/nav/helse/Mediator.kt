@@ -6,10 +6,12 @@ import no.nav.helse.kafka.*
 import no.nav.helse.kafka.KommandokjedeFerdigstiltMessage.Companion.tilDatabase
 import no.nav.helse.kafka.KommandokjedeSuspendertMessage.Companion.tilDatabase
 import no.nav.helse.rapids_rivers.RapidsConnection
+import no.nav.helse.slack.SlackClient
 
 class Mediator(
     rapidsConnection: RapidsConnection,
     dataSource: HikariDataSource,
+    private val slackClient: SlackClient,
     private val kommandokjedeDao: KommandokjedeDao = KommandokjedeDao(dataSource)
 ) {
 
@@ -29,8 +31,8 @@ class Mediator(
 
     fun fortellOmSuspenderteKommandokjeder() {
         val kommandokjederSomIkkeBleFerdigstilt = kommandokjedeDao.hentSuspenderteKommandokjeder()
-        if (kommandokjederSomIkkeBleFerdigstilt.isEmpty()) return
-        TODO("post til slack")
+//        if (kommandokjederSomIkkeBleFerdigstilt.isEmpty()) return
+        slackClient.postMessage(":pepe_nsfw:")
     }
 
 }
