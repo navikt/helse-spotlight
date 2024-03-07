@@ -33,6 +33,13 @@ spec:
         databases:
           - name: spotlight
             envVarPrefix: DATABASE
+  accessPolicy:
+    outbound:
+      external:
+        - host: slack.com
+        - host: api.slack.com
+  envFrom:
+    - secret: spotlight-slack
   env:
     - name: KAFKA_RAPID_TOPIC
       value: tbd.rapid.v1
