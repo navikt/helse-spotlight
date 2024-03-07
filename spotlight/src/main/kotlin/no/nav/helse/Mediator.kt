@@ -29,7 +29,7 @@ class Mediator(
         kommandokjedeDao.lagreSuspendert(message.tilDatabase())
     }
 
-    fun fortellOmSuspenderteKommandokjeder() {
+    internal fun fortellOmSuspenderteKommandokjeder() {
         val kommandokjederSomIkkeBleFerdigstilt = kommandokjedeDao.hentSuspenderteKommandokjeder()
 //        if (kommandokjederSomIkkeBleFerdigstilt.isEmpty()) return
         slackClient.postMessage(":pepe_nsfw:")
