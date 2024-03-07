@@ -6,6 +6,8 @@ private val kotliqueryVersion = "1.9.0"
 private val testcontainersPostgresqlVersion = "1.19.6"
 private val junitJupiterVersion = "5.10.2"
 private val mockkVersion = "1.13.9"
+private val logbackVersion = "1.4.11"
+private val logstashVersion = "7.4"
 
 private val mainClass = "no.nav.helse.AppKt"
 plugins {
@@ -34,6 +36,12 @@ dependencies {
     implementation("org.flywaydb:flyway-core:$flywayCoreVersion")
     implementation("org.flywaydb:flyway-database-postgresql:$flywayCoreVersion")
     implementation("com.github.seratch:kotliquery:$kotliqueryVersion")
+
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation("net.logstash.logback:logstash-logback-encoder:$logstashVersion") {
+        exclude("com.fasterxml.jackson.core")
+        exclude("com.fasterxml.jackson.dataformat")
+    }
 
     testImplementation("org.testcontainers:postgresql:$testcontainersPostgresqlVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
