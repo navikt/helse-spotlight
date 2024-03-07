@@ -27,4 +27,10 @@ class Mediator(
         kommandokjedeDao.lagreSuspendert(message.tilDatabase())
     }
 
+    fun fortellOmSuspenderteKommandokjeder() {
+        val kommandokjederSomIkkeBleFerdigstilt = kommandokjedeDao.hentSuspenderteKommandokjeder()
+        if (kommandokjederSomIkkeBleFerdigstilt.isEmpty()) return
+        TODO("post til slack")
+    }
+
 }

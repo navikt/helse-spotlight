@@ -1,6 +1,6 @@
 package no.nav.helse.kafka
 
-import no.nav.helse.db.KommandokjedeSuspendertForDatabase
+import no.nav.helse.db.KommandokjedeSuspendertDto
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.asLocalDateTime
 import java.time.LocalDateTime
@@ -16,7 +16,7 @@ class KommandokjedeSuspendertMessage(packet: JsonMessage) {
 
     companion object {
         internal fun KommandokjedeSuspendertMessage.tilDatabase() =
-            KommandokjedeSuspendertForDatabase(
+            KommandokjedeSuspendertDto(
                 commandContextId = commandContextId,
                 meldingId = meldingId,
                 command = command,

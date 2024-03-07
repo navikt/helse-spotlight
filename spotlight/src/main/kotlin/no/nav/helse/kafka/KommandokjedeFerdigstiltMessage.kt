@@ -1,6 +1,6 @@
 package no.nav.helse.kafka
 
-import no.nav.helse.db.KommandokjedeFerdigstiltForDatabase
+import no.nav.helse.db.KommandokjedeFerdigstiltDto
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.asLocalDateTime
 import java.time.LocalDateTime
@@ -15,7 +15,7 @@ class KommandokjedeFerdigstiltMessage(packet: JsonMessage) {
 
     companion object {
         internal fun KommandokjedeFerdigstiltMessage.tilDatabase() =
-            KommandokjedeFerdigstiltForDatabase(
+            KommandokjedeFerdigstiltDto(
                 commandContextId = commandContextId,
                 meldingId = meldingId,
                 command = command,

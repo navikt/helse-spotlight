@@ -21,11 +21,10 @@ internal class HelTimeRiver(rapidsConnection: RapidsConnection, private val medi
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         logg.info("KLOKKA ER 6 🐔")
-        sikkerlogg.info("KLOKKA ER 6 🐔")
+        mediator.fortellOmSuspenderteKommandokjeder()
     }
 
     companion object {
         private val logg = LoggerFactory.getLogger(HelTimeRiver::class.java)
-        private val sikkerlogg = LoggerFactory.getLogger("tjenestekall")
     }
 }

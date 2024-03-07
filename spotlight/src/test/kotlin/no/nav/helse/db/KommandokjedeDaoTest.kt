@@ -30,15 +30,38 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
         assertSlettet(commandContextId)
     }
 
-    private fun kommandokjedeSuspendert(commandContextId: UUID, command: String = "EnCommand") = KommandokjedeSuspendertForDatabase(
+    @Test
+    fun `Henter suspenderte kommandokjeder som er minst 1 time gamle`() {
+        val commandContextId = UUID.randomUUID()
+        val opprettet = LocalDateTime.now().minusHours(2)
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendert(commandContextId = commandContextId, opprettet = opprettet))
+        val suspenderteKommandokjeder = kommandokjedeDao.hentSuspenderteKommandokjeder()
+        assertEquals(1, suspenderteKommandokjeder.size)
+        assertEquals(commandContextId, suspenderteKommandokjeder.first().commandContextId)
+    }
+
+    @Test
+    fun `Henter ikke suspenderte kommandokjeder som ikke er 1 time gamle`() {
+        val commandContextId = UUID.randomUUID()
+        val opprettet = LocalDateTime.now()
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendert(commandContextId = commandContextId, opprettet = opprettet))
+        val suspenderteKommandokjeder = kommandokjedeDao.hentSuspenderteKommandokjeder()
+        assertEquals(0, suspenderteKommandokjeder.size)
+    }
+
+    private fun kommandokjedeSuspendert(
+        commandContextId: UUID,
+        command: String = "EnCommand",
+        opprettet: LocalDateTime = LocalDateTime.now(),
+    ) = KommandokjedeSuspendertDto(
         commandContextId = commandContextId,
         meldingId = UUID.randomUUID(),
         command = command,
         sti = listOf(1, 3),
-        opprettet = LocalDateTime.now()
+        opprettet = opprettet,
     )
 
-    private fun kommandokjedeFerdigstilt(commandContextId: UUID) = KommandokjedeFerdigstiltForDatabase(
+    private fun kommandokjedeFerdigstilt(commandContextId: UUID) = KommandokjedeFerdigstiltDto(
         commandContextId = commandContextId,
         meldingId = UUID.randomUUID(),
         command = "EnCommand",

@@ -1,6 +1,7 @@
 package no.nav.helse.kafka
 
 import io.mockk.mockk
+import io.mockk.verify
 import no.nav.helse.Mediator
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.intellij.lang.annotations.Language
@@ -18,6 +19,7 @@ class HelTimeRiverTest {
     @Test
     fun `kan lese inn kommandokjede_ferdigstilt`() {
         testRapid.sendTestMessage(helTime())
+        verify(exactly = 1) { mediator.fortellOmSuspenderteKommandokjeder() }
     }
 
     @Language("JSON")
