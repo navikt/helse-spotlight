@@ -20,13 +20,11 @@ class SlackClient(private val accessToken: String, private val channel: String) 
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
     }
 
-    fun postMessage(text: String): String? {
-        sikkerlogg.info("Channel: $channel")
-        return "https://slack.com/api/chat.postMessage".post(objectMapper.writeValueAsString(mutableMapOf<String, Any>(
+    fun postMessage(text: String): String? =
+        "https://slack.com/api/chat.postMessage".post(objectMapper.writeValueAsString(mutableMapOf<String, Any>(
             "channel" to channel,
             "text" to text
         )))
-    }
 
     private fun String.post(jsonPayload: String): String? {
         var connection: HttpURLConnection? = null
