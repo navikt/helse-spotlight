@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter
 
 object SlackMessageBuilder {
 
-    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
 
     fun List<KommandokjedeSuspendertDto>.byggSlackMelding(): String =
         attachments(buildSections(this))
