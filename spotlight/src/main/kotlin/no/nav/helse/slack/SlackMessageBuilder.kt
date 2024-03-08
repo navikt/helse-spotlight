@@ -2,6 +2,7 @@ package no.nav.helse.slack
 
 import no.nav.helse.db.KommandokjedeSuspendertDto
 import org.intellij.lang.annotations.Language
+import java.time.format.DateTimeFormatter
 
 object SlackMessageBuilder {
     fun List<KommandokjedeSuspendertDto>.byggSlackMelding(): String =
@@ -59,7 +60,7 @@ object SlackMessageBuilder {
             },
             {
               "type": "mrkdwn",
-              "text": "*Tidspunkt:*\n${kommandokjedeSuspendertDto.opprettet}"
+              "text": "*Tidspunkt:*\n${kommandokjedeSuspendertDto.opprettet.format(DateTimeFormatter.ISO_DATE_TIME)}"
             }
           ]
         }
