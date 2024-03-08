@@ -18,11 +18,9 @@ class SlackClient(private val accessToken: String, private val channel: String) 
     fun postMessage(text: String? = null, attachments: String? = null): String? =
         "https://slack.com/api/chat.postMessage".post(objectMapper.writeValueAsString(mutableMapOf<String, Any>(
             "channel" to channel,
-        ).also {
-            if (text != null)
-                it["text"] = text
-            if (attachments != null)
-                it["attachments"] = attachments
+        ).also { map ->
+            text?.let { map["text"] = it }
+            attachments?.let { map["attachments"] = it }
         }))
 
     private fun String.post(jsonPayload: String): String? {
