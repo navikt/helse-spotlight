@@ -9,7 +9,7 @@ object SlackMessageBuilder {
     private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
 
     fun List<KommandokjedeSuspendertDto>.byggSlackMelding(): String =
-        attachments(buildSections(this))
+        attachments(buildSections(this), this.size)
 
     private fun buildSections(suspenderteKommandokjeder: List<KommandokjedeSuspendertDto>): String {
         val iterator = suspenderteKommandokjeder.iterator()
@@ -22,7 +22,7 @@ object SlackMessageBuilder {
     }
 
     @Language("JSON")
-    private fun attachments(sections: String): String = """
+    private fun attachments(sections: String, antall: Int): String = """
         [
           {
             "color": "#36b528",
@@ -31,7 +31,7 @@ object SlackMessageBuilder {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": ":spotlight: Disse kommandokjedene sitter fast: :spotlight:"
+                  "text": ":spotlight: Det er $antall kommandokjeder som sitter fast: :spotlight:"
                 }
               },
               $sections
