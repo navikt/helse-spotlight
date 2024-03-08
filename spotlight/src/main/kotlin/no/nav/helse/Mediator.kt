@@ -7,6 +7,7 @@ import no.nav.helse.kafka.KommandokjedeFerdigstiltMessage.Companion.tilDatabase
 import no.nav.helse.kafka.KommandokjedeSuspendertMessage.Companion.tilDatabase
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.slack.SlackClient
+import no.nav.helse.slack.SlackMessageBuilder.byggSlackMelding
 
 class Mediator(
     rapidsConnection: RapidsConnection,
@@ -31,8 +32,11 @@ class Mediator(
 
     internal fun fortellOmSuspenderteKommandokjeder() {
         val kommandokjederSomIkkeBleFerdigstilt = kommandokjedeDao.hentSuspenderteKommandokjeder()
-//        if (kommandokjederSomIkkeBleFerdigstilt.isEmpty()) return
-        slackClient.postMessage(":pepe_nsfw:")
+        if (kommandokjederSomIkkeBleFerdigstilt.isEmpty()) {
+            slackClient.postMessage(text = ":spotlight: Ingen kommandokjeder sitter fast :spotlight:")
+        } else {
+            slackClient.postMessage(attachments = kommandokjederSomIkkeBleFerdigstilt.byggSlackMelding())
+        }
     }
 
 }

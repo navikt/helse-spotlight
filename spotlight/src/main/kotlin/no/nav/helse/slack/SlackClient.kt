@@ -1,8 +1,6 @@
 package no.nav.helse.slack
 
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import no.nav.helse.objectMapper
 import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.io.InputStream
@@ -15,16 +13,17 @@ class SlackClient(private val accessToken: String, private val channel: String) 
     private companion object {
         private val sikkerlogg = LoggerFactory.getLogger("tjenestekall")
         private val logg = LoggerFactory.getLogger(SlackClient::class.java)
-        private val objectMapper = jacksonObjectMapper()
-            .registerModule(JavaTimeModule())
-            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
     }
 
-    fun postMessage(text: String): String? =
+    fun postMessage(text: String? = null, attachments: String? = null): String? =
         "https://slack.com/api/chat.postMessage".post(objectMapper.writeValueAsString(mutableMapOf<String, Any>(
             "channel" to channel,
-            "text" to text
-        )))
+        ).also {
+            if (text != null)
+                it["text"] = text
+            if (attachments != null)
+                it["attachments"] = attachments
+        }))
 
     private fun String.post(jsonPayload: String): String? {
         var connection: HttpURLConnection? = null

@@ -1,5 +1,7 @@
 package no.nav.helse.db
 
+import no.nav.helse.Testdata.kommandokjedeFerdigstilt
+import no.nav.helse.Testdata.kommandokjedeSuspendert
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.util.*
@@ -48,25 +50,6 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
         val suspenderteKommandokjeder = kommandokjedeDao.hentSuspenderteKommandokjeder()
         assertEquals(0, suspenderteKommandokjeder.size)
     }
-
-    private fun kommandokjedeSuspendert(
-        commandContextId: UUID,
-        command: String = "EnCommand",
-        opprettet: LocalDateTime = LocalDateTime.now(),
-    ) = KommandokjedeSuspendertDto(
-        commandContextId = commandContextId,
-        meldingId = UUID.randomUUID(),
-        command = command,
-        sti = listOf(1, 3),
-        opprettet = opprettet,
-    )
-
-    private fun kommandokjedeFerdigstilt(commandContextId: UUID) = KommandokjedeFerdigstiltDto(
-        commandContextId = commandContextId,
-        meldingId = UUID.randomUUID(),
-        command = "EnCommand",
-        opprettet = LocalDateTime.now()
-    )
 
     private fun assertLagret(commandContextId: UUID) {
         val kommandokjedeSuspendert = query(
