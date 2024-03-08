@@ -5,6 +5,9 @@ import org.intellij.lang.annotations.Language
 import java.time.format.DateTimeFormatter
 
 object SlackMessageBuilder {
+
+    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
     fun List<KommandokjedeSuspendertDto>.byggSlackMelding(): String =
         attachments(buildSections(this))
 
@@ -60,7 +63,7 @@ object SlackMessageBuilder {
             },
             {
               "type": "mrkdwn",
-              "text": "*Tidspunkt:*\n${kommandokjedeSuspendertDto.opprettet.format(DateTimeFormatter.ISO_DATE_TIME)}"
+              "text": "*Tidspunkt:*\n${kommandokjedeSuspendertDto.opprettet.format(formatter)}"
             }
           ]
         }
