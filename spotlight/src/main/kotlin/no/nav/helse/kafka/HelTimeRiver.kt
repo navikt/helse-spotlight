@@ -20,7 +20,7 @@ internal class HelTimeRiver(rapidsConnection: RapidsConnection, private val medi
     }
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
-        logg.info("KLOKKA ER 6 🐔")
+        logg.info("Klokka er 6 🐔. Forteller om suspenderte kommandokjeder på slack.")
         mediator.fortellOmSuspenderteKommandokjeder()
     }
 
