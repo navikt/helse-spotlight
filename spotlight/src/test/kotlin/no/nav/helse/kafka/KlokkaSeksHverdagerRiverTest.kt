@@ -7,13 +7,13 @@ import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Test
 
-class HelTimeRiverTest {
+class KlokkaSeksHverdagerRiverTest {
 
     private val testRapid = TestRapid()
     private val mediator = mockk<Mediator>(relaxed = true)
 
     init {
-        HelTimeRiver(testRapid, mediator)
+        KlokkaSeksHverdagerRiver(testRapid, mediator)
     }
 
     @Test

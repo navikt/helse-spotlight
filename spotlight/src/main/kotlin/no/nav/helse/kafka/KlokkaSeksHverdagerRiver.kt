@@ -7,7 +7,11 @@ import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
 import org.slf4j.LoggerFactory
 
-internal class HelTimeRiver(rapidsConnection: RapidsConnection, private val mediator: Mediator): River.PacketListener {
+internal class KlokkaSeksHverdagerRiver(rapidsConnection: RapidsConnection, private val mediator: Mediator): River.PacketListener {
+
+    companion object {
+        private val logg = LoggerFactory.getLogger(KlokkaSeksHverdagerRiver::class.java)
+    }
 
     init {
         River(rapidsConnection).apply {
@@ -22,9 +26,5 @@ internal class HelTimeRiver(rapidsConnection: RapidsConnection, private val medi
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         logg.info("Klokka er 6 🐔. Forteller om suspenderte kommandokjeder på slack.")
         mediator.fortellOmSuspenderteKommandokjeder()
-    }
-
-    companion object {
-        private val logg = LoggerFactory.getLogger(HelTimeRiver::class.java)
     }
 }
