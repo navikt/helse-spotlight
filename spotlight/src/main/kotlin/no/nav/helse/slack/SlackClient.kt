@@ -15,13 +15,18 @@ class SlackClient(private val accessToken: String, private val channel: String) 
         private val logg = LoggerFactory.getLogger(SlackClient::class.java)
     }
 
-    fun postMessage(text: String? = null, attachments: String? = null): String? =
-        "https://slack.com/api/chat.postMessage".post(objectMapper.writeValueAsString(mutableMapOf<String, Any>(
-            "channel" to channel,
-        ).also { map ->
-            text?.let { map["text"] = it }
-            attachments?.let { map["attachments"] = it }
-        }))
+    fun postMessage(text: String? = null, attachments: String? = null, threadTs: String? = null): String? =
+        "https://slack.com/api/chat.postMessage".post(
+            objectMapper.writeValueAsString(mutableMapOf<String, Any>(
+                "channel" to channel,
+            ).apply {
+                text?.also { put("text", it) }
+                attachments?.also { put("attachments", it) }
+                threadTs?.also { put("thread_ts", it) }
+            })
+        )?.let {
+            objectMapper.readTree(it)["ts"]?.asText()
+        }
 
     private fun String.post(jsonPayload: String): String? {
         var connection: HttpURLConnection? = null
