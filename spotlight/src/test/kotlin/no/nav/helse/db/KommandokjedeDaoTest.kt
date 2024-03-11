@@ -4,7 +4,6 @@ import no.nav.helse.Testdata.kommandokjedeFerdigstilt
 import no.nav.helse.Testdata.kommandokjedeSuspendert
 import no.nav.helse.Testdata.kommandokjedeSuspendertForOverEnTimeSiden
 import org.junit.jupiter.api.Test
-import java.time.LocalDateTime
 import java.util.*
 import kotlin.test.assertEquals
 
@@ -21,7 +20,7 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
     fun `Oppdaterer suspendert kommandokjede on conflict`() {
         val commandContextId = UUID.randomUUID()
         kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendert(commandContextId))
-        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendert(commandContextId, "EnAnnenCommand"))
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendert(commandContextId = commandContextId, command =  "EnAnnenCommand"))
         assertOppdatert(commandContextId, "EnAnnenCommand")
     }
 
@@ -36,7 +35,7 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
     @Test
     fun `Henter suspenderte kommandokjeder som er minst 1 time gamle`() {
         val commandContextId = UUID.randomUUID()
-        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertForOverEnTimeSiden(commandContextId = commandContextId))
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertForOverEnTimeSiden(commandContextId))
         val suspenderteKommandokjeder = kommandokjedeDao.hentSuspenderteKommandokjeder()
         assertEquals(1, suspenderteKommandokjeder.size)
         assertEquals(commandContextId, suspenderteKommandokjeder.first().commandContextId)
@@ -44,11 +43,40 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
 
     @Test
     fun `Henter ikke suspenderte kommandokjeder som ikke er 1 time gamle`() {
-        val commandContextId = UUID.randomUUID()
-        val opprettet = LocalDateTime.now()
-        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendert(commandContextId = commandContextId, opprettet = opprettet))
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendert())
         val suspenderteKommandokjeder = kommandokjedeDao.hentSuspenderteKommandokjeder()
         assertEquals(0, suspenderteKommandokjeder.size)
+    }
+
+    @Test
+    fun `antall_ganger_påminnet blir inkrementert`() {
+        val commandContextId1 = UUID.randomUUID()
+        val commandContextId2 = UUID.randomUUID()
+        val commandContextId3 = UUID.randomUUID()
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertForOverEnTimeSiden(commandContextId = commandContextId1))
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertForOverEnTimeSiden(commandContextId = commandContextId2))
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertForOverEnTimeSiden(commandContextId = commandContextId3))
+        assertPåminnet(commandContextId1, 0)
+        assertPåminnet(commandContextId2, 0)
+        assertPåminnet(commandContextId3, 0)
+        kommandokjedeDao.harBlittPåminnet(listOf(commandContextId1, commandContextId2))
+        assertPåminnet(commandContextId1, 1)
+        assertPåminnet(commandContextId2, 1)
+        assertPåminnet(commandContextId3, 0)
+        kommandokjedeDao.harBlittPåminnet(listOf(commandContextId1))
+        assertPåminnet(commandContextId1, 2)
+        assertPåminnet(commandContextId2, 1)
+        assertPåminnet(commandContextId3, 0)
+    }
+
+    private fun assertPåminnet(commandContextId: UUID, forventetAntallGangerPåminnet: Int) {
+        val antallGangerPåminnet = query(
+            "select antall_ganger_påminnet from kommandokjede_ikke_ferdigstilt where command_context_id = :commandContextId",
+            "commandContextId" to commandContextId
+        ).single {
+            it.int("antall_ganger_påminnet")
+        }
+        assertEquals(forventetAntallGangerPåminnet, antallGangerPåminnet)
     }
 
     private fun assertLagret(commandContextId: UUID) {

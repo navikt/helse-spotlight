@@ -9,11 +9,12 @@ object Testdata {
 
     internal fun kommandokjedeSuspendert(
         commandContextId: UUID = UUID.randomUUID(),
+        meldingId: UUID = UUID.randomUUID(),
         command: String = "EnCommand",
         opprettet: LocalDateTime = LocalDateTime.now(),
     ) = KommandokjedeSuspendertDto(
         commandContextId = commandContextId,
-        meldingId = UUID.randomUUID(),
+        meldingId = meldingId,
         command = command,
         sti = listOf(1, 3),
         opprettet = opprettet,
@@ -21,7 +22,8 @@ object Testdata {
 
     internal fun kommandokjedeSuspendertForOverEnTimeSiden(
         commandContextId: UUID = UUID.randomUUID(),
-    ) = kommandokjedeSuspendert(commandContextId = commandContextId, opprettet = LocalDateTime.now().minusHours(2))
+        meldingId: UUID = UUID.randomUUID(),
+    ) = kommandokjedeSuspendert(commandContextId = commandContextId, meldingId = meldingId,opprettet = LocalDateTime.now().minusHours(2))
 
     internal fun kommandokjedeFerdigstilt(commandContextId: UUID) =
         KommandokjedeFerdigstiltDto(

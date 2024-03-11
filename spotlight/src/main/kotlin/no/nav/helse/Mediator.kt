@@ -4,15 +4,17 @@ import com.zaxxer.hikari.HikariDataSource
 import no.nav.helse.db.KommandokjedeDao
 import no.nav.helse.db.KommandokjedeFerdigstiltDto
 import no.nav.helse.db.KommandokjedeSuspendertDto
+import no.nav.helse.kafka.HverHalvtimeRiver
 import no.nav.helse.kafka.KlokkaSeksHverdagerRiver
 import no.nav.helse.kafka.KommandokjedeFerdigstiltRiver
 import no.nav.helse.kafka.KommandokjedeSuspendertRiver
+import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.slack.SlackClient
 import no.nav.helse.slack.SlackMessageBuilder.byggSlackMelding
 
 class Mediator(
-    rapidsConnection: RapidsConnection,
+    private val rapidsConnection: RapidsConnection,
     dataSource: HikariDataSource,
     private val slackClient: SlackClient,
     private val kommandokjedeDao: KommandokjedeDao = KommandokjedeDao(dataSource)
@@ -22,6 +24,7 @@ class Mediator(
         KommandokjedeFerdigstiltRiver(rapidsConnection, this)
         KommandokjedeSuspendertRiver(rapidsConnection, this)
         KlokkaSeksHverdagerRiver(rapidsConnection, this)
+        HverHalvtimeRiver(rapidsConnection, this)
     }
 
     internal fun kommandokjedeFerdigstilt(kommandokjedeFerdigstilt: KommandokjedeFerdigstiltDto) {
@@ -47,6 +50,24 @@ class Mediator(
                     slackClient.postMessage(attachments = it.byggSlackMelding(), threadTs = threadTs)
                 }
             }
+        }
+    }
+
+    internal fun påminnSuspenderteKommandokjeder() {
+        val kommandokjederSomSkalPåminnes = kommandokjedeDao.hentSuspenderteKommandokjeder()
+        rapidsConnection.publish(
+            JsonMessage.newMessage("kommandokjeder_påminnelse",
+                mapOf(
+                    "kommandokjeder" to kommandokjederSomSkalPåminnes.map {
+                            mapOf(
+                                "commandContextId" to it.commandContextId,
+                                "meldingId" to it.meldingId
+                            )
+                        }
+                )
+            ).toJson()
+        ).also {
+            kommandokjedeDao.harBlittPåminnet(kommandokjederSomSkalPåminnes.map { it.commandContextId })
         }
     }
 

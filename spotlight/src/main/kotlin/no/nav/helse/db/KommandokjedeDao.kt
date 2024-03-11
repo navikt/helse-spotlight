@@ -1,8 +1,10 @@
 package no.nav.helse.db
 
+import java.util.*
 import javax.sql.DataSource
 
 class KommandokjedeDao(dataSource: DataSource): AbstractDao(dataSource) {
+
     fun lagreSuspendert(kommandokjedeSuspendert: KommandokjedeSuspendertDto): Int {
         val stiForDatabase = kommandokjedeSuspendert.sti.joinToString { """ $it """ }
         return query(
@@ -33,6 +35,16 @@ class KommandokjedeDao(dataSource: DataSource): AbstractDao(dataSource) {
             sti = it.array<Int>("sti").toList(),
             opprettet = it.localDateTime("opprettet")
         )
+    }
+
+    fun harBlittPåminnet(påminnedeCommandContextIder: List<UUID>) = påminnedeCommandContextIder.forEach {
+        query(
+            """
+                update kommandokjede_ikke_ferdigstilt set antall_ganger_påminnet = antall_ganger_påminnet + 1 
+                where command_context_id = :commandContextId
+            """.trimIndent(),
+            "commandContextId" to it
+        ).update()
     }
 
 }
