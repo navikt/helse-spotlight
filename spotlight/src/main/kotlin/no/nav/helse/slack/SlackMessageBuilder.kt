@@ -71,6 +71,10 @@ object SlackMessageBuilder {
             {
               "type": "mrkdwn",
               "text": "*Tidspunkt:*\n${kommandokjedeSuspendertTilDatabase.opprettet.format(formatter)}"
+            },
+            {
+              "type": "mrkdwn",
+              "text": "*Antall ganger påminnet:*\n${kommandokjedeSuspendertTilDatabase.antallGangerPåminnet}"
             }
           ]
         }
