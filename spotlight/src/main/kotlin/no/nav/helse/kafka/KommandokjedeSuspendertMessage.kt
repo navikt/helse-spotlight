@@ -15,7 +15,7 @@ class KommandokjedeSuspendertMessage(packet: JsonMessage) {
     private val opprettet: LocalDateTime = packet["@opprettet"].asLocalDateTime()
 
     companion object {
-        internal fun KommandokjedeSuspendertMessage.tilDatabase() =
+        internal fun KommandokjedeSuspendertMessage.toDto() =
             KommandokjedeSuspendertDto(
                 commandContextId = commandContextId,
                 meldingId = meldingId,

@@ -6,6 +6,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 object Testdata {
+
     internal fun kommandokjedeSuspendert(
         commandContextId: UUID = UUID.randomUUID(),
         command: String = "EnCommand",
@@ -17,6 +18,10 @@ object Testdata {
         sti = listOf(1, 3),
         opprettet = opprettet,
     )
+
+    internal fun kommandokjedeSuspendertForOverEnTimeSiden(
+        commandContextId: UUID = UUID.randomUUID(),
+    ) = kommandokjedeSuspendert(commandContextId = commandContextId, opprettet = LocalDateTime.now().minusHours(2))
 
     internal fun kommandokjedeFerdigstilt(commandContextId: UUID) =
         KommandokjedeFerdigstiltDto(

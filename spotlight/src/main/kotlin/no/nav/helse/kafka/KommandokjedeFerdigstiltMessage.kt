@@ -14,7 +14,7 @@ class KommandokjedeFerdigstiltMessage(packet: JsonMessage) {
     private val opprettet: LocalDateTime = packet["@opprettet"].asLocalDateTime()
 
     companion object {
-        internal fun KommandokjedeFerdigstiltMessage.tilDatabase() =
+        internal fun KommandokjedeFerdigstiltMessage.toDto() =
             KommandokjedeFerdigstiltDto(
                 commandContextId = commandContextId,
                 meldingId = meldingId,

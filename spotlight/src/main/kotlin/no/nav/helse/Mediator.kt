@@ -2,9 +2,11 @@ package no.nav.helse
 
 import com.zaxxer.hikari.HikariDataSource
 import no.nav.helse.db.KommandokjedeDao
-import no.nav.helse.kafka.*
-import no.nav.helse.kafka.KommandokjedeFerdigstiltMessage.Companion.tilDatabase
-import no.nav.helse.kafka.KommandokjedeSuspendertMessage.Companion.tilDatabase
+import no.nav.helse.db.KommandokjedeFerdigstiltDto
+import no.nav.helse.db.KommandokjedeSuspendertDto
+import no.nav.helse.kafka.HelTimeRiver
+import no.nav.helse.kafka.KommandokjedeFerdigstiltRiver
+import no.nav.helse.kafka.KommandokjedeSuspendertRiver
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.slack.SlackClient
 import no.nav.helse.slack.SlackMessageBuilder.byggSlackMelding
@@ -22,12 +24,12 @@ class Mediator(
         HelTimeRiver(rapidsConnection, this)
     }
 
-    internal fun kommandokjedeFerdigstilt(message: KommandokjedeFerdigstiltMessage) {
-        kommandokjedeDao.ferdigstilt(message.tilDatabase())
+    internal fun kommandokjedeFerdigstilt(kommandokjedeFerdigstilt: KommandokjedeFerdigstiltDto) {
+        kommandokjedeDao.ferdigstilt(kommandokjedeFerdigstilt)
     }
 
-    internal fun kommandokjedeSuspendert(message: KommandokjedeSuspendertMessage) {
-        kommandokjedeDao.lagreSuspendert(message.tilDatabase())
+    internal fun kommandokjedeSuspendert(kommandokjedeSuspendert: KommandokjedeSuspendertDto) {
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendert)
     }
 
     internal fun fortellOmSuspenderteKommandokjeder() {

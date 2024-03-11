@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.testcontainers.containers.PostgreSQLContainer
 import javax.sql.DataSource
 
-internal abstract class AbstractDatabaseTest(private val doTruncate: Boolean = true) {
+abstract class AbstractDatabaseTest(private val doTruncate: Boolean = true) {
 
     companion object {
         private val port: String

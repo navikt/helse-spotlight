@@ -1,6 +1,7 @@
 package no.nav.helse.kafka
 
 import no.nav.helse.Mediator
+import no.nav.helse.kafka.KommandokjedeSuspendertMessage.Companion.toDto
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.RapidsConnection
@@ -8,6 +9,10 @@ import no.nav.helse.rapids_rivers.River
 import org.slf4j.LoggerFactory
 
 internal class KommandokjedeSuspendertRiver(rapidsConnection: RapidsConnection, private val mediator: Mediator): River.PacketListener {
+
+    companion object {
+        private val sikkerlogg = LoggerFactory.getLogger("tjenestekall")
+    }
 
     init {
         River(rapidsConnection).apply {
@@ -21,13 +26,9 @@ internal class KommandokjedeSuspendertRiver(rapidsConnection: RapidsConnection, 
             }
         }.register(this)
     }
+
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         sikkerlogg.info("Leser melding ${packet.toJson()}")
-        mediator.kommandokjedeSuspendert(KommandokjedeSuspendertMessage(packet))
-    }
-
-    companion object {
-        private val logg = LoggerFactory.getLogger(KommandokjedeSuspendertRiver::class.java)
-        private val sikkerlogg = LoggerFactory.getLogger("tjenestekall")
+        mediator.kommandokjedeSuspendert(KommandokjedeSuspendertMessage(packet).toDto())
     }
 }

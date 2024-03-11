@@ -2,6 +2,7 @@ package no.nav.helse.db
 
 import no.nav.helse.Testdata.kommandokjedeFerdigstilt
 import no.nav.helse.Testdata.kommandokjedeSuspendert
+import no.nav.helse.Testdata.kommandokjedeSuspendertForOverEnTimeSiden
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.util.*
@@ -35,8 +36,7 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
     @Test
     fun `Henter suspenderte kommandokjeder som er minst 1 time gamle`() {
         val commandContextId = UUID.randomUUID()
-        val opprettet = LocalDateTime.now().minusHours(2)
-        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendert(commandContextId = commandContextId, opprettet = opprettet))
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertForOverEnTimeSiden(commandContextId = commandContextId))
         val suspenderteKommandokjeder = kommandokjedeDao.hentSuspenderteKommandokjeder()
         assertEquals(1, suspenderteKommandokjeder.size)
         assertEquals(commandContextId, suspenderteKommandokjeder.first().commandContextId)
