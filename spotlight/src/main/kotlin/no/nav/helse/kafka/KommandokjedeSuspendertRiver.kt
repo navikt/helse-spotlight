@@ -1,7 +1,7 @@
 package no.nav.helse.kafka
 
 import no.nav.helse.Mediator
-import no.nav.helse.kafka.KommandokjedeSuspendertMessage.Companion.toDto
+import no.nav.helse.kafka.KommandokjedeSuspendertMessage.Companion.tilDatabase
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.RapidsConnection
@@ -29,6 +29,6 @@ internal class KommandokjedeSuspendertRiver(rapidsConnection: RapidsConnection, 
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         sikkerlogg.info("Leser melding ${packet.toJson()}")
-        mediator.kommandokjedeSuspendert(KommandokjedeSuspendertMessage(packet).toDto())
+        mediator.kommandokjedeSuspendert(KommandokjedeSuspendertMessage(packet).tilDatabase())
     }
 }

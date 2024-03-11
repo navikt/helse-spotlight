@@ -1,18 +1,28 @@
 package no.nav.helse
 
-import no.nav.helse.db.KommandokjedeFerdigstiltDto
-import no.nav.helse.db.KommandokjedeSuspendertDto
+import no.nav.helse.db.KommandokjedeFerdigstiltTilDatabase
+import no.nav.helse.db.KommandokjedeSuspendertFraDatabase
+import no.nav.helse.db.KommandokjedeSuspendertTilDatabase
 import java.time.LocalDateTime
 import java.util.*
 
 object Testdata {
 
-    internal fun kommandokjedeSuspendert(
+    internal fun kommandokjedeSuspendertFraDatabase() = KommandokjedeSuspendertFraDatabase(
+        commandContextId = UUID.randomUUID(),
+        meldingId = UUID.randomUUID(),
+        command = "EnCommand",
+        sti = listOf(1, 3),
+        opprettet = LocalDateTime.now(),
+        antallGangerPåminnet = 0
+    )
+
+    internal fun kommandokjedeSuspendertTilDatabase(
         commandContextId: UUID = UUID.randomUUID(),
         meldingId: UUID = UUID.randomUUID(),
         command: String = "EnCommand",
         opprettet: LocalDateTime = LocalDateTime.now(),
-    ) = KommandokjedeSuspendertDto(
+    ) = KommandokjedeSuspendertTilDatabase(
         commandContextId = commandContextId,
         meldingId = meldingId,
         command = command,
@@ -23,10 +33,14 @@ object Testdata {
     internal fun kommandokjedeSuspendertForOverEnTimeSiden(
         commandContextId: UUID = UUID.randomUUID(),
         meldingId: UUID = UUID.randomUUID(),
-    ) = kommandokjedeSuspendert(commandContextId = commandContextId, meldingId = meldingId,opprettet = LocalDateTime.now().minusHours(2))
+    ) = kommandokjedeSuspendertTilDatabase(
+        commandContextId = commandContextId,
+        meldingId = meldingId,
+        opprettet = LocalDateTime.now().minusHours(2)
+    )
 
     internal fun kommandokjedeFerdigstilt(commandContextId: UUID) =
-        KommandokjedeFerdigstiltDto(
+        KommandokjedeFerdigstiltTilDatabase(
             commandContextId = commandContextId,
             meldingId = UUID.randomUUID(),
             command = "EnCommand",

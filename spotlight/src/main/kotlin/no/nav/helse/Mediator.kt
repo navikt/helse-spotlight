@@ -2,8 +2,8 @@ package no.nav.helse
 
 import com.zaxxer.hikari.HikariDataSource
 import no.nav.helse.db.KommandokjedeDao
-import no.nav.helse.db.KommandokjedeFerdigstiltDto
-import no.nav.helse.db.KommandokjedeSuspendertDto
+import no.nav.helse.db.KommandokjedeFerdigstiltTilDatabase
+import no.nav.helse.db.KommandokjedeSuspendertTilDatabase
 import no.nav.helse.kafka.HverHalvtimeRiver
 import no.nav.helse.kafka.KlokkaSeksHverdagerRiver
 import no.nav.helse.kafka.KommandokjedeFerdigstiltRiver
@@ -27,11 +27,11 @@ class Mediator(
         HverHalvtimeRiver(rapidsConnection, this)
     }
 
-    internal fun kommandokjedeFerdigstilt(kommandokjedeFerdigstilt: KommandokjedeFerdigstiltDto) {
+    internal fun kommandokjedeFerdigstilt(kommandokjedeFerdigstilt: KommandokjedeFerdigstiltTilDatabase) {
         kommandokjedeDao.ferdigstilt(kommandokjedeFerdigstilt)
     }
 
-    internal fun kommandokjedeSuspendert(kommandokjedeSuspendert: KommandokjedeSuspendertDto) {
+    internal fun kommandokjedeSuspendert(kommandokjedeSuspendert: KommandokjedeSuspendertTilDatabase) {
         kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendert)
     }
 

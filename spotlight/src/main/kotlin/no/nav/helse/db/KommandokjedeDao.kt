@@ -5,7 +5,7 @@ import javax.sql.DataSource
 
 class KommandokjedeDao(dataSource: DataSource): AbstractDao(dataSource) {
 
-    fun lagreSuspendert(kommandokjedeSuspendert: KommandokjedeSuspendertDto): Int {
+    fun lagreSuspendert(kommandokjedeSuspendert: KommandokjedeSuspendertTilDatabase): Int {
         val stiForDatabase = kommandokjedeSuspendert.sti.joinToString { """ $it """ }
         return query(
             """insert into kommandokjede_ikke_ferdigstilt 
@@ -20,7 +20,7 @@ class KommandokjedeDao(dataSource: DataSource): AbstractDao(dataSource) {
         ).update()
     }
 
-    fun ferdigstilt(kommandokjedeFerdigstilt: KommandokjedeFerdigstiltDto) = query(
+    fun ferdigstilt(kommandokjedeFerdigstilt: KommandokjedeFerdigstiltTilDatabase) = query(
         "delete from kommandokjede_ikke_ferdigstilt where command_context_id = :commandContextId",
         "commandContextId" to kommandokjedeFerdigstilt.commandContextId,
     ).update()
@@ -28,12 +28,13 @@ class KommandokjedeDao(dataSource: DataSource): AbstractDao(dataSource) {
     fun hentSuspenderteKommandokjeder() = query(
         "select * from kommandokjede_ikke_ferdigstilt where opprettet < current_timestamp - interval '1 hour'"
     ).list {
-        KommandokjedeSuspendertDto(
+        KommandokjedeSuspendertFraDatabase(
             commandContextId = it.uuid("command_context_id"),
             meldingId = it.uuid("melding_id"),
             command = it.string("command"),
             sti = it.array<Int>("sti").toList(),
-            opprettet = it.localDateTime("opprettet")
+            opprettet = it.localDateTime("opprettet"),
+            antallGangerPåminnet = it.int("antall_ganger_påminnet")
         )
     }
 

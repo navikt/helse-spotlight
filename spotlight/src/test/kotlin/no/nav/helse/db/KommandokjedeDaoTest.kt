@@ -1,8 +1,8 @@
 package no.nav.helse.db
 
 import no.nav.helse.Testdata.kommandokjedeFerdigstilt
-import no.nav.helse.Testdata.kommandokjedeSuspendert
 import no.nav.helse.Testdata.kommandokjedeSuspendertForOverEnTimeSiden
+import no.nav.helse.Testdata.kommandokjedeSuspendertTilDatabase
 import org.junit.jupiter.api.Test
 import java.util.*
 import kotlin.test.assertEquals
@@ -12,22 +12,22 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
     @Test
     fun `Kan lagre suspendert kommandokjede`() {
         val commandContextId = UUID.randomUUID()
-        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendert(commandContextId))
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertTilDatabase(commandContextId))
         assertLagret(commandContextId)
     }
 
     @Test
     fun `Oppdaterer suspendert kommandokjede on conflict`() {
         val commandContextId = UUID.randomUUID()
-        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendert(commandContextId))
-        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendert(commandContextId = commandContextId, command =  "EnAnnenCommand"))
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertTilDatabase(commandContextId))
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertTilDatabase(commandContextId = commandContextId, command =  "EnAnnenCommand"))
         assertOppdatert(commandContextId, "EnAnnenCommand")
     }
 
     @Test
     fun `Sletter fra tabellen når kommandokjede ferdigstilles`() {
         val commandContextId = UUID.randomUUID()
-        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendert(commandContextId))
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertTilDatabase(commandContextId))
         kommandokjedeDao.ferdigstilt(kommandokjedeFerdigstilt(commandContextId))
         assertSlettet(commandContextId)
     }
@@ -43,7 +43,7 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
 
     @Test
     fun `Henter ikke suspenderte kommandokjeder som ikke er 1 time gamle`() {
-        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendert())
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertTilDatabase())
         val suspenderteKommandokjeder = kommandokjedeDao.hentSuspenderteKommandokjeder()
         assertEquals(0, suspenderteKommandokjeder.size)
     }
