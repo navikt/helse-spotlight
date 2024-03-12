@@ -38,14 +38,11 @@ class KommandokjedeDao(dataSource: DataSource): AbstractDao(dataSource) {
         )
     }
 
-    fun harBlittPåminnet(påminnedeCommandContextIder: List<UUID>) = påminnedeCommandContextIder.forEach {
-        query(
-            """
-                update kommandokjede_ikke_ferdigstilt set antall_ganger_påminnet = antall_ganger_påminnet + 1 
-                where command_context_id = :commandContextId
-            """.trimIndent(),
-            "commandContextId" to it
-        ).update()
-    }
-
+    fun harBlittPåminnet(påminnetCommandContextId: UUID) = query(
+        """
+            update kommandokjede_ikke_ferdigstilt set antall_ganger_påminnet = antall_ganger_påminnet + 1 
+            where command_context_id = :commandContextId
+        """.trimIndent(),
+        "commandContextId" to påminnetCommandContextId
+    ).update()
 }

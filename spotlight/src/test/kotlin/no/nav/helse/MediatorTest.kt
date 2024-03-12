@@ -3,7 +3,7 @@ package no.nav.helse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import no.nav.helse.TestRapidHelpers.siste
+import no.nav.helse.TestRapidHelpers.hendelser
 import no.nav.helse.Testdata.kommandokjedeSuspendertForOverEnTimeSiden
 import no.nav.helse.db.AbstractDatabaseTest
 import no.nav.helse.kafka.asUUID
@@ -57,7 +57,7 @@ class MediatorTest: AbstractDatabaseTest() {
     }
 
     @Test
-    fun `sender kommandokjeder_påminnelse`() {
+    fun `sender kommandokjede_påminnelse`() {
         val commandContextId1 = UUID.randomUUID()
         val commandContextId2 = UUID.randomUUID()
         val meldingId1 = UUID.randomUUID()
@@ -65,11 +65,11 @@ class MediatorTest: AbstractDatabaseTest() {
         mediator.kommandokjedeSuspendert(kommandokjedeSuspendertForOverEnTimeSiden(commandContextId1, meldingId1))
         mediator.kommandokjedeSuspendert(kommandokjedeSuspendertForOverEnTimeSiden(commandContextId2, meldingId2))
         mediator.påminnSuspenderteKommandokjeder()
-        val melding = testRapid.inspektør.siste("kommandokjeder_påminnelse")
-        assertEquals(commandContextId1, melding["kommandokjeder"][0]["commandContextId"].asUUID())
-        assertEquals(commandContextId2, melding["kommandokjeder"][1]["commandContextId"].asUUID())
-        assertEquals(meldingId1, melding["kommandokjeder"][0]["meldingId"].asUUID())
-        assertEquals(meldingId2, melding["kommandokjeder"][1]["meldingId"].asUUID())
+        val hendelser = testRapid.inspektør.hendelser("kommandokjede_påminnelse")
+        assertEquals(commandContextId1, hendelser[0]["commandContextId"].asUUID())
+        assertEquals(commandContextId2, hendelser[1]["commandContextId"].asUUID())
+        assertEquals(meldingId1, hendelser[0]["meldingId"].asUUID())
+        assertEquals(meldingId2, hendelser[1]["meldingId"].asUUID())
     }
 
 }

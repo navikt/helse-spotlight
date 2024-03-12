@@ -52,21 +52,13 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
     fun `antall_ganger_påminnet blir inkrementert`() {
         val commandContextId1 = UUID.randomUUID()
         val commandContextId2 = UUID.randomUUID()
-        val commandContextId3 = UUID.randomUUID()
         kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertForOverEnTimeSiden(commandContextId = commandContextId1))
         kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertForOverEnTimeSiden(commandContextId = commandContextId2))
-        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertForOverEnTimeSiden(commandContextId = commandContextId3))
         assertPåminnet(commandContextId1, 0)
         assertPåminnet(commandContextId2, 0)
-        assertPåminnet(commandContextId3, 0)
-        kommandokjedeDao.harBlittPåminnet(listOf(commandContextId1, commandContextId2))
+        kommandokjedeDao.harBlittPåminnet(commandContextId1)
         assertPåminnet(commandContextId1, 1)
-        assertPåminnet(commandContextId2, 1)
-        assertPåminnet(commandContextId3, 0)
-        kommandokjedeDao.harBlittPåminnet(listOf(commandContextId1))
-        assertPåminnet(commandContextId1, 2)
-        assertPåminnet(commandContextId2, 1)
-        assertPåminnet(commandContextId3, 0)
+        assertPåminnet(commandContextId2, 0)
     }
 
     private fun assertPåminnet(commandContextId: UUID, forventetAntallGangerPåminnet: Int) {

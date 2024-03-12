@@ -45,7 +45,8 @@ class Mediator(
             var threadTs: String? = null
             kommandokjederSomIkkeBleFerdigstilt.chunked(49).forEach {
                 if (threadTs == null) {
-                    threadTs = slackClient.postMessage(attachments = it.byggSlackMelding(kommandokjederSomIkkeBleFerdigstilt.size))
+                    threadTs =
+                        slackClient.postMessage(attachments = it.byggSlackMelding(kommandokjederSomIkkeBleFerdigstilt.size))
                 } else {
                     slackClient.postMessage(attachments = it.byggSlackMelding(), threadTs = threadTs)
                 }
@@ -55,20 +56,18 @@ class Mediator(
 
     internal fun påminnSuspenderteKommandokjeder() {
         val kommandokjederSomSkalPåminnes = kommandokjedeDao.hentSuspenderteKommandokjeder()
-        rapidsConnection.publish(
-            JsonMessage.newMessage("kommandokjeder_påminnelse",
-                mapOf(
-                    "kommandokjeder" to kommandokjederSomSkalPåminnes.map {
-                            mapOf(
-                                "commandContextId" to it.commandContextId,
-                                "meldingId" to it.meldingId
-                            )
-                        }
-                )
-            ).toJson()
-        ).also {
-            kommandokjedeDao.harBlittPåminnet(kommandokjederSomSkalPåminnes.map { it.commandContextId })
+        kommandokjederSomSkalPåminnes.forEach { kommandokjedeSuspendertFraDatabase ->
+            rapidsConnection.publish(
+                JsonMessage.newMessage(
+                    "kommandokjede_påminnelse",
+                    mapOf(
+                        "commandContextId" to kommandokjedeSuspendertFraDatabase.commandContextId,
+                        "meldingId" to kommandokjedeSuspendertFraDatabase.meldingId
+                    )
+                ).toJson()
+            ).also {
+                kommandokjedeDao.harBlittPåminnet(kommandokjedeSuspendertFraDatabase.commandContextId)
+            }
         }
     }
-
 }
