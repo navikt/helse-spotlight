@@ -12,7 +12,6 @@ import no.nav.helse.Testmeldinger.kommandokjedeSuspendert
 import no.nav.helse.db.DatabaseIntegrationTest
 import no.nav.helse.kafka.Meldingssender
 import no.nav.helse.kafka.asUUID
-import no.nav.helse.kafka.river.KommandokjedeFerdigstiltRiver
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import no.nav.helse.slack.SlackClient
 import org.junit.jupiter.api.BeforeEach
@@ -28,10 +27,6 @@ internal abstract class AbstractE2ETest : DatabaseIntegrationTest() {
     private val slackClientMock = mockk<SlackClient>(relaxed = true)
     private val meldingssender = Meldingssender(testRapid, kommandokjedeDao)
     private val mediator = Mediator(testRapid, slackClientMock, meldingssender, kommandokjedeDao)
-
-    init {
-        KommandokjedeFerdigstiltRiver(testRapid, mediator)
-    }
 
     @BeforeEach
     internal fun resetTestSetup() {
