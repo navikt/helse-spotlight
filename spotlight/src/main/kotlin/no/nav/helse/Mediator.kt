@@ -1,6 +1,5 @@
 package no.nav.helse
 
-import com.zaxxer.hikari.HikariDataSource
 import no.nav.helse.db.KommandokjedeAvbruttTilDatabase
 import no.nav.helse.db.KommandokjedeDao
 import no.nav.helse.db.KommandokjedeFerdigstiltTilDatabase
@@ -13,9 +12,8 @@ import no.nav.helse.slack.SlackMessageBuilder.byggSlackMelding
 
 class Mediator(
     private val rapidsConnection: RapidsConnection,
-    dataSource: HikariDataSource,
     private val slackClient: SlackClient,
-    private val kommandokjedeDao: KommandokjedeDao = KommandokjedeDao(dataSource)
+    private val kommandokjedeDao: KommandokjedeDao,
 ) {
 
     init {

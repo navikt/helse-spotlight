@@ -6,6 +6,7 @@ import io.mockk.verify
 import no.nav.helse.TestRapidHelpers.hendelser
 import no.nav.helse.Testdata.kommandokjedeSuspendertForOverEnHalvtimeSiden
 import no.nav.helse.db.AbstractDatabaseTest
+import no.nav.helse.db.KommandokjedeDao
 import no.nav.helse.kafka.asUUID
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import no.nav.helse.slack.SlackClient
@@ -18,7 +19,8 @@ class MediatorTest: AbstractDatabaseTest() {
 
     private val testRapid = TestRapid()
     private val slackClient = mockk<SlackClient>(relaxed = true)
-    private val mediator = Mediator(testRapid, dataSource, slackClient)
+    private val kommandokjedeDao = KommandokjedeDao(dataSource)
+    private val mediator = Mediator(testRapid, slackClient, kommandokjedeDao)
 
     @BeforeEach
     internal fun resetTestSetup() {
