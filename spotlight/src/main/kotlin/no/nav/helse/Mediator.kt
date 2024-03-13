@@ -39,17 +39,17 @@ class Mediator(
     }
 
     internal fun fortellOmSuspenderteKommandokjeder() {
-        val kommandokjederSomIkkeBleFerdigstilt = kommandokjedeDao.hentSuspenderteKommandokjeder()
-        if (kommandokjederSomIkkeBleFerdigstilt.isEmpty()) {
+        val suspenderteKommandokjeder = kommandokjedeDao.hentSuspenderteKommandokjeder()
+        if (suspenderteKommandokjeder.isEmpty()) {
             slackClient.postMessage(text = ":spotlight: Ingen kommandokjeder sitter fast :spotlight:")
         } else {
             // Slack APIet støtter bare 50 blocks pr melding. Hvis det er mer enn 50 stuck kommandokjeder
             // postes resterende i tråd.
             var threadTs: String? = null
-            kommandokjederSomIkkeBleFerdigstilt.chunked(49).forEach {
+            suspenderteKommandokjeder.chunked(49).forEach {
                 if (threadTs == null) {
                     threadTs =
-                        slackClient.postMessage(attachments = it.byggSlackMelding(kommandokjederSomIkkeBleFerdigstilt.size))
+                        slackClient.postMessage(attachments = it.byggSlackMelding(suspenderteKommandokjeder.size))
                 } else {
                     slackClient.postMessage(attachments = it.byggSlackMelding(), threadTs = threadTs)
                 }
