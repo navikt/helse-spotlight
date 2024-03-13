@@ -32,7 +32,7 @@ class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource) {
     ).update()
 
     fun hentSuspenderteKommandokjeder() = query(
-        "select * from suspenderte_kommandokjeder where opprettet < current_timestamp - interval '1 hour'"
+        "select * from suspenderte_kommandokjeder where opprettet < current_timestamp - interval '30 minutes'"
     ).list {
         KommandokjedeSuspendertFraDatabase(
             commandContextId = it.uuid("command_context_id"),

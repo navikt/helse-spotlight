@@ -31,13 +31,13 @@ object Testdata {
         opprettet = opprettet,
     )
 
-    internal fun kommandokjedeSuspendertForOverEnTimeSiden(
+    internal fun kommandokjedeSuspendertForOverEnHalvtimeSiden(
         commandContextId: UUID = UUID.randomUUID(),
         meldingId: UUID = UUID.randomUUID(),
     ) = kommandokjedeSuspendertTilDatabase(
         commandContextId = commandContextId,
         meldingId = meldingId,
-        opprettet = LocalDateTime.now().minusHours(2)
+        opprettet = LocalDateTime.now().minusMinutes(35)
     )
 
     internal fun kommandokjedeFerdigstilt(commandContextId: UUID) =

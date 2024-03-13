@@ -2,7 +2,7 @@ package no.nav.helse.db
 
 import no.nav.helse.Testdata.kommandokjedeAvbrutt
 import no.nav.helse.Testdata.kommandokjedeFerdigstilt
-import no.nav.helse.Testdata.kommandokjedeSuspendertForOverEnTimeSiden
+import no.nav.helse.Testdata.kommandokjedeSuspendertForOverEnHalvtimeSiden
 import no.nav.helse.Testdata.kommandokjedeSuspendertTilDatabase
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -42,9 +42,9 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
     }
 
     @Test
-    fun `Henter suspenderte kommandokjeder som er minst 1 time gamle`() {
+    fun `Henter suspenderte kommandokjeder som er minst 30 minutter gamle`() {
         val commandContextId = UUID.randomUUID()
-        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertForOverEnTimeSiden(commandContextId))
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertForOverEnHalvtimeSiden(commandContextId))
         val suspenderteKommandokjeder = kommandokjedeDao.hentSuspenderteKommandokjeder()
         assertEquals(1, suspenderteKommandokjeder.size)
         assertEquals(commandContextId, suspenderteKommandokjeder.first().commandContextId)
@@ -61,8 +61,8 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
     fun `antall_ganger_påminnet blir inkrementert`() {
         val commandContextId1 = UUID.randomUUID()
         val commandContextId2 = UUID.randomUUID()
-        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertForOverEnTimeSiden(commandContextId = commandContextId1))
-        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertForOverEnTimeSiden(commandContextId = commandContextId2))
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertForOverEnHalvtimeSiden(commandContextId = commandContextId1))
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertForOverEnHalvtimeSiden(commandContextId = commandContextId2))
         assertPåminnet(commandContextId1, 0)
         assertPåminnet(commandContextId2, 0)
         kommandokjedeDao.harBlittPåminnet(commandContextId1)
