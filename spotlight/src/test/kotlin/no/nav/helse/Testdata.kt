@@ -43,7 +43,7 @@ object Testdata {
         opprettet = LocalDateTime.now().minusMinutes(35)
     )
 
-    internal fun kommandokjedeFerdigstilt(commandContextId: UUID) =
+    internal fun kommandokjedeFerdigstiltTilDatabase(commandContextId: UUID) =
         KommandokjedeFerdigstiltTilDatabase(
             commandContextId = commandContextId,
             meldingId = UUID.randomUUID(),
@@ -51,9 +51,10 @@ object Testdata {
             opprettet = LocalDateTime.now()
         )
 
-    internal fun kommandokjedeAvbrutt(commandContextId: UUID) =
+    internal fun kommandokjedeAvbruttTilDatabase(commandContextId: UUID) =
         KommandokjedeAvbruttTilDatabase(
             commandContextId = commandContextId,
             meldingId = UUID.randomUUID(),
         )
+
 }
