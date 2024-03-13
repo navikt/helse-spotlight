@@ -72,7 +72,7 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
 
     private fun assertPåminnet(commandContextId: UUID, forventetAntallGangerPåminnet: Int) {
         val antallGangerPåminnet = query(
-            "select antall_ganger_påminnet from kommandokjede_ikke_ferdigstilt where command_context_id = :commandContextId",
+            "select antall_ganger_påminnet from suspenderte_kommandokjeder where command_context_id = :commandContextId",
             "commandContextId" to commandContextId
         ).single {
             it.int("antall_ganger_påminnet")
@@ -82,7 +82,7 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
 
     private fun assertLagret(commandContextId: UUID) {
         val kommandokjedeSuspendert = query(
-            "select * from kommandokjede_ikke_ferdigstilt where command_context_id = :commandContextId",
+            "select * from suspenderte_kommandokjeder where command_context_id = :commandContextId",
             "commandContextId" to commandContextId
         ).single {
             it.uuid("command_context_id")
@@ -92,7 +92,7 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
 
     private fun assertOppdatert(commandContextId: UUID, command: String) {
         val commandIDatabase = query(
-            "select command from kommandokjede_ikke_ferdigstilt where command_context_id = :commandContextId",
+            "select command from suspenderte_kommandokjeder where command_context_id = :commandContextId",
             "commandContextId" to commandContextId
         ).single {
             it.string("command")
@@ -102,7 +102,7 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
 
     private fun assertSlettet(commandContextId: UUID) {
         val antall = query(
-            "select count(1) from kommandokjede_ikke_ferdigstilt where command_context_id = :commandContextId",
+            "select count(1) from suspenderte_kommandokjeder where command_context_id = :commandContextId",
             "commandContextId" to commandContextId
         ).single { it.int(1) }
         assertEquals(antall, 0)

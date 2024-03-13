@@ -8,7 +8,7 @@ class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource) {
     fun lagreSuspendert(kommandokjedeSuspendert: KommandokjedeSuspendertTilDatabase): Int {
         val stiForDatabase = kommandokjedeSuspendert.sti.joinToString { """ $it """ }
         return query(
-            """insert into kommandokjede_ikke_ferdigstilt 
+            """insert into suspenderte_kommandokjeder 
                values (:commandContextId, :meldingId, :command, '{$stiForDatabase}', :opprettet)
                on conflict (command_context_id) do 
                update set melding_id = :meldingId, command = :command, sti = '{$stiForDatabase}', opprettet = :opprettet
@@ -26,12 +26,12 @@ class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource) {
     fun avbrutt(kommandokjedeAvbrutt: KommandokjedeAvbruttTilDatabase) = slett(kommandokjedeAvbrutt.commandContextId)
 
     private fun slett(commandContextId: UUID) = query(
-        "delete from kommandokjede_ikke_ferdigstilt where command_context_id = :commandContextId",
+        "delete from suspenderte_kommandokjeder where command_context_id = :commandContextId",
         "commandContextId" to commandContextId,
     ).update()
 
     fun hentSuspenderteKommandokjeder() = query(
-        "select * from kommandokjede_ikke_ferdigstilt where opprettet < current_timestamp - interval '1 hour'"
+        "select * from suspenderte_kommandokjeder where opprettet < current_timestamp - interval '1 hour'"
     ).list {
         KommandokjedeSuspendertFraDatabase(
             commandContextId = it.uuid("command_context_id"),
@@ -45,7 +45,7 @@ class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource) {
 
     fun harBlittPåminnet(påminnetCommandContextId: UUID) = query(
         """
-            update kommandokjede_ikke_ferdigstilt set antall_ganger_påminnet = antall_ganger_påminnet + 1 
+            update suspenderte_kommandokjeder set antall_ganger_påminnet = antall_ganger_påminnet + 1 
             where command_context_id = :commandContextId
         """.trimIndent(),
         "commandContextId" to påminnetCommandContextId
