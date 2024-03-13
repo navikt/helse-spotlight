@@ -1,6 +1,8 @@
 package no.nav.helse.slack
 
+import no.nav.helse.db.KommandokjedeSuspendertFraDatabase
 import no.nav.helse.objectMapper
+import no.nav.helse.slack.SlackMessageBuilder.byggSlackMelding
 import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.io.InputStream
@@ -11,11 +13,29 @@ import java.net.URI
 class SlackClient(private val accessToken: String, private val channel: String) {
 
     private companion object {
+        private val logg = LoggerFactory.getLogger(this::class.java)
         private val sikkerlogg = LoggerFactory.getLogger("tjenestekall")
-        private val logg = LoggerFactory.getLogger(SlackClient::class.java)
     }
 
-    fun postMessage(text: String? = null, attachments: String? = null, threadTs: String? = null): String? =
+    fun fortellOmSuspenderteKommandokjeder(suspenderteKommandokjeder: List<KommandokjedeSuspendertFraDatabase>) {
+        if (suspenderteKommandokjeder.isEmpty()) {
+            postMessage(text = ":spotlight: Ingen kommandokjeder sitter fast :spotlight:")
+        } else {
+            // Slack APIet støtter bare 50 blocks pr melding. Hvis det er mer enn 50 stuck kommandokjeder
+            // postes resterende i tråd.
+            var threadTs: String? = null
+            suspenderteKommandokjeder.chunked(49).forEach {
+                if (threadTs == null) {
+                    threadTs =
+                        postMessage(attachments = it.byggSlackMelding(suspenderteKommandokjeder.size))
+                } else {
+                    postMessage(attachments = it.byggSlackMelding(), threadTs = threadTs)
+                }
+            }
+        }
+    }
+
+    private fun postMessage(text: String? = null, attachments: String? = null, threadTs: String? = null): String? =
         "https://slack.com/api/chat.postMessage".post(
             objectMapper.writeValueAsString(mutableMapOf<String, Any>(
                 "channel" to channel,

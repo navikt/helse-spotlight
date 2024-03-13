@@ -12,16 +12,16 @@ import java.util.*
 class KommandokjedeSuspendertRiverTest {
 
     private val testRapid = TestRapid()
-    private val mediator = mockk<Mediator>(relaxed = true)
+    private val mediatorMock = mockk<Mediator>(relaxed = true)
 
     init {
-        KommandokjedeSuspendertRiver(testRapid, mediator)
+        KommandokjedeSuspendertRiver(testRapid, mediatorMock)
     }
 
     @Test
     fun `kan lese inn kommandokjede_suspendert`() {
         testRapid.sendTestMessage(kommandokjedeSuspendert())
-        verify(exactly = 1) { mediator.kommandokjedeSuspendert(any()) }
+        verify(exactly = 1) { mediatorMock.kommandokjedeSuspendert(any()) }
     }
 
     @Language("JSON")

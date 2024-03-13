@@ -10,16 +10,16 @@ import org.junit.jupiter.api.Test
 class HverHalvtimeRiverTest {
 
     private val testRapid = TestRapid()
-    private val mediator = mockk<Mediator>(relaxed = true)
+    private val mediatorMock = mockk<Mediator>(relaxed = true)
 
     init {
-        HverHalvtimeRiver(testRapid, mediator)
+        HverHalvtimeRiver(testRapid, mediatorMock)
     }
 
     @Test
     fun `kan lese inn kommandokjede_ferdigstilt`() {
         testRapid.sendTestMessage(halvTime())
-        verify(exactly = 1) { mediator.påminnSuspenderteKommandokjeder() }
+        verify(exactly = 1) { mediatorMock.påminnSuspenderteKommandokjeder() }
     }
 
     @Language("JSON")

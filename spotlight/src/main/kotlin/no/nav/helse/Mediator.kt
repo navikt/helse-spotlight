@@ -8,7 +8,6 @@ import no.nav.helse.kafka.*
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.slack.SlackClient
-import no.nav.helse.slack.SlackMessageBuilder.byggSlackMelding
 
 class Mediator(
     private val rapidsConnection: RapidsConnection,
@@ -37,22 +36,7 @@ class Mediator(
     }
 
     internal fun fortellOmSuspenderteKommandokjeder() {
-        val suspenderteKommandokjeder = kommandokjedeDao.hentSuspenderteKommandokjeder()
-        if (suspenderteKommandokjeder.isEmpty()) {
-            slackClient.postMessage(text = ":spotlight: Ingen kommandokjeder sitter fast :spotlight:")
-        } else {
-            // Slack APIet støtter bare 50 blocks pr melding. Hvis det er mer enn 50 stuck kommandokjeder
-            // postes resterende i tråd.
-            var threadTs: String? = null
-            suspenderteKommandokjeder.chunked(49).forEach {
-                if (threadTs == null) {
-                    threadTs =
-                        slackClient.postMessage(attachments = it.byggSlackMelding(suspenderteKommandokjeder.size))
-                } else {
-                    slackClient.postMessage(attachments = it.byggSlackMelding(), threadTs = threadTs)
-                }
-            }
-        }
+        slackClient.fortellOmSuspenderteKommandokjeder(kommandokjedeDao.hentSuspenderteKommandokjeder())
     }
 
     internal fun påminnSuspenderteKommandokjeder() {

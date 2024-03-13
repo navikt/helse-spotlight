@@ -12,16 +12,16 @@ import java.util.UUID
 class KommandokjedeFerdigstiltRiverTest {
 
     private val testRapid = TestRapid()
-    private val mediator = mockk<Mediator>(relaxed = true)
+    private val mediatorMock = mockk<Mediator>(relaxed = true)
 
     init {
-        KommandokjedeFerdigstiltRiver(testRapid, mediator)
+        KommandokjedeFerdigstiltRiver(testRapid, mediatorMock)
     }
 
     @Test
     fun `kan lese inn kommandokjede_ferdigstilt`() {
         testRapid.sendTestMessage(kommandokjedeFerdigstilt())
-        verify(exactly = 1) { mediator.kommandokjedeFerdigstilt(any()) }
+        verify(exactly = 1) { mediatorMock.kommandokjedeFerdigstilt(any()) }
     }
 
     @Language("JSON")
