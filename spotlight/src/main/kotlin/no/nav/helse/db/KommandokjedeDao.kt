@@ -8,10 +8,11 @@ class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource) {
     fun lagreSuspendert(kommandokjedeSuspendert: KommandokjedeSuspendertTilDatabase): Int {
         val stiForDatabase = kommandokjedeSuspendert.sti.joinToString { """ $it """ }
         return query(
-            """insert into suspenderte_kommandokjeder 
-               values (:commandContextId, :meldingId, :command, '{$stiForDatabase}', :opprettet)
-               on conflict (command_context_id) do 
-               update set melding_id = :meldingId, command = :command, sti = '{$stiForDatabase}', opprettet = :opprettet
+            """
+                insert into suspenderte_kommandokjeder 
+                values (:commandContextId, :meldingId, :command, '{$stiForDatabase}', :opprettet) 
+                on conflict (command_context_id) do 
+                update set melding_id = :meldingId, command = :command, sti = '{$stiForDatabase}', opprettet = :opprettet
             """.trimIndent(),
             "commandContextId" to kommandokjedeSuspendert.commandContextId,
             "meldingId" to kommandokjedeSuspendert.meldingId,
