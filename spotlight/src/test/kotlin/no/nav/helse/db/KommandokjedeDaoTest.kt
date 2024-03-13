@@ -51,7 +51,7 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
     }
 
     @Test
-    fun `Henter ikke suspenderte kommandokjeder som ikke er 1 time gamle`() {
+    fun `Henter ikke suspenderte kommandokjeder som ikke er 30 minutter gamle`() {
         kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertTilDatabase())
         val suspenderteKommandokjeder = kommandokjedeDao.hentSuspenderteKommandokjeder()
         assertEquals(0, suspenderteKommandokjeder.size)
