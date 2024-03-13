@@ -8,17 +8,17 @@ import no.nav.helse.rapids_rivers.RapidsConnection
 class Meldingssender(private val rapidsConnection: RapidsConnection, private val kommandokjedeDao: KommandokjedeDao) {
 
     fun påminnSuspenderteKommandokjeder(kommandokjederSomSkalPåminnes: List<KommandokjedeSuspendertFraDatabase>) {
-        kommandokjederSomSkalPåminnes.forEach { kommandokjedeSuspendertFraDatabase ->
+        kommandokjederSomSkalPåminnes.forEach { kommandokjede ->
             rapidsConnection.publish(
                 JsonMessage.newMessage(
                     "kommandokjede_påminnelse",
                     mapOf(
-                        "commandContextId" to kommandokjedeSuspendertFraDatabase.commandContextId,
-                        "meldingId" to kommandokjedeSuspendertFraDatabase.meldingId
+                        "commandContextId" to kommandokjede.commandContextId,
+                        "meldingId" to kommandokjede.meldingId
                     )
                 ).toJson()
             ).also {
-                kommandokjedeDao.harBlittPåminnet(kommandokjedeSuspendertFraDatabase.commandContextId)
+                kommandokjedeDao.harBlittPåminnet(kommandokjede.commandContextId)
             }
         }
     }
