@@ -1,6 +1,7 @@
-package no.nav.helse.kafka
+package no.nav.helse.kafka.message
 
 import no.nav.helse.db.KommandokjedeFerdigstiltTilDatabase
+import no.nav.helse.kafka.asUUID
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.asLocalDateTime
 import java.time.LocalDateTime

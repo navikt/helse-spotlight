@@ -1,6 +1,7 @@
-package no.nav.helse.kafka
+package no.nav.helse.kafka.message
 
 import no.nav.helse.db.KommandokjedeAvbruttTilDatabase
+import no.nav.helse.kafka.asUUID
 import no.nav.helse.rapids_rivers.JsonMessage
 import java.util.*
 

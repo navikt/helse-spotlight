@@ -1,7 +1,8 @@
 package no.nav.helse.kafka
 
 import no.nav.helse.Mediator
-import no.nav.helse.kafka.KommandokjedeSuspendertMessage.Companion.tilDatabase
+import no.nav.helse.kafka.message.KommandokjedeSuspendertMessage
+import no.nav.helse.kafka.message.KommandokjedeSuspendertMessage.Companion.tilDatabase
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.RapidsConnection
