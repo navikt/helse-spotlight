@@ -4,14 +4,15 @@ import no.nav.helse.db.KommandokjedeAvbruttTilDatabase
 import no.nav.helse.db.KommandokjedeDao
 import no.nav.helse.db.KommandokjedeFerdigstiltTilDatabase
 import no.nav.helse.db.KommandokjedeSuspendertTilDatabase
-import no.nav.helse.kafka.*
-import no.nav.helse.rapids_rivers.JsonMessage
+import no.nav.helse.kafka.Meldingssender
+import no.nav.helse.kafka.river.*
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.slack.SlackClient
 
 class Mediator(
-    private val rapidsConnection: RapidsConnection,
+    rapidsConnection: RapidsConnection,
     private val slackClient: SlackClient,
+    private val meldingssender: Meldingssender,
     private val kommandokjedeDao: KommandokjedeDao,
 ) {
 
@@ -40,19 +41,6 @@ class Mediator(
     }
 
     internal fun påminnSuspenderteKommandokjeder() {
-        val kommandokjederSomSkalPåminnes = kommandokjedeDao.hentSuspenderteKommandokjeder()
-        kommandokjederSomSkalPåminnes.forEach { kommandokjedeSuspendertFraDatabase ->
-            rapidsConnection.publish(
-                JsonMessage.newMessage(
-                    "kommandokjede_påminnelse",
-                    mapOf(
-                        "commandContextId" to kommandokjedeSuspendertFraDatabase.commandContextId,
-                        "meldingId" to kommandokjedeSuspendertFraDatabase.meldingId
-                    )
-                ).toJson()
-            ).also {
-                kommandokjedeDao.harBlittPåminnet(kommandokjedeSuspendertFraDatabase.commandContextId)
-            }
-        }
+        meldingssender.påminnSuspenderteKommandokjeder(kommandokjedeDao.hentSuspenderteKommandokjeder())
     }
 }

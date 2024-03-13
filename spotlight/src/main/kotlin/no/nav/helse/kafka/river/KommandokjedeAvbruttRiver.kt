@@ -1,16 +1,16 @@
-package no.nav.helse.kafka
+package no.nav.helse.kafka.river
 
 import no.nav.helse.Mediator
-import no.nav.helse.kafka.message.KommandokjedeSuspendertMessage
-import no.nav.helse.kafka.message.KommandokjedeSuspendertMessage.Companion.tilDatabase
+import no.nav.helse.kafka.message.KommandokjedeAvbruttMessage
+import no.nav.helse.kafka.message.KommandokjedeAvbruttMessage.Companion.tilDatabase
 import no.nav.helse.rapids_rivers.*
 import org.slf4j.LoggerFactory
 
-internal class KommandokjedeSuspendertRiver(rapidsConnection: RapidsConnection, private val mediator: Mediator): River.PacketListener {
+internal class KommandokjedeAvbruttRiver(rapidsConnection: RapidsConnection, private val mediator: Mediator): River.PacketListener {
 
     private companion object {
         private val logg = LoggerFactory.getLogger(this::class.java)
-        private const val EVENT_NAME = "kommandokjede_suspendert"
+        private const val EVENT_NAME = "kommandokjede_avbrutt"
     }
 
     init {
@@ -19,9 +19,6 @@ internal class KommandokjedeSuspendertRiver(rapidsConnection: RapidsConnection, 
                 it.demandValue("@event_name", EVENT_NAME)
                 it.requireKey("commandContextId")
                 it.requireKey("meldingId")
-                it.requireKey("command")
-                it.requireKey("sti")
-                it.requireKey("@opprettet")
             }
         }.register(this)
     }
@@ -32,6 +29,6 @@ internal class KommandokjedeSuspendertRiver(rapidsConnection: RapidsConnection, 
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         logg.info("Leser melding ${packet.toJson()}")
-        mediator.kommandokjedeSuspendert(KommandokjedeSuspendertMessage(packet).tilDatabase())
+        mediator.kommandokjedeAvbrutt(KommandokjedeAvbruttMessage(packet).tilDatabase())
     }
 }

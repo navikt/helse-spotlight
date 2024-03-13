@@ -9,9 +9,12 @@ import java.util.*
 
 object Testdata {
 
-    internal fun kommandokjedeSuspendertFraDatabase() = KommandokjedeSuspendertFraDatabase(
-        commandContextId = UUID.randomUUID(),
-        meldingId = UUID.randomUUID(),
+    internal fun kommandokjedeSuspendertFraDatabase(
+        commandContextId: UUID = UUID.randomUUID(),
+        meldingId: UUID = UUID.randomUUID()
+    ) = KommandokjedeSuspendertFraDatabase(
+        commandContextId = commandContextId,
+        meldingId = meldingId,
         command = "EnCommand",
         sti = listOf(1, 3),
         opprettet = LocalDateTime.now(),

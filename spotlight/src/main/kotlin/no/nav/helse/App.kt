@@ -5,6 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.nav.helse.db.DataSourceBuilder
 import no.nav.helse.db.KommandokjedeDao
+import no.nav.helse.kafka.Meldingssender
 import no.nav.helse.rapids_rivers.RapidApplication
 import no.nav.helse.slack.SlackClient
 
@@ -19,13 +20,14 @@ internal class App {
     private val dataSource = datasourceBuilder.getDataSource()
 
     private val kommandokjedeDao = KommandokjedeDao(dataSource)
+    private val meldingssender = Meldingssender(rapidsConnection, kommandokjedeDao)
     private val slackClient = SlackClient(
         accessToken = env.getValue("SLACK_SPY_ACCESS_TOKEN"),
         channel = env.getValue("SLACK_SPOTLIGHT_CHANNEL_ID")
     )
 
     init {
-        Mediator(rapidsConnection, slackClient, kommandokjedeDao)
+        Mediator(rapidsConnection, slackClient, meldingssender, kommandokjedeDao)
     }
 
     internal fun start() {

@@ -1,4 +1,4 @@
-package no.nav.helse.kafka
+package no.nav.helse.kafka.river
 
 import no.nav.helse.Mediator
 import no.nav.helse.rapids_rivers.*
