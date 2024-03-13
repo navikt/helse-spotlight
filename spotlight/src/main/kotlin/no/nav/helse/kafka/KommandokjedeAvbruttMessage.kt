@@ -1,0 +1,19 @@
+package no.nav.helse.kafka
+
+import no.nav.helse.db.KommandokjedeAvbruttTilDatabase
+import no.nav.helse.rapids_rivers.JsonMessage
+import java.util.*
+
+class KommandokjedeAvbruttMessage(packet: JsonMessage) {
+
+    private val commandContextId: UUID = packet["commandContextId"].asUUID()
+    private val meldingId: UUID = packet["meldingId"].asUUID()
+
+    companion object {
+        internal fun KommandokjedeAvbruttMessage.tilDatabase() =
+            KommandokjedeAvbruttTilDatabase(
+                commandContextId = commandContextId,
+                meldingId = meldingId,
+            )
+    }
+}

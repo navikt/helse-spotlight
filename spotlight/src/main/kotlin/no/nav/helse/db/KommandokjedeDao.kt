@@ -3,7 +3,7 @@ package no.nav.helse.db
 import java.util.*
 import javax.sql.DataSource
 
-class KommandokjedeDao(dataSource: DataSource): AbstractDao(dataSource) {
+class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource) {
 
     fun lagreSuspendert(kommandokjedeSuspendert: KommandokjedeSuspendertTilDatabase): Int {
         val stiForDatabase = kommandokjedeSuspendert.sti.joinToString { """ $it """ }
@@ -20,9 +20,14 @@ class KommandokjedeDao(dataSource: DataSource): AbstractDao(dataSource) {
         ).update()
     }
 
-    fun ferdigstilt(kommandokjedeFerdigstilt: KommandokjedeFerdigstiltTilDatabase) = query(
+    fun ferdigstilt(kommandokjedeFerdigstilt: KommandokjedeFerdigstiltTilDatabase) =
+        slett(kommandokjedeFerdigstilt.commandContextId)
+
+    fun avbrutt(kommandokjedeAvbrutt: KommandokjedeAvbruttTilDatabase) = slett(kommandokjedeAvbrutt.commandContextId)
+
+    private fun slett(commandContextId: UUID) = query(
         "delete from kommandokjede_ikke_ferdigstilt where command_context_id = :commandContextId",
-        "commandContextId" to kommandokjedeFerdigstilt.commandContextId,
+        "commandContextId" to commandContextId,
     ).update()
 
     fun hentSuspenderteKommandokjeder() = query(

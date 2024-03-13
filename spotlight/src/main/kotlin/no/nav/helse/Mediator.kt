@@ -1,13 +1,11 @@
 package no.nav.helse
 
 import com.zaxxer.hikari.HikariDataSource
+import no.nav.helse.db.KommandokjedeAvbruttTilDatabase
 import no.nav.helse.db.KommandokjedeDao
 import no.nav.helse.db.KommandokjedeFerdigstiltTilDatabase
 import no.nav.helse.db.KommandokjedeSuspendertTilDatabase
-import no.nav.helse.kafka.HverHalvtimeRiver
-import no.nav.helse.kafka.KlokkaSeksHverdagerRiver
-import no.nav.helse.kafka.KommandokjedeFerdigstiltRiver
-import no.nav.helse.kafka.KommandokjedeSuspendertRiver
+import no.nav.helse.kafka.*
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.slack.SlackClient
@@ -23,6 +21,7 @@ class Mediator(
     init {
         KommandokjedeFerdigstiltRiver(rapidsConnection, this)
         KommandokjedeSuspendertRiver(rapidsConnection, this)
+        KommandokjedeAvbruttRiver(rapidsConnection, this)
         KlokkaSeksHverdagerRiver(rapidsConnection, this)
         HverHalvtimeRiver(rapidsConnection, this)
     }
@@ -33,6 +32,10 @@ class Mediator(
 
     internal fun kommandokjedeSuspendert(kommandokjedeSuspendert: KommandokjedeSuspendertTilDatabase) {
         kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendert)
+    }
+
+    internal fun kommandokjedeAvbrutt(kommandokjedeAvbrutt: KommandokjedeAvbruttTilDatabase) {
+        kommandokjedeDao.avbrutt(kommandokjedeAvbrutt)
     }
 
     internal fun fortellOmSuspenderteKommandokjeder() {

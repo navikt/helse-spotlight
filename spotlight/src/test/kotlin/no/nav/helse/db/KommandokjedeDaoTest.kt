@@ -1,5 +1,6 @@
 package no.nav.helse.db
 
+import no.nav.helse.Testdata.kommandokjedeAvbrutt
 import no.nav.helse.Testdata.kommandokjedeFerdigstilt
 import no.nav.helse.Testdata.kommandokjedeSuspendertForOverEnTimeSiden
 import no.nav.helse.Testdata.kommandokjedeSuspendertTilDatabase
@@ -29,6 +30,14 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
         val commandContextId = UUID.randomUUID()
         kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertTilDatabase(commandContextId))
         kommandokjedeDao.ferdigstilt(kommandokjedeFerdigstilt(commandContextId))
+        assertSlettet(commandContextId)
+    }
+
+    @Test
+    fun `Sletter fra tabellen når kommandokjede avbrytes`() {
+        val commandContextId = UUID.randomUUID()
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertTilDatabase(commandContextId))
+        kommandokjedeDao.avbrutt(kommandokjedeAvbrutt(commandContextId))
         assertSlettet(commandContextId)
     }
 

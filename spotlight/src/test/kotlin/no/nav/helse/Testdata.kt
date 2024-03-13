@@ -1,5 +1,6 @@
 package no.nav.helse
 
+import no.nav.helse.db.KommandokjedeAvbruttTilDatabase
 import no.nav.helse.db.KommandokjedeFerdigstiltTilDatabase
 import no.nav.helse.db.KommandokjedeSuspendertFraDatabase
 import no.nav.helse.db.KommandokjedeSuspendertTilDatabase
@@ -45,5 +46,11 @@ object Testdata {
             meldingId = UUID.randomUUID(),
             command = "EnCommand",
             opprettet = LocalDateTime.now()
+        )
+
+    internal fun kommandokjedeAvbrutt(commandContextId: UUID) =
+        KommandokjedeAvbruttTilDatabase(
+            commandContextId = commandContextId,
+            meldingId = UUID.randomUUID(),
         )
 }

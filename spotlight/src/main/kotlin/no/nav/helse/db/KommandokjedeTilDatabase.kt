@@ -18,3 +18,8 @@ data class KommandokjedeFerdigstiltTilDatabase(
     val opprettet: LocalDateTime,
 )
 
+data class KommandokjedeAvbruttTilDatabase(
+    val commandContextId: UUID,
+    val meldingId: UUID,
+)
+
