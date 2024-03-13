@@ -8,7 +8,7 @@ import no.nav.helse.kafka.river.HverHalvtimeRiver
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.junit.jupiter.api.Test
 
-class HverHalvtimeRiverTest {
+internal class HverHalvtimeRiverTest {
 
     private val testRapid = TestRapid()
     private val mediatorMock = mockk<Mediator>(relaxed = true)
@@ -18,7 +18,7 @@ class HverHalvtimeRiverTest {
     }
 
     @Test
-    fun `kan lese inn halv_time`() {
+    fun `Kan lese inn halv_time`() {
         testRapid.sendTestMessage(halvTime())
         verify(exactly = 1) { mediatorMock.påminnSuspenderteKommandokjeder() }
     }

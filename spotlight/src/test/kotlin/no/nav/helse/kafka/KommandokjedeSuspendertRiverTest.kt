@@ -8,7 +8,7 @@ import no.nav.helse.kafka.river.KommandokjedeSuspendertRiver
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.junit.jupiter.api.Test
 
-class KommandokjedeSuspendertRiverTest {
+internal class KommandokjedeSuspendertRiverTest {
 
     private val testRapid = TestRapid()
     private val mediatorMock = mockk<Mediator>(relaxed = true)
@@ -18,7 +18,7 @@ class KommandokjedeSuspendertRiverTest {
     }
 
     @Test
-    fun `kan lese inn kommandokjede_suspendert`() {
+    fun `Kan lese inn kommandokjede_suspendert`() {
         testRapid.sendTestMessage(kommandokjedeSuspendert())
         verify(exactly = 1) { mediatorMock.kommandokjedeSuspendert(any()) }
     }

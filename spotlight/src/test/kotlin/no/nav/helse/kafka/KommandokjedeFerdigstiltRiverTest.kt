@@ -8,7 +8,7 @@ import no.nav.helse.kafka.river.KommandokjedeFerdigstiltRiver
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.junit.jupiter.api.Test
 
-class KommandokjedeFerdigstiltRiverTest {
+internal class KommandokjedeFerdigstiltRiverTest {
 
     private val testRapid = TestRapid()
     private val mediatorMock = mockk<Mediator>(relaxed = true)
@@ -18,7 +18,7 @@ class KommandokjedeFerdigstiltRiverTest {
     }
 
     @Test
-    fun `kan lese inn kommandokjede_ferdigstilt`() {
+    fun `Kan lese inn kommandokjede_ferdigstilt`() {
         testRapid.sendTestMessage(kommandokjedeFerdigstilt())
         verify(exactly = 1) { mediatorMock.kommandokjedeFerdigstilt(any()) }
     }

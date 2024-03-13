@@ -10,14 +10,14 @@ import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.net.URI
 
-class SlackClient(private val accessToken: String, private val channel: String) {
+internal class SlackClient(private val accessToken: String, private val channel: String) {
 
     private companion object {
         private val logg = LoggerFactory.getLogger(this::class.java)
         private val sikkerlogg = LoggerFactory.getLogger("tjenestekall")
     }
 
-    fun fortellOmSuspenderteKommandokjeder(suspenderteKommandokjeder: List<KommandokjedeSuspendertFraDatabase>) {
+    internal fun fortellOmSuspenderteKommandokjeder(suspenderteKommandokjeder: List<KommandokjedeSuspendertFraDatabase>) {
         if (suspenderteKommandokjeder.isEmpty()) {
             postMessage(text = ":spotlight: Ingen kommandokjeder sitter fast :spotlight:")
         } else {

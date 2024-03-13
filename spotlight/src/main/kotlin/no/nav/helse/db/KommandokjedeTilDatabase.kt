@@ -3,7 +3,7 @@ package no.nav.helse.db
 import java.time.LocalDateTime
 import java.util.*
 
-data class KommandokjedeSuspendertTilDatabase(
+internal data class KommandokjedeSuspendertTilDatabase(
     val commandContextId: UUID,
     val meldingId: UUID,
     val command: String,
@@ -11,14 +11,14 @@ data class KommandokjedeSuspendertTilDatabase(
     val opprettet: LocalDateTime,
 )
 
-data class KommandokjedeFerdigstiltTilDatabase(
+internal data class KommandokjedeFerdigstiltTilDatabase(
     val commandContextId: UUID,
     val meldingId: UUID,
     val command: String,
     val opprettet: LocalDateTime,
 )
 
-data class KommandokjedeAvbruttTilDatabase(
+internal data class KommandokjedeAvbruttTilDatabase(
     val commandContextId: UUID,
     val meldingId: UUID,
 )

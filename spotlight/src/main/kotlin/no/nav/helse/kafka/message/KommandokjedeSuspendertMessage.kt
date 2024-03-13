@@ -7,7 +7,7 @@ import no.nav.helse.rapids_rivers.asLocalDateTime
 import java.time.LocalDateTime
 import java.util.*
 
-class KommandokjedeSuspendertMessage(packet: JsonMessage) {
+internal class KommandokjedeSuspendertMessage(packet: JsonMessage) {
 
     private val commandContextId: UUID = packet["commandContextId"].asUUID()
     private val meldingId: UUID = packet["meldingId"].asUUID()
@@ -15,7 +15,7 @@ class KommandokjedeSuspendertMessage(packet: JsonMessage) {
     private val sti: List<Int> = packet["sti"].map { it.asInt() }
     private val opprettet: LocalDateTime = packet["@opprettet"].asLocalDateTime()
 
-    companion object {
+    internal companion object {
         internal fun KommandokjedeSuspendertMessage.tilDatabase() =
             KommandokjedeSuspendertTilDatabase(
                 commandContextId = commandContextId,

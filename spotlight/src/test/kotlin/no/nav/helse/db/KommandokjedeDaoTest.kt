@@ -58,7 +58,7 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
     }
 
     @Test
-    fun `antall_ganger_påminnet blir inkrementert`() {
+    fun `Inkrementerer antall_ganger_påminnet etter påminnelse`() {
         val commandContextId1 = UUID.randomUUID()
         val commandContextId2 = UUID.randomUUID()
         kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertForOverEnHalvtimeSiden(commandContextId = commandContextId1))

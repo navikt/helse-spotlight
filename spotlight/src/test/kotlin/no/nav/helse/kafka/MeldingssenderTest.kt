@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test
 import java.util.*
 import kotlin.test.assertEquals
 
-class MeldingssenderTest {
+internal class MeldingssenderTest {
+
     private val testRapid = TestRapid()
     private val kommandokjedeDaoMock = mockk<KommandokjedeDao>(relaxed = true)
     private val meldingssender = Meldingssender(testRapid, kommandokjedeDaoMock)
@@ -21,7 +22,7 @@ class MeldingssenderTest {
     }
 
     @Test
-    fun `sender kommandokjede_påminnelse`() {
+    fun `Sender kommandokjede_påminnelse`() {
         val commandContextId1 = UUID.randomUUID()
         val commandContextId2 = UUID.randomUUID()
         val meldingId1 = UUID.randomUUID()

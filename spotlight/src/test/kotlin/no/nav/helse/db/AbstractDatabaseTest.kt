@@ -10,9 +10,9 @@ import org.junit.jupiter.api.BeforeEach
 import org.testcontainers.containers.PostgreSQLContainer
 import javax.sql.DataSource
 
-abstract class AbstractDatabaseTest(private val doTruncate: Boolean = true) {
+internal abstract class AbstractDatabaseTest(private val doTruncate: Boolean = true) {
 
-    companion object {
+    internal companion object {
         private val port: String
         private val postgres = PostgreSQLContainer<Nothing>("postgres:15").apply {
             withReuse(true)
@@ -22,7 +22,7 @@ abstract class AbstractDatabaseTest(private val doTruncate: Boolean = true) {
             println("Database: jdbc:postgresql://localhost:$firstMappedPort/test startet opp, credentials: test og test")
         }
 
-        val dataSource =
+        internal val dataSource =
             HikariDataSource(HikariConfig().apply {
                 jdbcUrl = postgres.jdbcUrl
                 username = postgres.username

@@ -7,14 +7,14 @@ import no.nav.helse.rapids_rivers.asLocalDateTime
 import java.time.LocalDateTime
 import java.util.*
 
-class KommandokjedeFerdigstiltMessage(packet: JsonMessage) {
+internal class KommandokjedeFerdigstiltMessage(packet: JsonMessage) {
 
     private val commandContextId: UUID = packet["commandContextId"].asUUID()
     private val meldingId: UUID = packet["meldingId"].asUUID()
     private val command: String = packet["command"].asText()
     private val opprettet: LocalDateTime = packet["@opprettet"].asLocalDateTime()
 
-    companion object {
+    internal companion object {
         internal fun KommandokjedeFerdigstiltMessage.tilDatabase() =
             KommandokjedeFerdigstiltTilDatabase(
                 commandContextId = commandContextId,

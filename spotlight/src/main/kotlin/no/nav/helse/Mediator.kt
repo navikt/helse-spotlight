@@ -9,7 +9,7 @@ import no.nav.helse.kafka.river.*
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.slack.SlackClient
 
-class Mediator(
+internal class Mediator(
     rapidsConnection: RapidsConnection,
     private val slackClient: SlackClient,
     private val meldingssender: Meldingssender,

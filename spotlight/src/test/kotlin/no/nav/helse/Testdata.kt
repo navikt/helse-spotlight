@@ -7,7 +7,7 @@ import no.nav.helse.db.KommandokjedeSuspendertTilDatabase
 import java.time.LocalDateTime
 import java.util.*
 
-object Testdata {
+internal object Testdata {
 
     internal fun kommandokjedeSuspendertFraDatabase(
         commandContextId: UUID = UUID.randomUUID(),

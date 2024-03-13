@@ -4,11 +4,11 @@ import no.nav.helse.db.KommandokjedeSuspendertFraDatabase
 import org.intellij.lang.annotations.Language
 import java.time.format.DateTimeFormatter
 
-object SlackMessageBuilder {
+internal object SlackMessageBuilder {
 
     private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
 
-    fun List<KommandokjedeSuspendertFraDatabase>.byggSlackMelding(totaltAntall: Int? = null): String =
+    internal fun List<KommandokjedeSuspendertFraDatabase>.byggSlackMelding(totaltAntall: Int? = null): String =
         attachments(buildSections(this), totaltAntall)
 
     private fun buildSections(suspenderteKommandokjeder: List<KommandokjedeSuspendertFraDatabase>): String {

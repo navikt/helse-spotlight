@@ -6,7 +6,7 @@ import no.nav.helse.slack.SlackMessageBuilder.byggSlackMelding
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 
-class SlackMessageBuilderTest {
+internal class SlackMessageBuilderTest {
 
     @Test
     fun `Sjekker at byggSlackMelding lager gyldig json`() {

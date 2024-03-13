@@ -4,7 +4,7 @@ import org.intellij.lang.annotations.Language
 import java.time.LocalDateTime
 import java.util.*
 
-object Testmeldinger {
+internal object Testmeldinger {
 
     @Language("JSON")
     internal fun kommandokjedeSuspendert(commandContextId: UUID = UUID.randomUUID(), opprettet: LocalDateTime = LocalDateTime.now()): String {

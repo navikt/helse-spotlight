@@ -3,9 +3,9 @@ package no.nav.helse.db
 import java.util.*
 import javax.sql.DataSource
 
-class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource) {
+internal class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource) {
 
-    fun lagreSuspendert(kommandokjedeSuspendert: KommandokjedeSuspendertTilDatabase): Int {
+    internal fun lagreSuspendert(kommandokjedeSuspendert: KommandokjedeSuspendertTilDatabase): Int {
         val stiForDatabase = kommandokjedeSuspendert.sti.joinToString { """ $it """ }
         return query(
             """
@@ -21,17 +21,12 @@ class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource) {
         ).update()
     }
 
-    fun ferdigstilt(kommandokjedeFerdigstilt: KommandokjedeFerdigstiltTilDatabase) =
+    internal fun ferdigstilt(kommandokjedeFerdigstilt: KommandokjedeFerdigstiltTilDatabase) =
         slett(kommandokjedeFerdigstilt.commandContextId)
 
-    fun avbrutt(kommandokjedeAvbrutt: KommandokjedeAvbruttTilDatabase) = slett(kommandokjedeAvbrutt.commandContextId)
+    internal fun avbrutt(kommandokjedeAvbrutt: KommandokjedeAvbruttTilDatabase) = slett(kommandokjedeAvbrutt.commandContextId)
 
-    private fun slett(commandContextId: UUID) = query(
-        "delete from suspenderte_kommandokjeder where command_context_id = :commandContextId",
-        "commandContextId" to commandContextId,
-    ).update()
-
-    fun hentSuspenderteKommandokjeder() = query(
+    internal fun hentSuspenderteKommandokjeder() = query(
         "select * from suspenderte_kommandokjeder where opprettet < current_timestamp - interval '30 minutes'"
     ).list {
         KommandokjedeSuspendertFraDatabase(
@@ -44,11 +39,16 @@ class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource) {
         )
     }
 
-    fun harBlittPåminnet(påminnetCommandContextId: UUID) = query(
+    internal fun harBlittPåminnet(påminnetCommandContextId: UUID) = query(
         """
             update suspenderte_kommandokjeder set antall_ganger_påminnet = antall_ganger_påminnet + 1 
             where command_context_id = :commandContextId
         """.trimIndent(),
         "commandContextId" to påminnetCommandContextId
+    ).update()
+
+    private fun slett(commandContextId: UUID) = query(
+        "delete from suspenderte_kommandokjeder where command_context_id = :commandContextId",
+        "commandContextId" to commandContextId,
     ).update()
 }

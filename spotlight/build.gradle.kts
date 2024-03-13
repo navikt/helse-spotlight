@@ -10,6 +10,7 @@ private val logbackVersion = "1.4.11"
 private val logstashVersion = "7.4"
 
 private val mainClass = "no.nav.helse.AppKt"
+
 plugins {
     kotlin("jvm") version "1.9.22"
 }

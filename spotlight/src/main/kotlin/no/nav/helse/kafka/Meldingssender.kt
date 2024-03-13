@@ -5,9 +5,9 @@ import no.nav.helse.db.KommandokjedeSuspendertFraDatabase
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.RapidsConnection
 
-class Meldingssender(private val rapidsConnection: RapidsConnection, private val kommandokjedeDao: KommandokjedeDao) {
+internal class Meldingssender(private val rapidsConnection: RapidsConnection, private val kommandokjedeDao: KommandokjedeDao) {
 
-    fun påminnSuspenderteKommandokjeder(kommandokjederSomSkalPåminnes: List<KommandokjedeSuspendertFraDatabase>) {
+    internal fun påminnSuspenderteKommandokjeder(kommandokjederSomSkalPåminnes: List<KommandokjedeSuspendertFraDatabase>) {
         kommandokjederSomSkalPåminnes.forEach { kommandokjede ->
             rapidsConnection.publish(
                 JsonMessage.newMessage(
