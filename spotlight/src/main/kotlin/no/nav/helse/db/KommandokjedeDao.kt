@@ -12,12 +12,12 @@ internal class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource
                 insert into suspenderte_kommandokjeder 
                 values (:commandContextId, :meldingId, :command, '{$stiForDatabase}', :opprettet) 
                 on conflict (command_context_id) do 
-                update set melding_id = :meldingId, command = :command, sti = '{$stiForDatabase}', opprettet = :opprettet
+                update set melding_id = :meldingId, command = :command, sti = '{$stiForDatabase}', opprettet = :opprettet, antall_ganger_påminnet = 0
             """.trimIndent(),
             "commandContextId" to kommandokjedeSuspendert.commandContextId,
             "meldingId" to kommandokjedeSuspendert.meldingId,
             "command" to kommandokjedeSuspendert.command,
-            "opprettet" to kommandokjedeSuspendert.opprettet
+            "opprettet" to kommandokjedeSuspendert.opprettet,
         ).update()
     }
 

@@ -26,6 +26,17 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
     }
 
     @Test
+    fun `Antall ganger påminnet settes til 0 når rad blir oppdatert`() {
+        val commandContextId = UUID.randomUUID()
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertTilDatabase(commandContextId))
+        kommandokjedeDao.harBlittPåminnet(commandContextId)
+        assertPåminnet(commandContextId, 1)
+        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertTilDatabase(commandContextId = commandContextId, command =  "EnAnnenCommand"))
+        assertPåminnet(commandContextId, 0)
+        assertOppdatert(commandContextId, "EnAnnenCommand")
+    }
+
+    @Test
     fun `Sletter fra tabellen når kommandokjede ferdigstilles`() {
         val commandContextId = UUID.randomUUID()
         kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendertTilDatabase(commandContextId))
