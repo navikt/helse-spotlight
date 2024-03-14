@@ -43,6 +43,7 @@ internal class Mediator(
 
     internal fun påminnSuspenderteKommandokjeder() {
         meldingssender.påminnSuspenderteKommandokjeder(kommandokjedeDao.hent())
+            .onEach { kommandokjede -> kommandokjedeDao.påminnet(kommandokjede.commandContextId) }
     }
 
 }

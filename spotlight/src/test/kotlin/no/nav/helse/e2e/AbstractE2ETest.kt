@@ -25,7 +25,7 @@ internal abstract class AbstractE2ETest : DatabaseIntegrationTest() {
 
     private val testRapid = TestRapid()
     private val slackClientMock = mockk<SlackClient>(relaxed = true)
-    private val meldingssender = Meldingssender(testRapid, kommandokjedeDao)
+    private val meldingssender = Meldingssender(testRapid)
     private val mediator = Mediator(testRapid, slackClientMock, meldingssender, kommandokjedeDao)
 
     @BeforeEach

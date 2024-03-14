@@ -1,9 +1,7 @@
 package no.nav.helse.kafka
 
-import io.mockk.mockk
 import no.nav.helse.TestRapidHelpers.hendelser
 import no.nav.helse.Testdata.kommandokjedeSuspendertFraDatabase
-import no.nav.helse.db.KommandokjedeDao
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -13,8 +11,7 @@ import kotlin.test.assertEquals
 internal class MeldingssenderTest {
 
     private val testRapid = TestRapid()
-    private val kommandokjedeDaoMock = mockk<KommandokjedeDao>(relaxed = true)
-    private val meldingssender = Meldingssender(testRapid, kommandokjedeDaoMock)
+    private val meldingssender = Meldingssender(testRapid)
 
     @BeforeEach
     internal fun resetTestSetup() {
