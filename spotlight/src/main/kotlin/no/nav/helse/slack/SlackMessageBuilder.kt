@@ -42,9 +42,9 @@ internal object SlackMessageBuilder {
 
     private fun lagMeldingTittel(antall: Int?): String =
         if (antall != null) {
-            ":spotlight: Det er $antall kommandokjeder som sitter fast: :spotlight:"
+            ":spotlight: Det er $antall ${if (antall == 1) "kommandokjede" else "kommandokjeder"} som sitter fast: :spotlight:"
         } else {
-            ":the-more-you-know: Forsettelse: :the-more-you-know:"
+            ":the-more-you-know: Fortsettelse: :the-more-you-know:"
         }
 
     @Language("JSON")

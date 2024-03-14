@@ -10,7 +10,8 @@ internal class SlackMessageBuilderTest {
 
     @Test
     fun `Sjekker at byggSlackMelding lager gyldig json`() {
-        val jsonString = listOf(kommandokjedeSuspendertFraDatabase(), kommandokjedeSuspendertFraDatabase()).byggSlackMelding()
+        val suspenderteKommandokjeder = listOf(kommandokjedeSuspendertFraDatabase(), kommandokjedeSuspendertFraDatabase())
+        val jsonString = suspenderteKommandokjeder.byggSlackMelding(suspenderteKommandokjeder.size)
         assertDoesNotThrow { objectMapper.readTree(jsonString) }
     }
 }
