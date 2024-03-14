@@ -23,4 +23,5 @@ internal class KommandokjedeFerdigstiltMessage(packet: JsonMessage) {
                 opprettet = opprettet
             )
     }
+
 }

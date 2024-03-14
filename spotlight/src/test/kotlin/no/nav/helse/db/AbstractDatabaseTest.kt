@@ -56,9 +56,11 @@ internal abstract class AbstractDatabaseTest(private val doTruncate: Boolean = t
             }
         }
     }
+
 }
+
 private fun createTruncateFunction(dataSource: DataSource) {
-    sessionOf(dataSource).use  {
+    sessionOf(dataSource).use {
         @Language("PostgreSQL")
         val query = """
             CREATE OR REPLACE FUNCTION truncate_tables() RETURNS void AS $$

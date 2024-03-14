@@ -33,4 +33,5 @@ internal class KommandokjedeFerdigstiltRiver(rapidsConnection: RapidsConnection,
         logg.info("Leser melding ${packet.toJson()}")
         mediator.kommandokjedeFerdigstilt(KommandokjedeFerdigstiltMessage(packet).tilDatabase())
     }
+
 }

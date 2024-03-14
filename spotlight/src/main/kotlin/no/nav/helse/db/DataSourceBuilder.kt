@@ -11,6 +11,7 @@ import java.time.Duration
 import javax.sql.DataSource
 
 internal class DataSourceBuilder(env: Map<String, String>) {
+
     private val databaseHost: String = requireNotNull(env["DATABASE_HOST"]) { "host må settes" }
     private val databasePort: String = requireNotNull(env["DATABASE_PORT"]) { "port må settes" }
     private val databaseName: String = requireNotNull(env["DATABASE_DATABASE"]) { "databasenavn må settes" }
@@ -57,4 +58,5 @@ internal class DataSourceBuilder(env: Map<String, String>) {
     internal fun migrate() {
         HikariDataSource(hikariMigrationConfig).use { runMigration(it) }
     }
+
 }

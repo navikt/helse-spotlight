@@ -38,4 +38,5 @@ internal class MeldingssenderTest {
         assertEquals(meldingId1, hendelser[0]["meldingId"].asUUID())
         assertEquals(meldingId2, hendelser[1]["meldingId"].asUUID())
     }
+
 }

@@ -29,4 +29,5 @@ internal class KlokkaSeksHverdagerRiver(rapidsConnection: RapidsConnection, priv
         logg.info("Klokka er 6 🐔. Forteller om suspenderte kommandokjeder på slack.")
         mediator.fortellOmSuspenderteKommandokjeder()
     }
+
 }

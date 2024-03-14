@@ -27,4 +27,5 @@ internal class HverHalvtimeRiver(rapidsConnection: RapidsConnection, private val
         logg.info("Påminner suspenderte kommandokjeder")
         mediator.påminnSuspenderteKommandokjeder()
     }
+
 }

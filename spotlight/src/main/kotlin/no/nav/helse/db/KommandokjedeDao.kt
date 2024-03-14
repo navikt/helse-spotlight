@@ -51,4 +51,5 @@ internal class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource
         "delete from suspenderte_kommandokjeder where command_context_id = :commandContextId",
         "commandContextId" to commandContextId,
     ).update()
+
 }

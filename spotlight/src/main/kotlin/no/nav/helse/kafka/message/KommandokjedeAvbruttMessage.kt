@@ -17,4 +17,5 @@ internal class KommandokjedeAvbruttMessage(packet: JsonMessage) {
                 meldingId = meldingId,
             )
     }
+
 }

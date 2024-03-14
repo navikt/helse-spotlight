@@ -58,4 +58,5 @@ internal abstract class DatabaseIntegrationTest: AbstractDatabaseTest() {
         ).single { it.int(1) }
         assertEquals(antall, 0)
     }
+
 }

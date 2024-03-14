@@ -34,4 +34,5 @@ internal class KommandokjedeSuspendertRiver(rapidsConnection: RapidsConnection, 
         logg.info("Leser melding ${packet.toJson()}")
         mediator.kommandokjedeSuspendert(KommandokjedeSuspendertMessage(packet).tilDatabase())
     }
+
 }

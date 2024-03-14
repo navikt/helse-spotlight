@@ -64,4 +64,5 @@ internal object Testmeldinger {
             "ukedag": "THURSDAY"
           }
         """.trimIndent()
+
 }

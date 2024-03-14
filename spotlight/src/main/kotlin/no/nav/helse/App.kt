@@ -14,6 +14,7 @@ internal val objectMapper = jacksonObjectMapper()
     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 
 internal class App {
+
     private val env = System.getenv()
     private val rapidsConnection = RapidApplication.create(env)
     private val datasourceBuilder = DataSourceBuilder(env)

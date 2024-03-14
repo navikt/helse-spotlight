@@ -25,4 +25,5 @@ internal class KommandokjedeSuspendertMessage(packet: JsonMessage) {
                 opprettet = opprettet
             )
     }
+
 }

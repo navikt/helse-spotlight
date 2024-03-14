@@ -31,4 +31,5 @@ internal class KommandokjedeAvbruttRiver(rapidsConnection: RapidsConnection, pri
         logg.info("Leser melding ${packet.toJson()}")
         mediator.kommandokjedeAvbrutt(KommandokjedeAvbruttMessage(packet).tilDatabase())
     }
+
 }

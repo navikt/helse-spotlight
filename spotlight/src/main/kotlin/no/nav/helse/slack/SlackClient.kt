@@ -88,4 +88,5 @@ internal class SlackClient(private val accessToken: String, private val channel:
     }
 
     private fun InputStream.readText() = use { it.bufferedReader().readText() }
+
 }
