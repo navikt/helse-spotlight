@@ -2,12 +2,12 @@ package no.nav.helse.slack
 
 import no.nav.helse.Testdata.kommandokjedeSuspendertFraDatabase
 import no.nav.helse.objectMapper
-import no.nav.helse.slack.SlackMessageBuilder.byggSlackMelding
+import no.nav.helse.slack.SlackMeldingBuilder.byggSlackMelding
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 
-internal class SlackMessageBuilderTest {
+internal class SlackMeldingBuilderTest {
 
     @Test
     fun `Sjekker at byggSlackMelding velger riktig tittel`() {

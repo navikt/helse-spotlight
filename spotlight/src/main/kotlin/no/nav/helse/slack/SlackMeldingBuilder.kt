@@ -4,7 +4,7 @@ import no.nav.helse.db.KommandokjedeSuspendertFraDatabase
 import org.intellij.lang.annotations.Language
 import java.time.format.DateTimeFormatter
 
-internal object SlackMessageBuilder {
+internal object SlackMeldingBuilder {
 
     private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
 

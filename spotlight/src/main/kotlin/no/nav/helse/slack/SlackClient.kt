@@ -2,7 +2,7 @@ package no.nav.helse.slack
 
 import no.nav.helse.db.KommandokjedeSuspendertFraDatabase
 import no.nav.helse.objectMapper
-import no.nav.helse.slack.SlackMessageBuilder.byggSlackMelding
+import no.nav.helse.slack.SlackMeldingBuilder.byggSlackMelding
 import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.io.InputStream
@@ -19,7 +19,7 @@ internal class SlackClient(private val accessToken: String, private val channel:
 
     internal fun fortellOmSuspenderteKommandokjeder(suspenderteKommandokjeder: List<KommandokjedeSuspendertFraDatabase>) {
         if (suspenderteKommandokjeder.isEmpty()) {
-            postMessage(text = ":spotlight: Ingen kommandokjeder sitter fast :spotlight:")
+            postMelding(text = ":spotlight: Ingen kommandokjeder sitter fast :spotlight:")
         } else {
             // Slack APIet støtter bare 50 blocks pr melding. Hvis det er mer enn 50 stuck kommandokjeder
             // postes resterende i tråd.
@@ -27,15 +27,15 @@ internal class SlackClient(private val accessToken: String, private val channel:
             suspenderteKommandokjeder.chunked(49).forEach {
                 if (threadTs == null) {
                     threadTs =
-                        postMessage(attachments = it.byggSlackMelding(suspenderteKommandokjeder.size))
+                        postMelding(attachments = it.byggSlackMelding(suspenderteKommandokjeder.size))
                 } else {
-                    postMessage(attachments = it.byggSlackMelding(), threadTs = threadTs)
+                    postMelding(attachments = it.byggSlackMelding(), threadTs = threadTs)
                 }
             }
         }
     }
 
-    private fun postMessage(text: String? = null, attachments: String? = null, threadTs: String? = null): String? =
+    private fun postMelding(text: String? = null, attachments: String? = null, threadTs: String? = null): String? =
         "https://slack.com/api/chat.postMessage".post(
             objectMapper.writeValueAsString(mutableMapOf<String, Any>(
                 "channel" to channel,
@@ -66,20 +66,20 @@ internal class SlackClient(private val accessToken: String, private val channel:
             val responseCode = connection.responseCode
 
             if (connection.responseCode !in 200..299) {
-                logg.warn("response from slack: code=$responseCode")
-                sikkerlogg.warn("response from slack: code=$responseCode body=${connection.errorStream.readText()}")
+                logg.warn("Respons fra slack: code=$responseCode")
+                sikkerlogg.warn("Respons fra slack: code=$responseCode body=${connection.errorStream.readText()}")
                 return null
             }
 
             val responseBody = connection.inputStream.readText()
-            logg.debug("response from slack: code=$responseCode")
-            sikkerlogg.debug("response from slack: code=$responseCode body=$responseBody")
+            logg.debug("Respons fra slack: code=$responseCode")
+            sikkerlogg.debug("Respons fra slack: code=$responseCode body=$responseBody")
 
             return responseBody
         } catch (err: SocketTimeoutException) {
-            logg.warn("timeout waiting for reply", err)
+            logg.warn("Timeout venter på svar", err)
         } catch (err: IOException) {
-            logg.error("feil ved posting til slack: {}", err.message, err)
+            logg.error("Feil ved posting til slack: {}", err.message, err)
         } finally {
             connection?.disconnect()
         }
