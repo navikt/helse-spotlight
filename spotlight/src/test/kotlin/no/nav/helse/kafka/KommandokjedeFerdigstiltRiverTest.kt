@@ -3,6 +3,7 @@ package no.nav.helse.kafka
 import io.mockk.mockk
 import io.mockk.verify
 import no.nav.helse.Mediator
+import no.nav.helse.Testdata.kommandokjedeFerdigstiltTilDatabase
 import no.nav.helse.Testmeldinger.kommandokjedeFerdigstilt
 import no.nav.helse.kafka.river.KommandokjedeFerdigstiltRiver
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
@@ -20,7 +21,7 @@ internal class KommandokjedeFerdigstiltRiverTest {
     @Test
     fun `Kan lese inn kommandokjede_ferdigstilt`() {
         testRapid.sendTestMessage(kommandokjedeFerdigstilt())
-        verify(exactly = 1) { mediatorMock.kommandokjedeFerdigstilt(any()) }
+        verify(exactly = 1) { mediatorMock.kommandokjedeFerdigstilt(kommandokjedeFerdigstiltTilDatabase()) }
     }
 
 }

@@ -10,53 +10,54 @@ import java.util.*
 internal object Testdata {
 
     internal val COMMAND_CONTEXT_ID: UUID = UUID.randomUUID()
+    internal val MELDING_ID: UUID = UUID.randomUUID()
+    internal val OPPRETTET: LocalDateTime = LocalDateTime.now()
+    internal val STI: List<Int> = listOf(0)
+    internal const val EN_COMMAND: String = "EnCommand"
 
     internal fun kommandokjedeSuspendertFraDatabase(
         commandContextId: UUID = COMMAND_CONTEXT_ID,
-        meldingId: UUID = UUID.randomUUID()
+        meldingId: UUID = MELDING_ID,
     ) = KommandokjedeSuspendertFraDatabase(
         commandContextId = commandContextId,
         meldingId = meldingId,
-        command = "EnCommand",
-        sti = listOf(1, 3),
-        opprettet = LocalDateTime.now(),
+        command = EN_COMMAND,
+        sti = STI,
+        opprettet = OPPRETTET,
         antallGangerPåminnet = 0
     )
 
     internal fun kommandokjedeSuspendertTilDatabase(
         commandContextId: UUID = COMMAND_CONTEXT_ID,
-        meldingId: UUID = UUID.randomUUID(),
-        command: String = "EnCommand",
-        opprettet: LocalDateTime = LocalDateTime.now(),
+        command: String = EN_COMMAND,
+        opprettet: LocalDateTime = OPPRETTET,
     ) = KommandokjedeSuspendertTilDatabase(
         commandContextId = commandContextId,
-        meldingId = meldingId,
+        meldingId = MELDING_ID,
         command = command,
-        sti = listOf(1, 3),
+        sti = STI,
         opprettet = opprettet,
     )
 
     internal fun kommandokjedeSuspendertForOverEnHalvtimeSiden(
         commandContextId: UUID = COMMAND_CONTEXT_ID,
-        meldingId: UUID = UUID.randomUUID(),
     ) = kommandokjedeSuspendertTilDatabase(
         commandContextId = commandContextId,
-        meldingId = meldingId,
-        opprettet = LocalDateTime.now().minusMinutes(35)
+        opprettet = OPPRETTET.minusMinutes(35)
     )
 
-    internal fun kommandokjedeFerdigstiltTilDatabase(commandContextId: UUID = COMMAND_CONTEXT_ID) =
+    internal fun kommandokjedeFerdigstiltTilDatabase() =
         KommandokjedeFerdigstiltTilDatabase(
-            commandContextId = commandContextId,
-            meldingId = UUID.randomUUID(),
-            command = "EnCommand",
-            opprettet = LocalDateTime.now()
+            commandContextId = COMMAND_CONTEXT_ID,
+            meldingId = MELDING_ID,
+            command = EN_COMMAND,
+            opprettet = OPPRETTET,
         )
 
-    internal fun kommandokjedeAvbruttTilDatabase(commandContextId: UUID = COMMAND_CONTEXT_ID) =
+    internal fun kommandokjedeAvbruttTilDatabase() =
         KommandokjedeAvbruttTilDatabase(
-            commandContextId = commandContextId,
-            meldingId = UUID.randomUUID(),
+            commandContextId = COMMAND_CONTEXT_ID,
+            meldingId = MELDING_ID,
         )
 
 }
