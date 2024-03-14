@@ -1,7 +1,7 @@
 package no.nav.helse.e2e
 
+import no.nav.helse.Testdata.OPPRETTET
 import org.junit.jupiter.api.Test
-import java.time.LocalDateTime
 
 internal class KommandokjedeE2ETest: AbstractE2ETest() {
 
@@ -27,14 +27,14 @@ internal class KommandokjedeE2ETest: AbstractE2ETest() {
 
     @Test
     fun `Sender påminnelse når halv_time leses inn`() {
-        sendKommandokjedeSuspendert(opprettet = LocalDateTime.now().minusMinutes(35))
+        sendKommandokjedeSuspendert(opprettet = OPPRETTET.minusMinutes(35))
         sendHalvTime()
         assertPåminnelserSendt()
     }
 
     @Test
     fun `Poster på slack når klokka er 6`() {
-        sendKommandokjedeSuspendert(opprettet = LocalDateTime.now().minusMinutes(35))
+        sendKommandokjedeSuspendert(opprettet = OPPRETTET.minusMinutes(35))
         sendHelTime()
         assertPostetPåSlack()
     }
