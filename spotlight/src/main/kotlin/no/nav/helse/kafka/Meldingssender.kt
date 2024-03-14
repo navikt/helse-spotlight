@@ -9,13 +9,13 @@ internal class Meldingssender(private val rapidsConnection: RapidsConnection) {
     internal fun påminnSuspenderteKommandokjeder(
         kommandokjederSomSkalPåminnes: List<KommandokjedeSuspendertFraDatabase>
     ): List<KommandokjedeSuspendertFraDatabase> =
-        kommandokjederSomSkalPåminnes.onEach { kommandokjede ->
+        kommandokjederSomSkalPåminnes.onEach { (commandContextId, meldingId) ->
             rapidsConnection.publish(
                 JsonMessage.newMessage(
                     "kommandokjede_påminnelse",
                     mapOf(
-                        "commandContextId" to kommandokjede.commandContextId,
-                        "meldingId" to kommandokjede.meldingId
+                        "commandContextId" to commandContextId,
+                        "meldingId" to meldingId
                     )
                 ).toJson()
             )
