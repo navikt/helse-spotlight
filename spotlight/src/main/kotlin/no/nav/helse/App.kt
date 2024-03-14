@@ -7,13 +7,14 @@ import no.nav.helse.db.DataSourceBuilder
 import no.nav.helse.db.KommandokjedeDao
 import no.nav.helse.kafka.Meldingssender
 import no.nav.helse.rapids_rivers.RapidApplication
+import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.slack.SlackClient
 
 internal val objectMapper = jacksonObjectMapper()
     .registerModule(JavaTimeModule())
     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 
-internal class App {
+internal class App: RapidsConnection.StatusListener {
 
     private val env = System.getenv()
     private val rapidsConnection = RapidApplication.create(env)
@@ -28,12 +29,16 @@ internal class App {
     )
 
     init {
+        rapidsConnection.register(this)
         Mediator(rapidsConnection, slackClient, meldingssender, kommandokjedeDao)
     }
 
     internal fun start() {
-        datasourceBuilder.migrate()
         rapidsConnection.start()
+    }
+
+    override fun onStartup(rapidsConnection: RapidsConnection) {
+        datasourceBuilder.migrate()
     }
 
 }
