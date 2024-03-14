@@ -26,8 +26,7 @@ internal class SlackClient(private val accessToken: String, private val channel:
             var threadTs: String? = null
             suspenderteKommandokjeder.chunked(49).forEach {
                 if (threadTs == null) {
-                    threadTs =
-                        postMelding(attachments = it.byggSlackMelding(suspenderteKommandokjeder.size))
+                    threadTs = postMelding(attachments = it.byggSlackMelding(suspenderteKommandokjeder.size))
                 } else {
                     postMelding(attachments = it.byggSlackMelding(), threadTs = threadTs)
                 }
