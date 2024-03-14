@@ -32,7 +32,6 @@ internal class Mediator(
         kommandokjedeDao.ferdigstilt(kommandokjedeFerdigstilt)
     }
 
-
     internal fun kommandokjedeAvbrutt(kommandokjedeAvbrutt: KommandokjedeAvbruttTilDatabase) {
         kommandokjedeDao.avbrutt(kommandokjedeAvbrutt)
     }
