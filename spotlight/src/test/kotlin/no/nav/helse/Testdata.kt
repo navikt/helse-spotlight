@@ -9,8 +9,10 @@ import java.util.*
 
 internal object Testdata {
 
+    internal val COMMAND_CONTEXT_ID: UUID = UUID.randomUUID()
+
     internal fun kommandokjedeSuspendertFraDatabase(
-        commandContextId: UUID = UUID.randomUUID(),
+        commandContextId: UUID = COMMAND_CONTEXT_ID,
         meldingId: UUID = UUID.randomUUID()
     ) = KommandokjedeSuspendertFraDatabase(
         commandContextId = commandContextId,
@@ -22,7 +24,7 @@ internal object Testdata {
     )
 
     internal fun kommandokjedeSuspendertTilDatabase(
-        commandContextId: UUID = UUID.randomUUID(),
+        commandContextId: UUID = COMMAND_CONTEXT_ID,
         meldingId: UUID = UUID.randomUUID(),
         command: String = "EnCommand",
         opprettet: LocalDateTime = LocalDateTime.now(),
@@ -35,7 +37,7 @@ internal object Testdata {
     )
 
     internal fun kommandokjedeSuspendertForOverEnHalvtimeSiden(
-        commandContextId: UUID = UUID.randomUUID(),
+        commandContextId: UUID = COMMAND_CONTEXT_ID,
         meldingId: UUID = UUID.randomUUID(),
     ) = kommandokjedeSuspendertTilDatabase(
         commandContextId = commandContextId,
@@ -43,7 +45,7 @@ internal object Testdata {
         opprettet = LocalDateTime.now().minusMinutes(35)
     )
 
-    internal fun kommandokjedeFerdigstiltTilDatabase(commandContextId: UUID) =
+    internal fun kommandokjedeFerdigstiltTilDatabase(commandContextId: UUID = COMMAND_CONTEXT_ID) =
         KommandokjedeFerdigstiltTilDatabase(
             commandContextId = commandContextId,
             meldingId = UUID.randomUUID(),
@@ -51,7 +53,7 @@ internal object Testdata {
             opprettet = LocalDateTime.now()
         )
 
-    internal fun kommandokjedeAvbruttTilDatabase(commandContextId: UUID) =
+    internal fun kommandokjedeAvbruttTilDatabase(commandContextId: UUID = COMMAND_CONTEXT_ID) =
         KommandokjedeAvbruttTilDatabase(
             commandContextId = commandContextId,
             meldingId = UUID.randomUUID(),

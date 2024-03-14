@@ -4,6 +4,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import no.nav.helse.Mediator
 import no.nav.helse.TestRapidHelpers.hendelser
+import no.nav.helse.Testdata.COMMAND_CONTEXT_ID
 import no.nav.helse.Testmeldinger.halvTime
 import no.nav.helse.Testmeldinger.helTime
 import no.nav.helse.Testmeldinger.kommandokjedeAvbrutt
@@ -20,8 +21,6 @@ import java.util.*
 import kotlin.test.assertEquals
 
 internal abstract class AbstractE2ETest : DatabaseIntegrationTest() {
-
-    protected val COMMAND_CONTEXT_ID: UUID = UUID.randomUUID()
 
     private val testRapid = TestRapid()
     private val slackClientMock = mockk<SlackClient>(relaxed = true)

@@ -5,6 +5,7 @@ import kotliquery.Row
 import kotliquery.action.QueryAction
 import kotliquery.queryOf
 import kotliquery.sessionOf
+import no.nav.helse.Testdata.COMMAND_CONTEXT_ID
 import org.intellij.lang.annotations.Language
 import java.util.*
 import kotlin.test.assertEquals
@@ -20,7 +21,7 @@ internal abstract class DatabaseIntegrationTest: AbstractDatabaseTest() {
     protected fun Query.execute() = asExecute.runInSession()
     private fun <T> QueryAction<T>.runInSession() = sessionOf(dataSource).use(::runWithSession)
 
-    protected fun assertPåminnet(commandContextId: UUID, forventetAntallGangerPåminnet: Int) {
+    protected fun assertPåminnet(commandContextId: UUID = COMMAND_CONTEXT_ID, forventetAntallGangerPåminnet: Int) {
         val antallGangerPåminnet = query(
             "select antall_ganger_påminnet from suspenderte_kommandokjeder where command_context_id = :commandContextId",
             "commandContextId" to commandContextId
@@ -30,7 +31,7 @@ internal abstract class DatabaseIntegrationTest: AbstractDatabaseTest() {
         assertEquals(forventetAntallGangerPåminnet, antallGangerPåminnet)
     }
 
-    protected fun assertLagret(commandContextId: UUID) {
+    protected fun assertLagret(commandContextId: UUID = COMMAND_CONTEXT_ID) {
         val kommandokjedeSuspendert = query(
             "select * from suspenderte_kommandokjeder where command_context_id = :commandContextId",
             "commandContextId" to commandContextId
@@ -40,7 +41,7 @@ internal abstract class DatabaseIntegrationTest: AbstractDatabaseTest() {
         assertEquals(commandContextId, kommandokjedeSuspendert)
     }
 
-    protected fun assertOppdatert(commandContextId: UUID, command: String) {
+    protected fun assertOppdatert(commandContextId: UUID = COMMAND_CONTEXT_ID, command: String) {
         val commandIDatabase = query(
             "select command from suspenderte_kommandokjeder where command_context_id = :commandContextId",
             "commandContextId" to commandContextId
@@ -50,7 +51,7 @@ internal abstract class DatabaseIntegrationTest: AbstractDatabaseTest() {
         assertEquals(commandIDatabase, command)
     }
 
-    protected fun assertSlettet(commandContextId: UUID) {
+    protected fun assertSlettet(commandContextId: UUID = COMMAND_CONTEXT_ID) {
         val antall = query(
             "select count(1) from suspenderte_kommandokjeder where command_context_id = :commandContextId",
             "commandContextId" to commandContextId

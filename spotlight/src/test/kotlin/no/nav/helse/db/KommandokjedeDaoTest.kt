@@ -1,5 +1,6 @@
 package no.nav.helse.db
 
+import no.nav.helse.Testdata.COMMAND_CONTEXT_ID
 import no.nav.helse.Testdata.kommandokjedeAvbruttTilDatabase
 import no.nav.helse.Testdata.kommandokjedeFerdigstiltTilDatabase
 import no.nav.helse.Testdata.kommandokjedeSuspendertForOverEnHalvtimeSiden
@@ -12,53 +13,47 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
 
     @Test
     fun `Kan lagre suspendert kommandokjede`() {
-        val commandContextId = UUID.randomUUID()
-        kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase(commandContextId))
-        assertLagret(commandContextId)
+        kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase())
+        assertLagret()
     }
 
     @Test
     fun `Oppdaterer suspendert kommandokjede on conflict`() {
-        val commandContextId = UUID.randomUUID()
-        kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase(commandContextId))
-        kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase(commandContextId = commandContextId, command =  "EnAnnenCommand"))
-        assertOppdatert(commandContextId, "EnAnnenCommand")
+        kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase())
+        kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase(command =  "EnAnnenCommand"))
+        assertOppdatert(command = "EnAnnenCommand")
     }
 
     @Test
     fun `Antall ganger påminnet settes til 0 når rad blir oppdatert`() {
-        val commandContextId = UUID.randomUUID()
-        kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase(commandContextId))
-        kommandokjedeDao.påminnet(commandContextId)
-        assertPåminnet(commandContextId, 1)
-        kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase(commandContextId = commandContextId, command =  "EnAnnenCommand"))
-        assertPåminnet(commandContextId, 0)
-        assertOppdatert(commandContextId, "EnAnnenCommand")
+        kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase())
+        kommandokjedeDao.påminnet(COMMAND_CONTEXT_ID)
+        assertPåminnet(forventetAntallGangerPåminnet =  1)
+        kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase(command =  "EnAnnenCommand"))
+        assertPåminnet(forventetAntallGangerPåminnet = 0)
+        assertOppdatert(command = "EnAnnenCommand")
     }
 
     @Test
     fun `Sletter fra tabellen når kommandokjede ferdigstilles`() {
-        val commandContextId = UUID.randomUUID()
-        kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase(commandContextId))
-        kommandokjedeDao.ferdigstilt(kommandokjedeFerdigstiltTilDatabase(commandContextId))
-        assertSlettet(commandContextId)
+        kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase())
+        kommandokjedeDao.ferdigstilt(kommandokjedeFerdigstiltTilDatabase())
+        assertSlettet()
     }
 
     @Test
     fun `Sletter fra tabellen når kommandokjede avbrytes`() {
-        val commandContextId = UUID.randomUUID()
-        kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase(commandContextId))
-        kommandokjedeDao.avbrutt(kommandokjedeAvbruttTilDatabase(commandContextId))
-        assertSlettet(commandContextId)
+        kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase())
+        kommandokjedeDao.avbrutt(kommandokjedeAvbruttTilDatabase())
+        assertSlettet()
     }
 
     @Test
     fun `Henter suspenderte kommandokjeder som er minst 30 minutter gamle`() {
-        val commandContextId = UUID.randomUUID()
-        kommandokjedeDao.upsert(kommandokjedeSuspendertForOverEnHalvtimeSiden(commandContextId))
+        kommandokjedeDao.upsert(kommandokjedeSuspendertForOverEnHalvtimeSiden())
         val suspenderteKommandokjeder = kommandokjedeDao.hent()
         assertEquals(1, suspenderteKommandokjeder.size)
-        assertEquals(commandContextId, suspenderteKommandokjeder.first().commandContextId)
+        assertEquals(COMMAND_CONTEXT_ID, suspenderteKommandokjeder.first().commandContextId)
     }
 
     @Test

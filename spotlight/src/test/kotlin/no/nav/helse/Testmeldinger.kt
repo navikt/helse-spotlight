@@ -1,5 +1,6 @@
 package no.nav.helse
 
+import no.nav.helse.Testdata.COMMAND_CONTEXT_ID
 import org.intellij.lang.annotations.Language
 import java.time.LocalDateTime
 import java.util.*
@@ -7,7 +8,7 @@ import java.util.*
 internal object Testmeldinger {
 
     @Language("JSON")
-    internal fun kommandokjedeSuspendert(commandContextId: UUID = UUID.randomUUID(), opprettet: LocalDateTime = LocalDateTime.now()): String {
+    internal fun kommandokjedeSuspendert(commandContextId: UUID = COMMAND_CONTEXT_ID, opprettet: LocalDateTime = LocalDateTime.now()): String {
         return """
             {
               "@event_name": "kommandokjede_suspendert",
@@ -21,7 +22,7 @@ internal object Testmeldinger {
     }
 
     @Language("JSON")
-    internal fun kommandokjedeFerdigstilt(commandContextId: UUID = UUID.randomUUID()): String {
+    internal fun kommandokjedeFerdigstilt(commandContextId: UUID = COMMAND_CONTEXT_ID): String {
         return """
             {
               "@event_name": "kommandokjede_ferdigstilt",
@@ -35,7 +36,7 @@ internal object Testmeldinger {
     }
 
     @Language("JSON")
-    internal fun kommandokjedeAvbrutt(commandContextId: UUID = UUID.randomUUID()): String {
+    internal fun kommandokjedeAvbrutt(commandContextId: UUID = COMMAND_CONTEXT_ID): String {
         return """
             {
               "@event_name": "kommandokjede_avbrutt",
