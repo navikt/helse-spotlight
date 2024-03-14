@@ -5,7 +5,7 @@ import javax.sql.DataSource
 
 internal class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource) {
 
-    internal fun lagreSuspendert(kommandokjedeSuspendert: KommandokjedeSuspendertTilDatabase): Int {
+    internal fun upsert(kommandokjedeSuspendert: KommandokjedeSuspendertTilDatabase): Int {
         val stiForDatabase = kommandokjedeSuspendert.sti.joinToString { """ $it """ }
         return query(
             """
@@ -26,7 +26,7 @@ internal class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource
 
     internal fun avbrutt(kommandokjedeAvbrutt: KommandokjedeAvbruttTilDatabase) = slett(kommandokjedeAvbrutt.commandContextId)
 
-    internal fun hentSuspenderteKommandokjeder() = query(
+    internal fun hent() = query(
         "select * from suspenderte_kommandokjeder where opprettet < current_timestamp - interval '30 minutes'"
     ).list {
         KommandokjedeSuspendertFraDatabase(
@@ -39,7 +39,7 @@ internal class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource
         )
     }
 
-    internal fun harBlittPåminnet(påminnetCommandContextId: UUID) = query(
+    internal fun påminnet(påminnetCommandContextId: UUID) = query(
         """
             update suspenderte_kommandokjeder set antall_ganger_påminnet = antall_ganger_påminnet + 1 
             where command_context_id = :commandContextId

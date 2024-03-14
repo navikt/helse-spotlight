@@ -18,7 +18,7 @@ internal class Meldingssender(private val rapidsConnection: RapidsConnection, pr
                     )
                 ).toJson()
             ).also {
-                kommandokjedeDao.harBlittPåminnet(kommandokjede.commandContextId)
+                kommandokjedeDao.påminnet(kommandokjede.commandContextId)
             }
         }
     }

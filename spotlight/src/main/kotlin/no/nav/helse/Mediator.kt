@@ -24,23 +24,25 @@ internal class Mediator(
         HverHalvtimeRiver(rapidsConnection, this)
     }
 
+    internal fun kommandokjedeSuspendert(kommandokjedeSuspendert: KommandokjedeSuspendertTilDatabase) {
+        kommandokjedeDao.upsert(kommandokjedeSuspendert)
+    }
+
     internal fun kommandokjedeFerdigstilt(kommandokjedeFerdigstilt: KommandokjedeFerdigstiltTilDatabase) {
         kommandokjedeDao.ferdigstilt(kommandokjedeFerdigstilt)
     }
 
-    internal fun kommandokjedeSuspendert(kommandokjedeSuspendert: KommandokjedeSuspendertTilDatabase) {
-        kommandokjedeDao.lagreSuspendert(kommandokjedeSuspendert)
-    }
 
     internal fun kommandokjedeAvbrutt(kommandokjedeAvbrutt: KommandokjedeAvbruttTilDatabase) {
         kommandokjedeDao.avbrutt(kommandokjedeAvbrutt)
     }
 
     internal fun fortellOmSuspenderteKommandokjeder() {
-        slackClient.fortellOmSuspenderteKommandokjeder(kommandokjedeDao.hentSuspenderteKommandokjeder())
+        slackClient.fortellOmSuspenderteKommandokjeder(kommandokjedeDao.hent())
     }
 
     internal fun påminnSuspenderteKommandokjeder() {
-        meldingssender.påminnSuspenderteKommandokjeder(kommandokjedeDao.hentSuspenderteKommandokjeder())
+        meldingssender.påminnSuspenderteKommandokjeder(kommandokjedeDao.hent())
     }
+
 }
