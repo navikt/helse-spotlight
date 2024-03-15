@@ -8,6 +8,7 @@ import no.nav.helse.kafka.Meldingssender
 import no.nav.helse.kafka.river.*
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.slack.SlackClient
+import java.util.*
 
 internal class Mediator(
     rapidsConnection: RapidsConnection,
@@ -24,25 +25,23 @@ internal class Mediator(
         HverHalvtimeRiver(rapidsConnection, this)
     }
 
-    internal fun kommandokjedeSuspendert(kommandokjedeSuspendert: KommandokjedeSuspendertTilDatabase) {
-        kommandokjedeDao.upsert(kommandokjedeSuspendert)
-    }
+    internal fun kommandokjedeSuspendert(kommandokjede: KommandokjedeSuspendertTilDatabase) =
+        kommandokjedeDao.upsert(kommandokjede)
 
-    internal fun kommandokjedeFerdigstilt(kommandokjedeFerdigstilt: KommandokjedeFerdigstiltTilDatabase) {
-        kommandokjedeDao.ferdigstilt(kommandokjedeFerdigstilt)
-    }
+    internal fun kommandokjedeFerdigstilt(kommandokjede: KommandokjedeFerdigstiltTilDatabase) =
+        kommandokjedeDao.ferdigstilt(kommandokjede)
 
-    internal fun kommandokjedeAvbrutt(kommandokjedeAvbrutt: KommandokjedeAvbruttTilDatabase) {
-        kommandokjedeDao.avbrutt(kommandokjedeAvbrutt)
-    }
+    internal fun kommandokjedeAvbrutt(kommandokjede: KommandokjedeAvbruttTilDatabase) =
+        kommandokjedeDao.avbrutt(kommandokjede)
 
-    internal fun fortellOmSuspenderteKommandokjeder() {
-        slackClient.fortellOmSuspenderteKommandokjeder(kommandokjedeDao.hent())
-    }
+    internal fun fortellOmSuspenderteKommandokjeder() =
+        slackClient.fortellOmSuspenderteKommandokjeder(kommandokjeder())
 
-    internal fun påminnSuspenderteKommandokjeder() {
-        meldingssender.påminnSuspenderteKommandokjeder(kommandokjedeDao.hent())
-            .forEach { (commandContextId) -> kommandokjedeDao.påminnet(commandContextId) }
-    }
+    internal fun påminnSuspenderteKommandokjeder() =
+        meldingssender.påminnSuspenderteKommandokjeder(kommandokjeder())
+            .forEach { (commandContextId) -> commandContextId.påminnet() }
+
+    private fun kommandokjeder() = kommandokjedeDao.hent()
+    private fun UUID.påminnet() = kommandokjedeDao.påminnet(this)
 
 }

@@ -17,16 +17,16 @@ internal class SlackClient(private val accessToken: String, private val channel:
         private val sikkerlogg = LoggerFactory.getLogger("tjenestekall")
     }
 
-    internal fun fortellOmSuspenderteKommandokjeder(suspenderteKommandokjeder: List<KommandokjedeSuspendertFraDatabase>) {
-        if (suspenderteKommandokjeder.isEmpty()) {
+    internal fun fortellOmSuspenderteKommandokjeder(kommandokjeder: List<KommandokjedeSuspendertFraDatabase>) {
+        if (kommandokjeder.isEmpty()) {
             postMelding(text = ":spotlight: Ingen kommandokjeder sitter fast :spotlight:")
         } else {
             // Slack APIet støtter bare 50 blocks pr melding. Hvis det er mer enn 50 stuck kommandokjeder
             // postes resterende i tråd.
             var threadTs: String? = null
-            suspenderteKommandokjeder.chunked(49).forEach {
+            kommandokjeder.chunked(49).forEach {
                 if (threadTs == null) {
-                    threadTs = postMelding(attachments = it.byggSlackMelding(suspenderteKommandokjeder.size))
+                    threadTs = postMelding(attachments = it.byggSlackMelding(kommandokjeder.size))
                 } else {
                     postMelding(attachments = it.byggSlackMelding(), threadTs = threadTs)
                 }
