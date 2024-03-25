@@ -14,7 +14,7 @@ internal class HverHalvtimeRiver(rapidsConnection: RapidsConnection, private val
     init {
         River(rapidsConnection).apply {
             validate {
-                it.demandAny("@event_name", listOf(EVENT_NAME, "kommandokjeder_påminnelse"))
+                it.demandAny("@event_name", listOf(EVENT_NAME, "påminn_kommandokjeder_som_sitter_fast"))
             }
         }.register(this)
     }
