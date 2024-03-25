@@ -1,5 +1,6 @@
 package no.nav.helse.db
 
+import kotliquery.Row
 import java.time.LocalDateTime
 import java.util.*
 import javax.sql.DataSource
@@ -54,28 +55,30 @@ internal class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource
 
     internal fun hent() = query(
         "select * from kommandokjeder where opprettet < current_timestamp - interval '30 minutes'"
-    ).list {
-        KommandokjedeFraDatabase(
-            commandContextId = it.uuid("command_context_id"),
-            meldingId = it.uuid("melding_id"),
-            command = it.string("command"),
-            sti = it.array<Int>("sti").toList(),
-            opprettet = it.localDateTime("opprettet"),
-            tilstand = enumValueOf(it.string("tilstand")),
-            antallGangerPåminnet = it.int("antall_ganger_påminnet"),
-        )
-    }
+    ).list { kommandokjedeFraDatabase(it) }
 
-    internal fun påminnet(commandContextId: UUID) = query(
+    internal fun påminnet(commandContextId: UUID): KommandokjedeFraDatabase = requireNotNull(query(
         """
             update kommandokjeder set antall_ganger_påminnet = antall_ganger_påminnet + 1 
             where command_context_id = :commandContextId
+            returning *
         """.trimIndent(), "commandContextId" to commandContextId
-    ).update()
+    ).single { kommandokjedeFraDatabase(it) })
 
     private fun slett(commandContextId: UUID) = query(
         "delete from kommandokjeder where command_context_id = :commandContextId",
         "commandContextId" to commandContextId,
     ).update()
+
+    private fun kommandokjedeFraDatabase(row: Row) =
+        KommandokjedeFraDatabase(
+            commandContextId = row.uuid("command_context_id"),
+            meldingId = row.uuid("melding_id"),
+            command = row.string("command"),
+            sti = row.array<Int>("sti").toList(),
+            opprettet = row.localDateTime("opprettet"),
+            tilstand = enumValueOf(row.string("tilstand")),
+            antallGangerPåminnet = row.int("antall_ganger_påminnet"),
+        )
 
 }

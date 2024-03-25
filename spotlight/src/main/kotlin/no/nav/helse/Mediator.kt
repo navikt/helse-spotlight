@@ -41,7 +41,7 @@ internal class Mediator(
 
     internal fun påminnKommandokjeder() =
         meldingssender.påminnKommandokjeder(kommandokjeder())
-            .onEach { (commandContextId) -> commandContextId.påminnet() }
+            .map { (commandContextId) -> commandContextId.påminnet() }
             .filter { it.tilstand == FEIL }
             .takeUnless { it.isEmpty() }
             ?.let { slackClient.fortellOmKommandokjederPåminnetMedTilstandFeil(it) }
