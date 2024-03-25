@@ -8,8 +8,11 @@ internal object SlackMeldingBuilder {
 
     private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
 
-    internal fun List<KommandokjedeFraDatabase>.byggSlackMelding(totaltAntall: Int? = null): String =
-        attachments(buildSections(this), totaltAntall)
+    internal fun List<KommandokjedeFraDatabase>.byggDagligSlackMelding(totaltAntall: Int? = null): String =
+        attachments(buildSections(this), lagDagligMeldingTittel(totaltAntall))
+
+    internal fun List<KommandokjedeFraDatabase>.byggPåminnelseSlackMelding(totaltAntall: Int? = null): String =
+        attachments(buildSections(this), lagPåminnelseMeldingTittel(totaltAntall))
 
     private fun buildSections(kommandokjeder: List<KommandokjedeFraDatabase>): String {
         val iterator = kommandokjeder.iterator()
@@ -22,7 +25,7 @@ internal object SlackMeldingBuilder {
     }
 
     @Language("JSON")
-    private fun attachments(sections: String, antall: Int?): String = """
+    private fun attachments(sections: String, tittel: String): String = """
         [
           {
             "color": "#36b528",
@@ -31,7 +34,7 @@ internal object SlackMeldingBuilder {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "${lagMeldingTittel(antall)}"
+                  "text": "$tittel"
                 }
               },
               $sections
@@ -40,9 +43,16 @@ internal object SlackMeldingBuilder {
         ]
     """.trimIndent()
 
-    private fun lagMeldingTittel(antall: Int?): String =
+    private fun lagDagligMeldingTittel(antall: Int?): String =
         if (antall != null) {
             ":spotlight: Det er $antall ${if (antall == 1) "kommandokjede" else "kommandokjeder"} som sitter fast: :spotlight:"
+        } else {
+            ":the-more-you-know: Fortsettelse: :the-more-you-know:"
+        }
+
+    private fun lagPåminnelseMeldingTittel(antall: Int?): String =
+        if (antall != null) {
+            ":spotlight::warn: Det er $antall ${if (antall == 1) "kommandokjede" else "kommandokjeder"} med tilstand FEIL som har blitt påminnet: :warn::spotlight:"
         } else {
             ":the-more-you-know: Fortsettelse: :the-more-you-know:"
         }

@@ -37,8 +37,8 @@ internal abstract class AbstractE2ETest : DatabaseIntegrationTest() {
     protected fun sendKommandokjedeSuspendert(opprettet: LocalDateTime = OPPRETTET) =
         testRapid.sendTestMessage(kommandokjedeSuspendert(opprettet))
 
-    protected fun sendKommandokjedeFeilet() =
-        testRapid.sendTestMessage(kommandokjedeFeilet())
+    protected fun sendKommandokjedeFeilet(opprettet: LocalDateTime = OPPRETTET) =
+        testRapid.sendTestMessage(kommandokjedeFeilet(opprettet))
 
     protected fun sendKommandokjedeFerdigstilt() = testRapid.sendTestMessage(kommandokjedeFerdigstilt())
 
@@ -62,9 +62,13 @@ internal abstract class AbstractE2ETest : DatabaseIntegrationTest() {
         )
     }
 
-    protected fun assertPostetPåSlack() {
+    protected fun assertPostetDagligMeldingPåSlack() {
         verify(exactly = 1) { mediator.fortellOmKommandokjeder() }
         verify(exactly = 1) { slackClientMock.fortellOmKommandokjeder(any()) }
+    }
+
+    protected fun assertPostetPåminnelseMeldingPåSlack(forventetAntall: Int = 1) {
+        verify(exactly = forventetAntall) { slackClientMock.fortellOmKommandokjederPåminnetMedTilstandFeil(any()) }
     }
 
 }

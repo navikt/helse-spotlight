@@ -2,7 +2,8 @@ package no.nav.helse.slack
 
 import no.nav.helse.db.KommandokjedeFraDatabase
 import no.nav.helse.objectMapper
-import no.nav.helse.slack.SlackMeldingBuilder.byggSlackMelding
+import no.nav.helse.slack.SlackMeldingBuilder.byggDagligSlackMelding
+import no.nav.helse.slack.SlackMeldingBuilder.byggPåminnelseSlackMelding
 import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.io.InputStream
@@ -26,10 +27,21 @@ internal class SlackClient(private val accessToken: String, private val channel:
             var threadTs: String? = null
             kommandokjeder.chunked(49).forEach {
                 if (threadTs == null) {
-                    threadTs = postMelding(attachments = it.byggSlackMelding(kommandokjeder.size))
+                    threadTs = postMelding(attachments = it.byggDagligSlackMelding(kommandokjeder.size))
                 } else {
-                    postMelding(attachments = it.byggSlackMelding(), threadTs = threadTs)
+                    postMelding(attachments = it.byggDagligSlackMelding(), threadTs = threadTs)
                 }
+            }
+        }
+    }
+
+    internal fun fortellOmKommandokjederPåminnetMedTilstandFeil(kommandokjeder: List<KommandokjedeFraDatabase>) {
+        var threadTs: String? = null
+        kommandokjeder.chunked(49).forEach {
+            if (threadTs == null) {
+                threadTs = postMelding(attachments = it.byggPåminnelseSlackMelding(kommandokjeder.size))
+            } else {
+                postMelding(attachments = it.byggPåminnelseSlackMelding(), threadTs = threadTs)
             }
         }
     }

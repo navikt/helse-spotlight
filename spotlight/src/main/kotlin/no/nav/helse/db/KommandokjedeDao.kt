@@ -61,7 +61,8 @@ internal class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource
             command = it.string("command"),
             sti = it.array<Int>("sti").toList(),
             opprettet = it.localDateTime("opprettet"),
-            antallGangerPåminnet = it.int("antall_ganger_påminnet")
+            tilstand = enumValueOf(it.string("tilstand")),
+            antallGangerPåminnet = it.int("antall_ganger_påminnet"),
         )
     }
 

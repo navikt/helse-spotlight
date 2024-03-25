@@ -47,10 +47,26 @@ internal class KommandokjedeE2ETest: AbstractE2ETest() {
     }
 
     @Test
+    fun `Poster på slack hvis det sendes påminnelse på kommandokjede med tilstand FEIL`() {
+        sendKommandokjedeFeilet(opprettet = OPPRETTET.minusMinutes(35))
+        sendHalvTime()
+        assertPåminnelserSendt()
+        assertPostetPåminnelseMeldingPåSlack()
+    }
+
+    @Test
+    fun `Poster ikke på slack hvis det ikke sendes påminnelse på kommandokjede med tilstand FEIL`() {
+        sendKommandokjedeSuspendert(opprettet = OPPRETTET.minusMinutes(35))
+        sendHalvTime()
+        assertPåminnelserSendt()
+        assertPostetPåminnelseMeldingPåSlack(forventetAntall = 0)
+    }
+
+    @Test
     fun `Poster på slack når klokka er 6`() {
         sendKommandokjedeSuspendert(opprettet = OPPRETTET.minusMinutes(35))
         sendHelTime()
-        assertPostetPåSlack()
+        assertPostetDagligMeldingPåSlack()
     }
 
 }

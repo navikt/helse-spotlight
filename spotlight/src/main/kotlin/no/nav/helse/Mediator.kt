@@ -1,6 +1,7 @@
 package no.nav.helse
 
 import no.nav.helse.db.*
+import no.nav.helse.db.Tilstand.FEIL
 import no.nav.helse.kafka.Meldingssender
 import no.nav.helse.kafka.river.*
 import no.nav.helse.rapids_rivers.RapidsConnection
@@ -40,7 +41,12 @@ internal class Mediator(
 
     internal fun påminnKommandokjeder() =
         meldingssender.påminnKommandokjeder(kommandokjeder())
-            .forEach { (commandContextId) -> commandContextId.påminnet() }
+            .onEach { kommandokjede ->
+                kommandokjede.commandContextId.påminnet()
+            }
+            .filter { it.tilstand == FEIL }
+            .takeUnless { it.isEmpty() }
+            ?.let { slackClient.fortellOmKommandokjederPåminnetMedTilstandFeil(it) }
 
     private fun kommandokjeder() = kommandokjedeDao.hent()
     private fun UUID.påminnet() = kommandokjedeDao.påminnet(this)

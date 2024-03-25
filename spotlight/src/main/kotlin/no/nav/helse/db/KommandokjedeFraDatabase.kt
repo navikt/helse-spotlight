@@ -10,4 +10,5 @@ internal data class KommandokjedeFraDatabase(
     val sti: List<Int>,
     val opprettet: LocalDateTime,
     val antallGangerPåminnet: Int,
+    val tilstand: Tilstand,
 )

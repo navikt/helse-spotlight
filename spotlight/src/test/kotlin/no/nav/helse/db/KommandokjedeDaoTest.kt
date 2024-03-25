@@ -7,6 +7,8 @@ import no.nav.helse.Testdata.kommandokjedeFeiletTilDatabase
 import no.nav.helse.Testdata.kommandokjedeFerdigstiltTilDatabase
 import no.nav.helse.Testdata.kommandokjedeSuspendertForOverEnHalvtimeSiden
 import no.nav.helse.Testdata.kommandokjedeSuspendertTilDatabase
+import no.nav.helse.db.Tilstand.FEIL
+import no.nav.helse.db.Tilstand.SUSPENDERT
 import org.junit.jupiter.api.Test
 import java.util.*
 import kotlin.test.assertEquals
@@ -72,7 +74,9 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
         val kommandokjeder = kommandokjedeDao.hent()
         assertEquals(2, kommandokjeder.size)
         assertEquals(commandContextId1, kommandokjeder[0].commandContextId)
+        assertEquals(SUSPENDERT, kommandokjeder[0].tilstand)
         assertEquals(commandContextId2, kommandokjeder[1].commandContextId)
+        assertEquals(FEIL, kommandokjeder[1].tilstand)
     }
 
     @Test

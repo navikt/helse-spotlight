@@ -1,6 +1,7 @@
 package no.nav.helse
 
 import no.nav.helse.db.*
+import no.nav.helse.db.Tilstand.SUSPENDERT
 import java.time.LocalDateTime
 import java.util.*
 
@@ -21,7 +22,8 @@ internal object Testdata {
         command = EN_COMMAND,
         sti = STI,
         opprettet = OPPRETTET,
-        antallGangerPåminnet = 0
+        tilstand = SUSPENDERT,
+        antallGangerPåminnet = 0,
     )
 
     internal fun kommandokjedeSuspendertTilDatabase(
