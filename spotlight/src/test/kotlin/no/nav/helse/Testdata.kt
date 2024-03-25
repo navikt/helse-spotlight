@@ -1,9 +1,6 @@
 package no.nav.helse
 
-import no.nav.helse.db.KommandokjedeAvbruttTilDatabase
-import no.nav.helse.db.KommandokjedeFerdigstiltTilDatabase
-import no.nav.helse.db.KommandokjedeSuspendertFraDatabase
-import no.nav.helse.db.KommandokjedeSuspendertTilDatabase
+import no.nav.helse.db.*
 import java.time.LocalDateTime
 import java.util.*
 
@@ -39,12 +36,33 @@ internal object Testdata {
         opprettet = opprettet,
     )
 
+    internal fun kommandokjedeFeiletTilDatabase(
+        commandContextId: UUID = COMMAND_CONTEXT_ID,
+        command: String = EN_COMMAND,
+        opprettet: LocalDateTime = OPPRETTET,
+    ) = KommandokjedeFeiletTilDatabase(
+        commandContextId = commandContextId,
+        meldingId = MELDING_ID,
+        command = command,
+        sti = STI,
+        opprettet = opprettet,
+    )
+
+
     internal fun kommandokjedeSuspendertForOverEnHalvtimeSiden(
         commandContextId: UUID = COMMAND_CONTEXT_ID,
     ) = kommandokjedeSuspendertTilDatabase(
         commandContextId = commandContextId,
         opprettet = OPPRETTET.minusMinutes(35)
     )
+
+    internal fun kommandokjedeFeiletForOverEnHalvtimeSiden(
+        commandContextId: UUID = COMMAND_CONTEXT_ID,
+    ) = kommandokjedeFeiletTilDatabase(
+        commandContextId = commandContextId,
+        opprettet = OPPRETTET.minusMinutes(35)
+    )
+
 
     internal fun kommandokjedeFerdigstiltTilDatabase() =
         KommandokjedeFerdigstiltTilDatabase(

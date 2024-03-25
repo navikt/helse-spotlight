@@ -23,6 +23,18 @@ internal object Testmeldinger {
     """.trimIndent()
 
     @Language("JSON")
+    internal fun kommandokjedeFeilet(): String = """
+        {
+          "@event_name": "kommandokjede_feilet",
+          "commandContextId": "$COMMAND_CONTEXT_ID",
+          "meldingId": "$MELDING_ID",
+          "command": "$EN_COMMAND",
+          "sti": $STI,
+          "@opprettet": "$OPPRETTET"
+        }
+    """.trimIndent()
+
+    @Language("JSON")
     internal fun kommandokjedeFerdigstilt(): String = """
         {
           "@event_name": "kommandokjede_ferdigstilt",

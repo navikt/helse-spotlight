@@ -9,9 +9,11 @@ import no.nav.helse.Testdata.OPPRETTET
 import no.nav.helse.Testmeldinger.halvTime
 import no.nav.helse.Testmeldinger.helTime
 import no.nav.helse.Testmeldinger.kommandokjedeAvbrutt
+import no.nav.helse.Testmeldinger.kommandokjedeFeilet
 import no.nav.helse.Testmeldinger.kommandokjedeFerdigstilt
 import no.nav.helse.Testmeldinger.kommandokjedeSuspendert
 import no.nav.helse.db.DatabaseIntegrationTest
+import no.nav.helse.db.Tilstand
 import no.nav.helse.kafka.Meldingssender
 import no.nav.helse.kafka.asUUID
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
@@ -35,6 +37,9 @@ internal abstract class AbstractE2ETest : DatabaseIntegrationTest() {
     protected fun sendKommandokjedeSuspendert(opprettet: LocalDateTime = OPPRETTET) =
         testRapid.sendTestMessage(kommandokjedeSuspendert(opprettet))
 
+    protected fun sendKommandokjedeFeilet() =
+        testRapid.sendTestMessage(kommandokjedeFeilet())
+
     protected fun sendKommandokjedeFerdigstilt() = testRapid.sendTestMessage(kommandokjedeFerdigstilt())
 
     protected fun sendKommandokjedeAvbrutt() = testRapid.sendTestMessage(kommandokjedeAvbrutt())
@@ -44,6 +49,8 @@ internal abstract class AbstractE2ETest : DatabaseIntegrationTest() {
     protected fun sendHelTime() = testRapid.sendTestMessage(helTime())
 
     protected fun assertKommandokjedeLagret() = assertLagret()
+
+    protected fun assertKommandokjedeTilstand(tilstand: Tilstand) = assertTilstand(tilstand = tilstand)
 
     protected fun assertKommandokjedeSlettet() = assertSlettet()
 

@@ -2,6 +2,8 @@ package no.nav.helse.db
 
 import no.nav.helse.Testdata.COMMAND_CONTEXT_ID
 import no.nav.helse.Testdata.kommandokjedeAvbruttTilDatabase
+import no.nav.helse.Testdata.kommandokjedeFeiletForOverEnHalvtimeSiden
+import no.nav.helse.Testdata.kommandokjedeFeiletTilDatabase
 import no.nav.helse.Testdata.kommandokjedeFerdigstiltTilDatabase
 import no.nav.helse.Testdata.kommandokjedeSuspendertForOverEnHalvtimeSiden
 import no.nav.helse.Testdata.kommandokjedeSuspendertTilDatabase
@@ -18,9 +20,22 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
     }
 
     @Test
+    fun `Kan lagre feilet kommandokjede`() {
+        kommandokjedeDao.upsert(kommandokjedeFeiletTilDatabase())
+        assertLagret()
+    }
+
+    @Test
     fun `Oppdaterer suspendert kommandokjede on conflict`() {
         kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase())
         kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase(command =  "EnAnnenCommand"))
+        assertOppdatert(command = "EnAnnenCommand")
+    }
+
+    @Test
+    fun `Oppdaterer feilet kommandokjede on conflict`() {
+        kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase())
+        kommandokjedeDao.upsert(kommandokjedeFeiletTilDatabase(command =  "EnAnnenCommand"))
         assertOppdatert(command = "EnAnnenCommand")
     }
 
@@ -49,18 +64,22 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
     }
 
     @Test
-    fun `Henter suspenderte kommandokjeder som er minst 30 minutter gamle`() {
-        kommandokjedeDao.upsert(kommandokjedeSuspendertForOverEnHalvtimeSiden())
-        val suspenderteKommandokjeder = kommandokjedeDao.hent()
-        assertEquals(1, suspenderteKommandokjeder.size)
-        assertEquals(COMMAND_CONTEXT_ID, suspenderteKommandokjeder.first().commandContextId)
+    fun `Henter stuck kommandokjeder som er minst 30 minutter gamle`() {
+        val commandContextId1 = UUID.randomUUID()
+        val commandContextId2 = UUID.randomUUID()
+        kommandokjedeDao.upsert(kommandokjedeSuspendertForOverEnHalvtimeSiden(commandContextId1))
+        kommandokjedeDao.upsert(kommandokjedeFeiletForOverEnHalvtimeSiden(commandContextId2))
+        val kommandokjeder = kommandokjedeDao.hent()
+        assertEquals(2, kommandokjeder.size)
+        assertEquals(commandContextId1, kommandokjeder[0].commandContextId)
+        assertEquals(commandContextId2, kommandokjeder[1].commandContextId)
     }
 
     @Test
     fun `Henter ikke suspenderte kommandokjeder som ikke er 30 minutter gamle`() {
         kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase())
-        val suspenderteKommandokjeder = kommandokjedeDao.hent()
-        assertEquals(0, suspenderteKommandokjeder.size)
+        val kommandokjeder = kommandokjedeDao.hent()
+        assertEquals(0, kommandokjeder.size)
     }
 
     @Test

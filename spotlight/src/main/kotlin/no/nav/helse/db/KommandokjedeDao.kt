@@ -1,23 +1,50 @@
 package no.nav.helse.db
 
+import java.time.LocalDateTime
 import java.util.*
 import javax.sql.DataSource
 
 internal class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource) {
 
-    internal fun upsert(kommandokjede: KommandokjedeSuspendertTilDatabase) {
-        val stiForDatabase = kommandokjede.sti.joinToString { """ $it """ }
+    internal fun upsert(kommandokjede: KommandokjedeSuspendertTilDatabase) = upsert(
+        commandContextId = kommandokjede.commandContextId,
+        meldingId = kommandokjede.meldingId,
+        command = kommandokjede.command,
+        sti = kommandokjede.sti,
+        tilstand = kommandokjede.tilstand,
+        opprettet = kommandokjede.opprettet
+    )
+
+    internal fun upsert(kommandokjede: KommandokjedeFeiletTilDatabase) = upsert(
+        commandContextId = kommandokjede.commandContextId,
+        meldingId = kommandokjede.meldingId,
+        command = kommandokjede.command,
+        sti = kommandokjede.sti,
+        tilstand = kommandokjede.tilstand,
+        opprettet = kommandokjede.opprettet
+    )
+
+    private fun upsert(
+        commandContextId: UUID,
+        meldingId: UUID,
+        command: String,
+        sti: List<Int>,
+        tilstand: Tilstand,
+        opprettet: LocalDateTime
+    ) {
+        val stiForDatabase = sti.joinToString { """ $it """ }
         query(
             """
                 insert into suspenderte_kommandokjeder 
-                values (:commandContextId, :meldingId, :command, '{$stiForDatabase}', :opprettet) 
+                values (:commandContextId, :meldingId, :command, '{$stiForDatabase}', :opprettet, 0, :tilstand) 
                 on conflict (command_context_id) do 
-                update set melding_id = :meldingId, command = :command, sti = '{$stiForDatabase}', opprettet = :opprettet, antall_ganger_påminnet = 0
+                update set melding_id = :meldingId, command = :command, sti = '{$stiForDatabase}', opprettet = :opprettet, antall_ganger_påminnet = 0, tilstand = :tilstand
             """.trimIndent(),
-            "commandContextId" to kommandokjede.commandContextId,
-            "meldingId" to kommandokjede.meldingId,
-            "command" to kommandokjede.command,
-            "opprettet" to kommandokjede.opprettet,
+            "commandContextId" to commandContextId,
+            "meldingId" to meldingId,
+            "command" to command,
+            "tilstand" to tilstand.name,
+            "opprettet" to opprettet,
         ).update()
     }
 
