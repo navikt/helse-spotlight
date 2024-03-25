@@ -1,6 +1,6 @@
 package no.nav.helse.slack
 
-import no.nav.helse.db.KommandokjedeSuspendertFraDatabase
+import no.nav.helse.db.KommandokjedeFraDatabase
 import org.intellij.lang.annotations.Language
 import java.time.format.DateTimeFormatter
 
@@ -8,11 +8,11 @@ internal object SlackMeldingBuilder {
 
     private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
 
-    internal fun List<KommandokjedeSuspendertFraDatabase>.byggSlackMelding(totaltAntall: Int? = null): String =
+    internal fun List<KommandokjedeFraDatabase>.byggSlackMelding(totaltAntall: Int? = null): String =
         attachments(buildSections(this), totaltAntall)
 
-    private fun buildSections(suspenderteKommandokjeder: List<KommandokjedeSuspendertFraDatabase>): String {
-        val iterator = suspenderteKommandokjeder.iterator()
+    private fun buildSections(kommandokjeder: List<KommandokjedeFraDatabase>): String {
+        val iterator = kommandokjeder.iterator()
         return buildString {
             iterator.forEach {
                 append(section(it))
@@ -48,33 +48,33 @@ internal object SlackMeldingBuilder {
         }
 
     @Language("JSON")
-    private fun section(kommandokjedeSuspendertTilDatabase: KommandokjedeSuspendertFraDatabase) = """
+    private fun section(kommandokjede: KommandokjedeFraDatabase) = """
         {
           "type": "section",
           "fields": [
             {
               "type": "mrkdwn",
-              "text": "*Command context id:*\n<${link(kommandokjedeSuspendertTilDatabase.commandContextId.toString())}|${kommandokjedeSuspendertTilDatabase.commandContextId}>"
+              "text": "*Command context id:*\n<${link(kommandokjede.commandContextId.toString())}|${kommandokjede.commandContextId}>"
             },
             {
               "type": "mrkdwn",
-              "text": "*Melding id:*\n<${link(kommandokjedeSuspendertTilDatabase.meldingId.toString())}|${kommandokjedeSuspendertTilDatabase.meldingId}>"
+              "text": "*Melding id:*\n<${link(kommandokjede.meldingId.toString())}|${kommandokjede.meldingId}>"
             },
             {
               "type": "mrkdwn",
-              "text": "*Command:*\n${kommandokjedeSuspendertTilDatabase.command}"
+              "text": "*Command:*\n${kommandokjede.command}"
             },
             {
               "type": "mrkdwn",
-              "text": "*Sti:*\n${kommandokjedeSuspendertTilDatabase.sti}"
+              "text": "*Sti:*\n${kommandokjede.sti}"
             },
             {
               "type": "mrkdwn",
-              "text": "*Tidspunkt:*\n${kommandokjedeSuspendertTilDatabase.opprettet.format(formatter)}"
+              "text": "*Tidspunkt:*\n${kommandokjede.opprettet.format(formatter)}"
             },
             {
               "type": "mrkdwn",
-              "text": "*Antall ganger påminnet:*\n${kommandokjedeSuspendertTilDatabase.antallGangerPåminnet}"
+              "text": "*Antall ganger påminnet:*\n${kommandokjede.antallGangerPåminnet}"
             }
           ]
         }

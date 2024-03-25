@@ -63,8 +63,8 @@ internal abstract class AbstractE2ETest : DatabaseIntegrationTest() {
     }
 
     protected fun assertPostetPåSlack() {
-        verify(exactly = 1) { mediator.fortellOmSuspenderteKommandokjeder() }
-        verify(exactly = 1) { slackClientMock.fortellOmSuspenderteKommandokjeder(any()) }
+        verify(exactly = 1) { mediator.fortellOmKommandokjeder() }
+        verify(exactly = 1) { slackClientMock.fortellOmKommandokjeder(any()) }
     }
 
 }

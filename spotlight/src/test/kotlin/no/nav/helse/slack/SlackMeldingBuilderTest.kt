@@ -1,6 +1,6 @@
 package no.nav.helse.slack
 
-import no.nav.helse.Testdata.kommandokjedeSuspendertFraDatabase
+import no.nav.helse.Testdata.kommandokjedeFraDatabase
 import no.nav.helse.objectMapper
 import no.nav.helse.slack.SlackMeldingBuilder.byggSlackMelding
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -11,17 +11,17 @@ internal class SlackMeldingBuilderTest {
 
     @Test
     fun `Sjekker at byggSlackMelding velger riktig tittel`() {
-        val enKommandokjede = listOf(kommandokjedeSuspendertFraDatabase())
+        val enKommandokjede = listOf(kommandokjedeFraDatabase())
         val enKommandokjedeJsonString = enKommandokjede.byggSlackMelding(enKommandokjede.size)
         assertDoesNotThrow { objectMapper.readTree(enKommandokjedeJsonString) }
         assertTrue(enKommandokjedeJsonString.contains("1 kommandokjede"))
 
-        val toKommandokjeder = listOf(kommandokjedeSuspendertFraDatabase(), kommandokjedeSuspendertFraDatabase())
+        val toKommandokjeder = listOf(kommandokjedeFraDatabase(), kommandokjedeFraDatabase())
         val toKommandokjederJsonString = toKommandokjeder.byggSlackMelding(toKommandokjeder.size)
         assertDoesNotThrow { objectMapper.readTree(toKommandokjederJsonString) }
         assertTrue(toKommandokjederJsonString.contains("2 kommandokjeder"))
 
-        val fortsettelse = listOf(kommandokjedeSuspendertFraDatabase())
+        val fortsettelse = listOf(kommandokjedeFraDatabase())
         val fortsettelseJsonString = fortsettelse.byggSlackMelding()
         assertDoesNotThrow { objectMapper.readTree(fortsettelseJsonString) }
         assertTrue(fortsettelseJsonString.contains("Fortsettelse"))

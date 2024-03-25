@@ -12,10 +12,10 @@ internal object Testdata {
     internal val STI: List<Int> = listOf(0)
     internal const val EN_COMMAND: String = "EnCommand"
 
-    internal fun kommandokjedeSuspendertFraDatabase(
+    internal fun kommandokjedeFraDatabase(
         commandContextId: UUID = COMMAND_CONTEXT_ID,
         meldingId: UUID = MELDING_ID,
-    ) = KommandokjedeSuspendertFraDatabase(
+    ) = KommandokjedeFraDatabase(
         commandContextId = commandContextId,
         meldingId = meldingId,
         command = EN_COMMAND,

@@ -2,7 +2,7 @@
 [![Bygg og deploy Spinnvill](https://github.com/navikt/helse-spotlight/actions/workflows/main.yml/badge.svg)](https://github.com/navikt/helse-spotlight/actions/workflows/main.yml)
 
 ## Beskrivelse
-Backend som lagrer ned suspenderte kommandokjeder fra [Spesialist](https://github.com/navikt/helse-spotlight) og påminner dem.
+Backend som lagrer ned kommandokjeder som sitter fast i [Spesialist](https://github.com/navikt/helse-spotlight) og påminner dem.
 Varsler på Slack hver morgen om kommandokjeder som er stuck.
 
 ## Format på Commit-meldinger 

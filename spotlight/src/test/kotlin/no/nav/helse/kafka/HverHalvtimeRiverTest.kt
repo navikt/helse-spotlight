@@ -20,7 +20,7 @@ internal class HverHalvtimeRiverTest {
     @Test
     fun `Kan lese inn halv_time`() {
         testRapid.sendTestMessage(halvTime())
-        verify(exactly = 1) { mediatorMock.påminnSuspenderteKommandokjeder() }
+        verify(exactly = 1) { mediatorMock.påminnKommandokjeder() }
     }
 
 }

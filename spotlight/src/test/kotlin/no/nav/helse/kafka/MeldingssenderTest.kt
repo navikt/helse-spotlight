@@ -1,7 +1,7 @@
 package no.nav.helse.kafka
 
 import no.nav.helse.TestRapidHelpers.hendelser
-import no.nav.helse.Testdata.kommandokjedeSuspendertFraDatabase
+import no.nav.helse.Testdata.kommandokjedeFraDatabase
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -25,10 +25,10 @@ internal class MeldingssenderTest {
         val meldingId1 = UUID.randomUUID()
         val meldingId2 = UUID.randomUUID()
 
-        meldingssender.påminnSuspenderteKommandokjeder(
+        meldingssender.påminnKommandokjeder(
             listOf(
-                kommandokjedeSuspendertFraDatabase(commandContextId1, meldingId1),
-                kommandokjedeSuspendertFraDatabase(commandContextId2, meldingId2)
+                kommandokjedeFraDatabase(commandContextId1, meldingId1),
+                kommandokjedeFraDatabase(commandContextId2, meldingId2)
             )
         )
 

@@ -20,7 +20,7 @@ internal class KlokkaSeksHverdagerRiverTest {
     @Test
     fun `Kan lese inn hel_time`() {
         testRapid.sendTestMessage(helTime())
-        verify(exactly = 1) { mediatorMock.fortellOmSuspenderteKommandokjeder() }
+        verify(exactly = 1) { mediatorMock.fortellOmKommandokjeder() }
     }
 
 }

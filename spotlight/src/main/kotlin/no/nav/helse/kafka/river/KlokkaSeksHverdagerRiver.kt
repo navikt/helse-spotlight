@@ -14,7 +14,7 @@ internal class KlokkaSeksHverdagerRiver(rapidsConnection: RapidsConnection, priv
     init {
         River(rapidsConnection).apply {
             validate {
-                it.demandAny("@event_name", listOf(EVENT_NAME, "post_suspenderte_kommandokjeder_til_slack"))
+                it.demandAny("@event_name", listOf(EVENT_NAME, "post_kommandokjeder_til_slack"))
                 it.demandValue("time", 6)
                 it.demandAny("ukedag", listOf("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"))
             }
@@ -26,8 +26,8 @@ internal class KlokkaSeksHverdagerRiver(rapidsConnection: RapidsConnection, priv
     }
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
-        logg.info("Klokka er 6 🐔. Forteller om suspenderte kommandokjeder på slack.")
-        mediator.fortellOmSuspenderteKommandokjeder()
+        logg.info("Klokka er 6 🐔. Forteller om kommandokjeder som sitter fast på slack.")
+        mediator.fortellOmKommandokjeder()
     }
 
 }

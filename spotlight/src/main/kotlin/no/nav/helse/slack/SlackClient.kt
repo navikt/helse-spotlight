@@ -1,6 +1,6 @@
 package no.nav.helse.slack
 
-import no.nav.helse.db.KommandokjedeSuspendertFraDatabase
+import no.nav.helse.db.KommandokjedeFraDatabase
 import no.nav.helse.objectMapper
 import no.nav.helse.slack.SlackMeldingBuilder.byggSlackMelding
 import org.slf4j.LoggerFactory
@@ -17,7 +17,7 @@ internal class SlackClient(private val accessToken: String, private val channel:
         private val sikkerlogg = LoggerFactory.getLogger("tjenestekall")
     }
 
-    internal fun fortellOmSuspenderteKommandokjeder(kommandokjeder: List<KommandokjedeSuspendertFraDatabase>) {
+    internal fun fortellOmKommandokjeder(kommandokjeder: List<KommandokjedeFraDatabase>) {
         if (kommandokjeder.isEmpty()) {
             postMelding(text = ":spotlight: Ingen kommandokjeder sitter fast :spotlight:")
         } else {

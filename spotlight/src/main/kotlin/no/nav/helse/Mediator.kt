@@ -35,11 +35,11 @@ internal class Mediator(
     internal fun kommandokjedeAvbrutt(kommandokjede: KommandokjedeAvbruttTilDatabase) =
         kommandokjedeDao.avbrutt(kommandokjede)
 
-    internal fun fortellOmSuspenderteKommandokjeder() =
-        slackClient.fortellOmSuspenderteKommandokjeder(kommandokjeder())
+    internal fun fortellOmKommandokjeder() =
+        slackClient.fortellOmKommandokjeder(kommandokjeder())
 
-    internal fun påminnSuspenderteKommandokjeder() =
-        meldingssender.påminnSuspenderteKommandokjeder(kommandokjeder())
+    internal fun påminnKommandokjeder() =
+        meldingssender.påminnKommandokjeder(kommandokjeder())
             .forEach { (commandContextId) -> commandContextId.påminnet() }
 
     private fun kommandokjeder() = kommandokjedeDao.hent()

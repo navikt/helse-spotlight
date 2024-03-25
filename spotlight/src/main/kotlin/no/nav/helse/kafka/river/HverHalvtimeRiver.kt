@@ -14,7 +14,7 @@ internal class HverHalvtimeRiver(rapidsConnection: RapidsConnection, private val
     init {
         River(rapidsConnection).apply {
             validate {
-                it.demandAny("@event_name", listOf(EVENT_NAME, "suspenderte_kommandokjeder_påminnelse"))
+                it.demandAny("@event_name", listOf(EVENT_NAME, "kommandokjeder_påminnelse"))
             }
         }.register(this)
     }
@@ -24,8 +24,8 @@ internal class HverHalvtimeRiver(rapidsConnection: RapidsConnection, private val
     }
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
-        logg.info("Påminner suspenderte kommandokjeder")
-        mediator.påminnSuspenderteKommandokjeder()
+        logg.info("Påminner kommandokjeder som sitter fast")
+        mediator.påminnKommandokjeder()
     }
 
 }

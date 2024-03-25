@@ -55,7 +55,7 @@ internal class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource
     internal fun hent() = query(
         "select * from kommandokjeder where opprettet < current_timestamp - interval '30 minutes'"
     ).list {
-        KommandokjedeSuspendertFraDatabase(
+        KommandokjedeFraDatabase(
             commandContextId = it.uuid("command_context_id"),
             meldingId = it.uuid("melding_id"),
             command = it.string("command"),

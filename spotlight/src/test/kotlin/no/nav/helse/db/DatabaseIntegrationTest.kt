@@ -32,13 +32,13 @@ internal abstract class DatabaseIntegrationTest: AbstractDatabaseTest() {
     }
 
     protected fun assertLagret(commandContextId: UUID = COMMAND_CONTEXT_ID) {
-        val kommandokjedeSuspendert = query(
+        val kommandokjede = query(
             "select * from kommandokjeder where command_context_id = :commandContextId",
             "commandContextId" to commandContextId
         ).single {
             it.uuid("command_context_id")
         }
-        assertEquals(commandContextId, kommandokjedeSuspendert)
+        assertEquals(commandContextId, kommandokjede)
     }
 
     protected fun assertTilstand(commandContextId: UUID = COMMAND_CONTEXT_ID, tilstand: Tilstand) {
