@@ -52,7 +52,7 @@ internal object SlackMeldingBuilder {
 
     private fun lagPåminnelseMeldingTittel(antall: Int?): String =
         if (antall != null) {
-            ":spotlight::warn: Det er $antall ${if (antall == 1) "kommandokjede" else "kommandokjeder"} med tilstand FEIL som har blitt påminnet: :warn::spotlight:"
+            ":spotlight::warning: Det er $antall ${if (antall == 1) "kommandokjede" else "kommandokjeder"} med tilstand FEIL som har blitt påminnet: :warning::spotlight:"
         } else {
             ":the-more-you-know: Fortsettelse: :the-more-you-know:"
         }
