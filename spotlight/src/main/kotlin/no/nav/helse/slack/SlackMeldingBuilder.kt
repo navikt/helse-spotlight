@@ -80,7 +80,7 @@ internal object SlackMeldingBuilder {
             },
             {
               "type": "mrkdwn",
-              "text": "*Tidspunkt:*\n${kommandokjede.opprettet.format(formatter)}"
+              "text": "*Opprettet:*\n${kommandokjede.opprettet.format(formatter)}"
             },
             {
               "type": "mrkdwn",
