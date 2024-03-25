@@ -35,7 +35,7 @@ internal class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource
         val stiForDatabase = sti.joinToString { """ $it """ }
         query(
             """
-                insert into suspenderte_kommandokjeder 
+                insert into kommandokjeder 
                 values (:commandContextId, :meldingId, :command, '{$stiForDatabase}', :opprettet, 0, :tilstand) 
                 on conflict (command_context_id) do 
                 update set melding_id = :meldingId, command = :command, sti = '{$stiForDatabase}', opprettet = :opprettet, antall_ganger_påminnet = 0, tilstand = :tilstand
@@ -53,7 +53,7 @@ internal class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource
     internal fun avbrutt(kommandokjede: KommandokjedeAvbruttTilDatabase) = slett(kommandokjede.commandContextId)
 
     internal fun hent() = query(
-        "select * from suspenderte_kommandokjeder where opprettet < current_timestamp - interval '30 minutes'"
+        "select * from kommandokjeder where opprettet < current_timestamp - interval '30 minutes'"
     ).list {
         KommandokjedeSuspendertFraDatabase(
             commandContextId = it.uuid("command_context_id"),
@@ -67,13 +67,13 @@ internal class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource
 
     internal fun påminnet(commandContextId: UUID) = query(
         """
-            update suspenderte_kommandokjeder set antall_ganger_påminnet = antall_ganger_påminnet + 1 
+            update kommandokjeder set antall_ganger_påminnet = antall_ganger_påminnet + 1 
             where command_context_id = :commandContextId
         """.trimIndent(), "commandContextId" to commandContextId
     ).update()
 
     private fun slett(commandContextId: UUID) = query(
-        "delete from suspenderte_kommandokjeder where command_context_id = :commandContextId",
+        "delete from kommandokjeder where command_context_id = :commandContextId",
         "commandContextId" to commandContextId,
     ).update()
 
