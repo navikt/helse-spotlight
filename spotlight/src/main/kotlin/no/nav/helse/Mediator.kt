@@ -37,7 +37,7 @@ internal class Mediator(
         kommandokjedeDao.avbrutt(kommandokjede)
 
     internal fun fortellOmKommandokjeder() =
-        slackClient.fortellOmKommandokjeder(kommandokjeder())
+        slackClient.fortellOmKommandokjeder(kommandokjederSomErPåminnet())
 
     internal fun påminnKommandokjeder() =
         meldingssender.påminnKommandokjeder(kommandokjeder())
@@ -47,6 +47,7 @@ internal class Mediator(
             ?.let { slackClient.fortellOmKommandokjederPåminnetMedTilstandFeil(it) }
 
     private fun kommandokjeder() = kommandokjedeDao.hent()
+    private fun kommandokjederSomErPåminnet() = kommandokjeder().filter { it.antallGangerPåminnet > 0 }
     private fun UUID.påminnet() = kommandokjedeDao.påminnet(this)
 
 }
