@@ -6,8 +6,7 @@ import no.nav.helse.kafka.message.KommandokjedeSuspendertMessage.Companion.tilDa
 import no.nav.helse.rapids_rivers.*
 import org.slf4j.LoggerFactory
 
-internal class KommandokjedeSuspendertRiver(rapidsConnection: RapidsConnection, private val mediator: Mediator): River.PacketListener {
-
+internal class KommandokjedeSuspendertRiver(rapidsConnection: RapidsConnection, private val mediator: Mediator) : River.PacketListener {
     private companion object {
         private val logg = LoggerFactory.getLogger(this::class.java)
         private const val EVENT_NAME = "kommandokjede_suspendert"
@@ -20,19 +19,25 @@ internal class KommandokjedeSuspendertRiver(rapidsConnection: RapidsConnection, 
                 it.requireKey("commandContextId")
                 it.requireKey("meldingId")
                 it.requireKey("command")
+                it.forbidValues("command", listOf("OppdaterPersonsnapshotCommand"))
                 it.requireKey("sti")
                 it.requireKey("@opprettet")
             }
         }.register(this)
     }
 
-    override fun onError(problems: MessageProblems, context: MessageContext) {
+    override fun onError(
+        problems: MessageProblems,
+        context: MessageContext,
+    ) {
         logg.error("Forstod ikke $EVENT_NAME:\n${problems.toExtendedReport()}")
     }
 
-    override fun onPacket(packet: JsonMessage, context: MessageContext) {
+    override fun onPacket(
+        packet: JsonMessage,
+        context: MessageContext,
+    ) {
         logg.info("Leser melding ${packet.toJson()}")
         mediator.kommandokjedeSuspendert(KommandokjedeSuspendertMessage(packet).tilDatabase())
     }
-
 }

@@ -10,7 +10,6 @@ import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.junit.jupiter.api.Test
 
 internal class KommandokjedeSuspendertRiverTest {
-
     private val testRapid = TestRapid()
     private val mediatorMock = mockk<Mediator>(relaxed = true)
 
@@ -24,4 +23,9 @@ internal class KommandokjedeSuspendertRiverTest {
         verify(exactly = 1) { mediatorMock.kommandokjedeSuspendert(kommandokjedeSuspendertTilDatabase()) }
     }
 
+    @Test
+    fun `Leser ikke inn inn kommandokjede_suspendert hvis command = OppdaterPersonsnapshotCommand`() {
+        testRapid.sendTestMessage(kommandokjedeSuspendert(command = "OppdaterPersonsnapshotCommand"))
+        verify(exactly = 0) { mediatorMock.kommandokjedeSuspendert(any()) }
+    }
 }
