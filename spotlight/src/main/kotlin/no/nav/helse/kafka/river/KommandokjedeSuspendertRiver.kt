@@ -16,10 +16,10 @@ internal class KommandokjedeSuspendertRiver(rapidsConnection: RapidsConnection, 
         River(rapidsConnection).apply {
             validate {
                 it.demandValue("@event_name", EVENT_NAME)
+                it.rejectValue("command", "OppdaterPersonsnapshotCommand")
                 it.requireKey("commandContextId")
                 it.requireKey("meldingId")
                 it.requireKey("command")
-                it.forbidValues("command", listOf("OppdaterPersonsnapshotCommand"))
                 it.requireKey("sti")
                 it.requireKey("@opprettet")
             }
