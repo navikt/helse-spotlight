@@ -88,9 +88,11 @@ internal class SlackClient(private val accessToken: String, private val channel:
 
             return responseBody
         } catch (err: SocketTimeoutException) {
-            logg.warn("Timeout venter på svar", err)
+            logg.error("Timeout venter på svar", err)
+            sikkerlogg.error("Timeout venter på svar, forsøker å poste melding: $jsonPayload", err)
         } catch (err: IOException) {
             logg.error("Feil ved posting til slack: {}", err.message, err)
+            sikkerlogg.error("Feil ved posting til slack med melding: $jsonPayload Error: {}", err.message, err)
         } finally {
             connection?.disconnect()
         }
