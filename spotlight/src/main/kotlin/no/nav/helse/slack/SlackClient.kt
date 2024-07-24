@@ -20,7 +20,7 @@ internal class SlackClient(private val accessToken: String, private val channel:
 
     internal fun fortellOmKommandokjeder(kommandokjeder: List<KommandokjedeFraDatabase>) {
         if (kommandokjeder.isEmpty()) {
-            postMelding(text = ":spotlight: Ingen kommandokjeder sitter fast :spotlight:")
+            postMelding(text = ":spotlight: Ingen kommandokjeder sitter fast :spotlight:", ingenKommandokjederSitterFast = true)
         } else {
             // Slack APIet støtter bare 50 blocks pr melding. Hvis det er mer enn 50 stuck kommandokjeder
             // postes resterende i tråd.
@@ -46,7 +46,7 @@ internal class SlackClient(private val accessToken: String, private val channel:
         }
     }
 
-    private fun postMelding(text: String? = null, attachments: String? = null, threadTs: String? = null): String? =
+    private fun postMelding(text: String? = null, attachments: String? = null, threadTs: String? = null, ingenKommandokjederSitterFast: Boolean = false): String? =
         "https://slack.com/api/chat.postMessage".post(
             objectMapper.writeValueAsString(mutableMapOf<String, Any>(
                 "channel" to channel,
@@ -54,12 +54,12 @@ internal class SlackClient(private val accessToken: String, private val channel:
                 text?.also { put("text", it) }
                 attachments?.also { put("attachments", it) }
                 threadTs?.also { put("thread_ts", it) }
-            })
+            }), ingenKommandokjederSitterFast
         )?.let {
             objectMapper.readTree(it)["ts"]?.asText()
         }
 
-    private fun String.post(jsonPayload: String): String? {
+    private fun String.post(jsonPayload: String, ingenKommandokjederSitterFast: Boolean): String? {
         var connection: HttpURLConnection? = null
         try {
             connection = (URI(this).toURL().openConnection() as HttpURLConnection).apply {
@@ -88,11 +88,20 @@ internal class SlackClient(private val accessToken: String, private val channel:
 
             return responseBody
         } catch (err: SocketTimeoutException) {
-            logg.error("Timeout venter på svar", err)
-            sikkerlogg.error("Timeout venter på svar, forsøker å poste melding: $jsonPayload", err)
+            if (ingenKommandokjederSitterFast) {
+                logg.warn("Forsøkte å poste gladmelding til slack om at ingen kommandokjeder sitter fast - fikk timeout", err)
+            }
+            else {
+                logg.error("Timeout venter på svar", err)
+                sikkerlogg.error("Timeout venter på svar, forsøker å poste melding: $jsonPayload", err)
+            }
         } catch (err: IOException) {
-            logg.error("Feil ved posting til slack: {}", err.message, err)
-            sikkerlogg.error("Feil ved posting til slack med melding: $jsonPayload Error: {}", err.message, err)
+            if (ingenKommandokjederSitterFast) {
+                logg.warn("Forsøkte å poste gladmelding til slack om at ingen kommandokjeder sitter fast - fikk feil: {}", err.message, err)
+            } else {
+                logg.error("Feil ved posting til slack: {}", err.message, err)
+                sikkerlogg.error("Feil ved posting til slack med melding: $jsonPayload Error: {}", err.message, err)
+            }
         } finally {
             connection?.disconnect()
         }
