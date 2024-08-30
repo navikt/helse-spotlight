@@ -14,6 +14,18 @@ I dette repoet skal det commites på dette formatet:
 
 NB: Husk å bytte til å bruke unicode characters i stedet for `:<emote>:` notasjon
 
+## Manuell påminnelse
+Fyll ut denne og send den fra spout.ansatt.dev.nav.no eller spout.intern.nav.noª:
+```json
+{
+  "@event_name": "kommandokjede_påminnelse",
+  "@id": "{{uuidgen}}",
+  "commandContextId": "<fyll meg ut>",
+  "meldingId": "<fyll meg ut>"
+}
+```
+Dataene kan du finne i logger eller databasen til spesialist (eller spotlight).ª
+
 ## Henvendelser
 Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub.
 
