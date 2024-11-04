@@ -2,12 +2,9 @@ package no.nav.helse.db
 
 import no.nav.helse.Testdata.COMMAND_CONTEXT_ID
 import no.nav.helse.Testdata.kommandokjedeAvbruttTilDatabase
-import no.nav.helse.Testdata.kommandokjedeFeiletForOverEnHalvtimeSiden
-import no.nav.helse.Testdata.kommandokjedeFeiletTilDatabase
 import no.nav.helse.Testdata.kommandokjedeFerdigstiltTilDatabase
 import no.nav.helse.Testdata.kommandokjedeSuspendertForOverEnHalvtimeSiden
 import no.nav.helse.Testdata.kommandokjedeSuspendertTilDatabase
-import no.nav.helse.db.Tilstand.FEIL
 import no.nav.helse.db.Tilstand.SUSPENDERT
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -22,22 +19,9 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
     }
 
     @Test
-    fun `Kan lagre feilet kommandokjede`() {
-        kommandokjedeDao.upsert(kommandokjedeFeiletTilDatabase())
-        assertLagret()
-    }
-
-    @Test
     fun `Oppdaterer suspendert kommandokjede on conflict`() {
         kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase())
         kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase(command =  "EnAnnenCommand"))
-        assertOppdatert(command = "EnAnnenCommand")
-    }
-
-    @Test
-    fun `Oppdaterer feilet kommandokjede on conflict`() {
-        kommandokjedeDao.upsert(kommandokjedeSuspendertTilDatabase())
-        kommandokjedeDao.upsert(kommandokjedeFeiletTilDatabase(command =  "EnAnnenCommand"))
         assertOppdatert(command = "EnAnnenCommand")
     }
 
@@ -66,17 +50,13 @@ internal class KommandokjedeDaoTest: DatabaseIntegrationTest() {
     }
 
     @Test
-    fun `Henter stuck kommandokjeder som er minst 30 minutter gamle`() {
+    fun `Henter stuck kommandokjede som er minst 30 minutter gamle`() {
         val commandContextId1 = UUID.randomUUID()
-        val commandContextId2 = UUID.randomUUID()
         kommandokjedeDao.upsert(kommandokjedeSuspendertForOverEnHalvtimeSiden(commandContextId1))
-        kommandokjedeDao.upsert(kommandokjedeFeiletForOverEnHalvtimeSiden(commandContextId2))
-        val kommandokjeder = kommandokjedeDao.hent()
-        assertEquals(2, kommandokjeder.size)
-        assertEquals(commandContextId1, kommandokjeder[0].commandContextId)
-        assertEquals(SUSPENDERT, kommandokjeder[0].tilstand)
-        assertEquals(commandContextId2, kommandokjeder[1].commandContextId)
-        assertEquals(FEIL, kommandokjeder[1].tilstand)
+        val kommandokjede = kommandokjedeDao.hent()
+        assertEquals(1, kommandokjede.size)
+        assertEquals(commandContextId1, kommandokjede[0].commandContextId)
+        assertEquals(SUSPENDERT, kommandokjede[0].tilstand)
     }
 
     @Test

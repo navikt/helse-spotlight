@@ -1,13 +1,11 @@
 package no.nav.helse.db
 
-import no.nav.helse.db.Tilstand.FEIL
 import no.nav.helse.db.Tilstand.SUSPENDERT
 import java.time.LocalDateTime
 import java.util.*
 
 internal enum class Tilstand {
-    SUSPENDERT,
-    FEIL
+    SUSPENDERT
 }
 
 internal data class KommandokjedeSuspendertTilDatabase(
@@ -16,15 +14,6 @@ internal data class KommandokjedeSuspendertTilDatabase(
     val command: String,
     val sti: List<Int>,
     val tilstand: Tilstand = SUSPENDERT,
-    val opprettet: LocalDateTime,
-)
-
-internal data class KommandokjedeFeiletTilDatabase(
-    val commandContextId: UUID,
-    val meldingId: UUID,
-    val command: String,
-    val sti: List<Int>,
-    val tilstand: Tilstand = FEIL,
     val opprettet: LocalDateTime,
 )
 

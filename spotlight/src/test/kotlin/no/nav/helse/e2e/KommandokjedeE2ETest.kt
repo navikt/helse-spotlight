@@ -1,7 +1,6 @@
 package no.nav.helse.e2e
 
 import no.nav.helse.Testdata.OPPRETTET
-import no.nav.helse.db.Tilstand.FEIL
 import org.junit.jupiter.api.Test
 
 internal class KommandokjedeE2ETest: AbstractE2ETest() {
@@ -12,18 +11,6 @@ internal class KommandokjedeE2ETest: AbstractE2ETest() {
         assertKommandokjedeLagret()
     }
 
-    @Test
-    fun `Lagrer feilet kommandokjede når kommandokjede_feilet leses inn`() {
-        sendKommandokjedeFeilet()
-        assertKommandokjedeLagret()
-    }
-
-    @Test
-    fun `Oppdaterer tilstand på kommandokjede når kommandokjede_feilet leses inn, hvis den allerede er suspendert`() {
-        sendKommandokjedeSuspendert()
-        sendKommandokjedeFeilet()
-        assertKommandokjedeTilstand(FEIL)
-    }
 
     @Test
     fun `Sletter suspendert kommandokjede når kommandokjede_ferdigstilt leses inn`() {
@@ -44,22 +31,6 @@ internal class KommandokjedeE2ETest: AbstractE2ETest() {
         sendKommandokjedeSuspendert(opprettet = OPPRETTET.minusMinutes(35))
         sendHalvTime()
         assertPåminnelserSendt()
-    }
-
-    @Test
-    fun `Poster på slack hvis det sendes påminnelse på kommandokjede med tilstand FEIL`() {
-        sendKommandokjedeFeilet(opprettet = OPPRETTET.minusMinutes(35))
-        sendHalvTime()
-        assertPåminnelserSendt()
-        assertPostetPåminnelseMeldingPåSlack()
-    }
-
-    @Test
-    fun `Poster ikke på slack hvis det ikke sendes påminnelse på kommandokjede med tilstand FEIL`() {
-        sendKommandokjedeSuspendert(opprettet = OPPRETTET.minusMinutes(35))
-        sendHalvTime()
-        assertPåminnelserSendt()
-        assertPostetPåminnelseMeldingPåSlack(forventetAntall = 0)
     }
 
     @Test

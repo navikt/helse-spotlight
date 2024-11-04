@@ -1,7 +1,9 @@
 package no.nav.helse
 
-import no.nav.helse.db.*
-import no.nav.helse.db.Tilstand.FEIL
+import no.nav.helse.db.KommandokjedeAvbruttTilDatabase
+import no.nav.helse.db.KommandokjedeDao
+import no.nav.helse.db.KommandokjedeFerdigstiltTilDatabase
+import no.nav.helse.db.KommandokjedeSuspendertTilDatabase
 import no.nav.helse.kafka.Meldingssender
 import no.nav.helse.kafka.river.*
 import no.nav.helse.rapids_rivers.RapidsConnection
@@ -19,15 +21,11 @@ internal class Mediator(
         KommandokjedeFerdigstiltRiver(rapidsConnection, this)
         KommandokjedeSuspendertRiver(rapidsConnection, this)
         KommandokjedeAvbruttRiver(rapidsConnection, this)
-        KommandokjedeFeiletRiver(rapidsConnection, this)
         KlokkaSeksHverdagerRiver(rapidsConnection, this)
         HverHalvtimeRiver(rapidsConnection, this)
     }
 
     internal fun kommandokjedeSuspendert(kommandokjede: KommandokjedeSuspendertTilDatabase) =
-        kommandokjedeDao.upsert(kommandokjede)
-
-    internal fun kommandokjedeFeilet(kommandokjede: KommandokjedeFeiletTilDatabase) =
         kommandokjedeDao.upsert(kommandokjede)
 
     internal fun kommandokjedeFerdigstilt(kommandokjede: KommandokjedeFerdigstiltTilDatabase) =
@@ -42,9 +40,6 @@ internal class Mediator(
     internal fun påminnKommandokjeder() =
         meldingssender.påminnKommandokjeder(kommandokjeder())
             .map { (commandContextId) -> commandContextId.påminnet() }
-            .filter { it.tilstand == FEIL }
-            .takeUnless { it.isEmpty() }
-            ?.let { slackClient.fortellOmKommandokjederPåminnetMedTilstandFeil(it) }
 
     private fun kommandokjeder() = kommandokjedeDao.hent()
     private fun kommandokjederSomErPåminnet() = kommandokjeder().filter { it.antallGangerPåminnet > 0 }

@@ -16,15 +16,6 @@ internal class KommandokjedeDao(dataSource: DataSource) : AbstractDao(dataSource
         opprettet = kommandokjede.opprettet
     )
 
-    internal fun upsert(kommandokjede: KommandokjedeFeiletTilDatabase) = upsert(
-        commandContextId = kommandokjede.commandContextId,
-        meldingId = kommandokjede.meldingId,
-        command = kommandokjede.command,
-        sti = kommandokjede.sti,
-        tilstand = kommandokjede.tilstand,
-        opprettet = kommandokjede.opprettet
-    )
-
     private fun upsert(
         commandContextId: UUID,
         meldingId: UUID,
