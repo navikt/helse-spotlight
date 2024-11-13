@@ -5,10 +5,12 @@ import no.nav.helse.objectMapper
 import no.nav.helse.slack.SlackMeldingBuilder.byggDagligSlackMelding
 import org.slf4j.LoggerFactory
 import java.io.IOException
-import java.io.InputStream
-import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
+import java.time.Duration
 
 internal class SlackClient(private val accessToken: String, private val channel: String) {
 
@@ -48,31 +50,28 @@ internal class SlackClient(private val accessToken: String, private val channel:
         }
 
     private fun String.post(jsonPayload: String, ingenKommandokjederSitterFast: Boolean): String? {
-        var connection: HttpURLConnection? = null
+        val request = HttpRequest.newBuilder()
+            .uri(URI(this))
+            .timeout(Duration.ofSeconds(50))
+            .header("Content-Type", "application/json; charset=utf-8")
+            .header("Authorization", "Bearer ${accessToken}")
+            .header("User-Agent", "navikt/spotlight")
+            .method("POST", HttpRequest.BodyPublishers.ofString(jsonPayload))
+            .build()
+        val client = HttpClient.newHttpClient()
         try {
-            connection = (URI(this).toURL().openConnection() as HttpURLConnection).apply {
-                requestMethod = "POST"
-                connectTimeout = 5000
-                readTimeout = 5000
-                doOutput = true
-                setRequestProperty("Authorization", "Bearer $accessToken")
-                setRequestProperty("Content-Type", "application/json; charset=utf-8")
-                setRequestProperty("User-Agent", "navikt/spotlight")
+            val response = client.send(request, HttpResponse.BodyHandlers.ofString())
 
-                outputStream.use { it.bufferedWriter(Charsets.UTF_8).apply { write(jsonPayload); flush() } }
-            }
-
-            val responseCode = connection.responseCode
-
-            if (connection.responseCode !in 200..299) {
-                logg.warn("Respons fra slack: code=$responseCode")
-                sikkerlogg.warn("Respons fra slack: code=$responseCode body=${connection.errorStream.readText()}")
+            val statusCode = response.statusCode()
+            if (statusCode !in 200..299) {
+                logg.warn("Respons fra slack: code=$statusCode")
+                sikkerlogg.warn("Respons fra slack: code=$statusCode body=${response.body()}")
                 return null
             }
 
-            val responseBody = connection.inputStream.readText()
-            logg.debug("Respons fra slack: code=$responseCode")
-            sikkerlogg.debug("Respons fra slack: code=$responseCode body=$responseBody")
+            val responseBody = response.body()
+            logg.debug("Respons fra slack: code=$statusCode")
+            sikkerlogg.debug("Respons fra slack: code=$statusCode body=$responseBody")
 
             return responseBody
         } catch (err: SocketTimeoutException) {
@@ -91,12 +90,9 @@ internal class SlackClient(private val accessToken: String, private val channel:
                 sikkerlogg.error("Feil ved posting til slack med melding: $jsonPayload Error: {}", err.message, err)
             }
         } finally {
-            connection?.disconnect()
+            client.close()
         }
 
         return null
     }
-
-    private fun InputStream.readText() = use { it.bufferedReader().readText() }
-
 }
