@@ -1,12 +1,12 @@
 package no.nav.helse.kafka
 
+import com.github.navikt.tbd_libs.rapids_and_rivers.test_support.TestRapid
 import io.mockk.mockk
 import io.mockk.verify
 import no.nav.helse.Mediator
 import no.nav.helse.Testdata.kommandokjedeFerdigstiltTilDatabase
 import no.nav.helse.Testmeldinger.kommandokjedeFerdigstilt
 import no.nav.helse.kafka.river.KommandokjedeFerdigstiltRiver
-import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.junit.jupiter.api.Test
 
 internal class KommandokjedeFerdigstiltRiverTest {

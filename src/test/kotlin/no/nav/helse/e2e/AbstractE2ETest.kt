@@ -1,5 +1,6 @@
 package no.nav.helse.e2e
 
+import com.github.navikt.tbd_libs.rapids_and_rivers.test_support.TestRapid
 import io.mockk.mockk
 import io.mockk.verify
 import no.nav.helse.Mediator
@@ -14,7 +15,6 @@ import no.nav.helse.Testmeldinger.kommandokjedeSuspendert
 import no.nav.helse.db.DatabaseIntegrationTest
 import no.nav.helse.kafka.Meldingssender
 import no.nav.helse.kafka.asUUID
-import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import no.nav.helse.slack.SlackClient
 import org.junit.jupiter.api.BeforeEach
 import java.time.LocalDateTime

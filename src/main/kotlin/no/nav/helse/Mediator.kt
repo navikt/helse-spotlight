@@ -1,12 +1,12 @@
 package no.nav.helse
 
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import no.nav.helse.db.KommandokjedeAvbruttTilDatabase
 import no.nav.helse.db.KommandokjedeDao
 import no.nav.helse.db.KommandokjedeFerdigstiltTilDatabase
 import no.nav.helse.db.KommandokjedeSuspendertTilDatabase
 import no.nav.helse.kafka.Meldingssender
 import no.nav.helse.kafka.river.*
-import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.slack.SlackClient
 import java.util.*
 

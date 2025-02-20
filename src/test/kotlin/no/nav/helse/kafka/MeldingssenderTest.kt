@@ -1,8 +1,8 @@
 package no.nav.helse.kafka
 
+import com.github.navikt.tbd_libs.rapids_and_rivers.test_support.TestRapid
 import no.nav.helse.TestRapidHelpers.hendelser
 import no.nav.helse.Testdata.kommandokjedeFraDatabase
-import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.*

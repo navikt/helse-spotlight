@@ -1,12 +1,12 @@
 package no.nav.helse.db
 
-import javax.sql.DataSource
 import kotliquery.Query
 import kotliquery.Row
 import kotliquery.action.QueryAction
 import kotliquery.queryOf
 import kotliquery.sessionOf
 import org.intellij.lang.annotations.Language
+import javax.sql.DataSource
 
 internal abstract class AbstractDao(private val dataSource: DataSource) {
 

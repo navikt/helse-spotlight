@@ -1,6 +1,6 @@
 package no.nav.helse
 
-import no.nav.helse.rapids_rivers.testsupport.TestRapid
+import com.github.navikt.tbd_libs.rapids_and_rivers.test_support.TestRapid
 
 internal object TestRapidHelpers {
 

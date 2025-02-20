@@ -1,8 +1,8 @@
 package no.nav.helse.kafka.message
 
+import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
 import no.nav.helse.db.KommandokjedeAvbruttTilDatabase
 import no.nav.helse.kafka.asUUID
-import no.nav.helse.rapids_rivers.JsonMessage
 import java.util.*
 
 internal class KommandokjedeAvbruttMessage(packet: JsonMessage) {
