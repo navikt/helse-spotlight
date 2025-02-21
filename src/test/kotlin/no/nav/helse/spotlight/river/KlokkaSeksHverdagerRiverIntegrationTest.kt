@@ -25,17 +25,17 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
             postRequestedFor(urlEqualTo("/"))
                 .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
                 .withHeader("Authorization", equalTo("Bearer ${slackConfiguration.accessToken}"))
-                .withHeader("User-Agent", equalTo("navikt/spotlight"))
+                .withHeader("User-Agent", equalTo("navikt/spotlight")),
         )
         val requestJson = wireMockSlack.allServeEvents.first().request.bodyAsString.parseJson()
         assertEquals(
             """
-              {
-                "channel" : "${slackConfiguration.channel}",
-                "text" : ":spotlight: Ingen kommandokjeder sitter fast :spotlight:"
-              }
+            {
+              "channel" : "${slackConfiguration.channel}",
+              "text" : ":spotlight: Ingen kommandokjeder sitter fast :spotlight:"
+            }
             """.trimIndent().parseJson().toPrettyString(),
-            requestJson.toPrettyString()
+            requestJson.toPrettyString(),
         )
     }
 
@@ -43,10 +43,11 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
     fun `Poster en kommandokjede som står fast på slack når klokka er 6`() {
         // Given:
         wireMockSlack.stubFor(post(urlEqualTo("/")).willReturn(ok()))
-        val kommandokjede = lagretKommandokjede(
-            opprettet = LocalDateTime.now().minusMinutes(31),
-            antallGangerPåminnet = 1337
-        )
+        val kommandokjede =
+            lagretKommandokjede(
+                opprettet = LocalDateTime.now().minusMinutes(31),
+                antallGangerPåminnet = 1337,
+            )
         checkNotNull(dao.finn(kommandokjede.commandContextId))
 
         // When:
@@ -55,45 +56,45 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
         // Then:
         wireMockSlack.verify(
             postRequestedFor(urlEqualTo("/"))
-                .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
+                .withHeader("Content-Type", equalTo("application/json; charset=UTF-8")),
         )
         val requestJson = wireMockSlack.allServeEvents.first().request.bodyAsString.parseJson()
         assertEquals(slackConfiguration.channel, requestJson["channel"]?.asText())
         assertEquals(
             """
-              [ {
-                "color" : "#36b528",
-                "blocks" : [ {
-                  "type" : "section",
-                  "text" : {
-                    "type" : "mrkdwn",
-                    "text" : ":spotlight: Det er 1 kommandokjede som sitter fast: :spotlight:"
-                  }
+            [ {
+              "color" : "#36b528",
+              "blocks" : [ {
+                "type" : "section",
+                "text" : {
+                  "type" : "mrkdwn",
+                  "text" : ":spotlight: Det er 1 kommandokjede som sitter fast: :spotlight:"
+                }
+              }, {
+                "type" : "section",
+                "fields" : [ {
+                  "type" : "mrkdwn",
+                  "text" : "*Command context id:*\n<https://logs.adeo.no/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-7d%2Fd,to:now))&_a=(columns:!(level,message,envclass,application,pod),filters:!(),hideChart:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:kuery,query:%22${kommandokjede.commandContextId}%22),sort:!(!('@timestamp',desc)))|${kommandokjede.commandContextId}>"
                 }, {
-                  "type" : "section",
-                  "fields" : [ {
-                    "type" : "mrkdwn",
-                    "text" : "*Command context id:*\n<https://logs.adeo.no/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-7d%2Fd,to:now))&_a=(columns:!(level,message,envclass,application,pod),filters:!(),hideChart:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:kuery,query:%22${kommandokjede.commandContextId}%22),sort:!(!('@timestamp',desc)))|${kommandokjede.commandContextId}>"
-                  }, {
-                    "type" : "mrkdwn",
-                    "text" : "*Melding id:*\n<https://logs.adeo.no/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-7d%2Fd,to:now))&_a=(columns:!(level,message,envclass,application,pod),filters:!(),hideChart:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:kuery,query:%22${kommandokjede.meldingId}%22),sort:!(!('@timestamp',desc)))|${kommandokjede.meldingId}>"
-                  }, {
-                    "type" : "mrkdwn",
-                    "text" : "*Command:*\n${kommandokjede.command}"
-                  }, {
-                    "type" : "mrkdwn",
-                    "text" : "*Sti:*\n[${kommandokjede.sti.joinToString { it.toString() }}]"
-                  }, {
-                    "type" : "mrkdwn",
-                    "text" : "*Opprettet:*\n${kommandokjede.opprettet.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))}"
-                  }, {
-                    "type" : "mrkdwn",
-                    "text" : "*Antall ganger påminnet:*\n${kommandokjede.antallGangerPåminnet}"
-                  } ]
+                  "type" : "mrkdwn",
+                  "text" : "*Melding id:*\n<https://logs.adeo.no/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-7d%2Fd,to:now))&_a=(columns:!(level,message,envclass,application,pod),filters:!(),hideChart:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:kuery,query:%22${kommandokjede.meldingId}%22),sort:!(!('@timestamp',desc)))|${kommandokjede.meldingId}>"
+                }, {
+                  "type" : "mrkdwn",
+                  "text" : "*Command:*\n${kommandokjede.command}"
+                }, {
+                  "type" : "mrkdwn",
+                  "text" : "*Sti:*\n[${kommandokjede.sti.joinToString { it.toString() }}]"
+                }, {
+                  "type" : "mrkdwn",
+                  "text" : "*Opprettet:*\n${kommandokjede.opprettet.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))}"
+                }, {
+                  "type" : "mrkdwn",
+                  "text" : "*Antall ganger påminnet:*\n${kommandokjede.antallGangerPåminnet}"
                 } ]
               } ]
+            } ]
             """.trimIndent().parseJson().toPrettyString(),
-            requestJson["attachments"]?.asText()?.parseJson()?.toPrettyString()
+            requestJson["attachments"]?.asText()?.parseJson()?.toPrettyString(),
         )
     }
 
@@ -105,7 +106,7 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
         (1..80).forEach { index ->
             lagretKommandokjede(
                 opprettet = LocalDateTime.now().minusMinutes(31L + index),
-                antallGangerPåminnet = index
+                antallGangerPåminnet = index,
             )
         }
 
@@ -116,7 +117,7 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
         wireMockSlack.verify(
             2,
             postRequestedFor(urlEqualTo("/"))
-                .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
+                .withHeader("Content-Type", equalTo("application/json; charset=UTF-8")),
         )
 
         val førsteRequest = wireMockSlack.allServeEvents[1].request.bodyAsString.parseJson()
@@ -139,12 +140,11 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
               "dagen": "2024-03-07",
               "ukedag": "THURSDAY"
             }
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
     private val objectMapper = jacksonObjectMapper()
 
-    private fun String.parseJson(): JsonNode =
-        objectMapper.readTree(this)
+    private fun String.parseJson(): JsonNode = objectMapper.readTree(this)
 }

@@ -20,18 +20,19 @@ abstract class AbstractIntegrationTest {
 
     protected val testRapid = TestRapid()
 
-    protected val slackConfiguration = Configuration.Slack(
-        accessToken = "mockAccessToken",
-        channel = "mockChannel",
-        url = wireMockSlack.baseUrl()
-    )
+    protected val slackConfiguration =
+        Configuration.Slack(
+            accessToken = "mockAccessToken",
+            channel = "mockChannel",
+            url = wireMockSlack.baseUrl(),
+        )
 
     @BeforeEach
     fun setUp() {
         start(
             dataSource = TestDatabase.dataSource,
             rapidsConnection = testRapid,
-            slackConfiguration = slackConfiguration
+            slackConfiguration = slackConfiguration,
         )
     }
 
@@ -46,7 +47,7 @@ abstract class AbstractIntegrationTest {
 
     protected fun lagretKommandokjede(
         opprettet: LocalDateTime = LocalDateTime.now().minusMinutes(5),
-        antallGangerPåminnet: Int = 0
+        antallGangerPåminnet: Int = 0,
     ): Kommandokjede =
         Kommandokjede(
             commandContextId = UUID.randomUUID(),
@@ -54,11 +55,10 @@ abstract class AbstractIntegrationTest {
             command = "EnCommand",
             sti = listOf(0),
             opprettet = opprettet,
-            antallGangerPåminnet = antallGangerPåminnet
+            antallGangerPåminnet = antallGangerPåminnet,
         ).also(dao::lagre).also { checkNotNull(dao.finn(it.commandContextId)) }
 
-    protected fun Kommandokjede.roundedToMicros() =
-        copy(opprettet = opprettet.roundToMicros())
+    protected fun Kommandokjede.roundedToMicros() = copy(opprettet = opprettet.roundToMicros())
 
     protected fun LocalDateTime.roundToMicros(): LocalDateTime {
         val remainder = nano % 1000

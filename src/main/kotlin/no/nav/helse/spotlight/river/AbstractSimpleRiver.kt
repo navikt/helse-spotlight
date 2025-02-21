@@ -15,8 +15,11 @@ abstract class AbstractSimpleRiver(
     private val altEventName: String? = null,
 ) : River.PacketListener {
     protected val logg: Logger = LoggerFactory.getLogger(this::class.java)
+
     protected open fun precondition(message: JsonMessage) {}
+
     protected open fun validate(message: JsonMessage) {}
+
     protected abstract fun håndter(message: JsonMessage)
 
     fun buildRiver(rapidsConnection: RapidsConnection) {

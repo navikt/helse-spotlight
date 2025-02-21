@@ -11,14 +11,15 @@ class KommandokjederDaoTest : AbstractIntegrationTest() {
     @Test
     fun `Lagrer ny kommandokjede`() {
         // Given:
-        val kommandokjede = Kommandokjede(
-            commandContextId = UUID.randomUUID(),
-            meldingId = UUID.randomUUID(),
-            command = "EnCommand",
-            sti = listOf(0),
-            opprettet = LocalDateTime.now(),
-            antallGangerPåminnet = 0
-        )
+        val kommandokjede =
+            Kommandokjede(
+                commandContextId = UUID.randomUUID(),
+                meldingId = UUID.randomUUID(),
+                command = "EnCommand",
+                sti = listOf(0),
+                opprettet = LocalDateTime.now(),
+                antallGangerPåminnet = 0,
+            )
         val commandContextId = kommandokjede.commandContextId
 
         // When:
@@ -31,9 +32,10 @@ class KommandokjederDaoTest : AbstractIntegrationTest() {
     @Test
     fun `Henter kommandokjede som er mer enn 30 minutter gammel`() {
         // Given:
-        val kommandokjede = lagretKommandokjede(
-            opprettet = LocalDateTime.now().minusMinutes(31)
-        )
+        val kommandokjede =
+            lagretKommandokjede(
+                opprettet = LocalDateTime.now().minusMinutes(31),
+            )
 
         // When:
         val kommandokjederEldreEnnEnHalvtime = dao.finnAlleEldreEnnEnHalvtime()
@@ -47,7 +49,7 @@ class KommandokjederDaoTest : AbstractIntegrationTest() {
     fun `Henter ikke kommandokjede som er mindre enn 30 minutter gammel`() {
         // Given:
         lagretKommandokjede(
-            opprettet = LocalDateTime.now().minusMinutes(29)
+            opprettet = LocalDateTime.now().minusMinutes(29),
         )
 
         // When:

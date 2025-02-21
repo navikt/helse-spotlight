@@ -16,20 +16,19 @@ class KommandokjederDao(private val runner: SqlRunner) {
     private fun insert(kommandokjede: Kommandokjede) {
         runner.update(
             """
-                insert into kommandokjeder (command_context_id, melding_id, command, sti, opprettet, antall_ganger_påminnet, tilstand)
-                values (:command_context_id, :melding_id, :command, ${kommandokjede.sti.tilDatabaseArray()}, :opprettet, :antall_ganger_paaminnet, :tilstand) 
+            insert into kommandokjeder (command_context_id, melding_id, command, sti, opprettet, antall_ganger_påminnet, tilstand)
+            values (:command_context_id, :melding_id, :command, ${kommandokjede.sti.tilDatabaseArray()}, :opprettet, :antall_ganger_paaminnet, :tilstand) 
             """.trimIndent(),
-            kommandokjede.tilParameterMap()
+            kommandokjede.tilParameterMap(),
         )
     }
 
-    fun finnAlle(): List<Kommandokjede> =
-        runner.queryList("select * from kommandokjeder") { it.tilKommandokjede() }
+    fun finnAlle(): List<Kommandokjede> = runner.queryList("select * from kommandokjeder") { it.tilKommandokjede() }
 
     fun finn(commandContextId: UUID): Kommandokjede? =
         runner.querySingle(
             "select * from kommandokjeder where command_context_id = :command_context_id::uuid",
-            mapOf("command_context_id" to commandContextId.toString())
+            mapOf("command_context_id" to commandContextId.toString()),
         ) { it.tilKommandokjede() }
 
     fun finnAlleEldreEnnEnHalvtime() =
@@ -40,23 +39,23 @@ class KommandokjederDao(private val runner: SqlRunner) {
     private fun update(kommandokjede: Kommandokjede) {
         runner.update(
             """
-                update kommandokjeder 
-                set melding_id = :melding_id
-                , command = :command
-                , sti = ${kommandokjede.sti.tilDatabaseArray()}
-                , opprettet = :opprettet
-                , antall_ganger_påminnet = :antall_ganger_paaminnet
-                , tilstand = :tilstand
-                where command_context_id = :command_context_id::uuid
+            update kommandokjeder 
+            set melding_id = :melding_id
+            , command = :command
+            , sti = ${kommandokjede.sti.tilDatabaseArray()}
+            , opprettet = :opprettet
+            , antall_ganger_påminnet = :antall_ganger_paaminnet
+            , tilstand = :tilstand
+            where command_context_id = :command_context_id::uuid
             """.trimIndent(),
-            kommandokjede.tilParameterMap()
+            kommandokjede.tilParameterMap(),
         )
     }
 
     fun slett(commandContextId: UUID) {
         runner.update(
             "delete from kommandokjeder where command_context_id = :command_context_id::uuid",
-            mapOf("command_context_id" to commandContextId.toString())
+            mapOf("command_context_id" to commandContextId.toString()),
         )
     }
 

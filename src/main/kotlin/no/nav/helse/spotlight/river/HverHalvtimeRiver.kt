@@ -11,11 +11,12 @@ class HverHalvtimeRiver(
 ) : AbstractSimpleRiver("halv_time", "påminn_kommandokjeder_som_sitter_fast") {
     override fun håndter(message: JsonMessage) {
         logg.info("Påminner kommandokjeder som sitter fast")
-        val kommandokjeder = transactionManager.transaction { dao ->
-            dao.finnAlleEldreEnnEnHalvtime()
-                .map { it.copy(antallGangerPåminnet = it.antallGangerPåminnet + 1) }
-                .onEach(dao::lagre)
-        }
+        val kommandokjeder =
+            transactionManager.transaction { dao ->
+                dao.finnAlleEldreEnnEnHalvtime()
+                    .map { it.copy(antallGangerPåminnet = it.antallGangerPåminnet + 1) }
+                    .onEach(dao::lagre)
+            }
         kommandokjeder.map(Meldingsbygger::byggKommandokjedePåminnelse).forEach(rapidsConnection::publish)
     }
 }

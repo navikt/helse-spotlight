@@ -22,7 +22,7 @@ class KommandokjedeFerdigstiltRiverIntegrationTest : AbstractIntegrationTest() {
               "command": "EnCommand",
               "@opprettet": "${LocalDateTime.now()}"
             }
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         // Then:

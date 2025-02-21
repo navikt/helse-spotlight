@@ -13,11 +13,12 @@ object TestDatabase {
             println("Database: jdbc:postgresql://localhost:$firstMappedPort/test startet opp, credentials: test og test")
         }
 
-    private val configuration = Configuration.Database(
-        jdbcUrl = postgres.jdbcUrl,
-        username = postgres.username,
-        password = postgres.password,
-    )
+    private val configuration =
+        Configuration.Database(
+            jdbcUrl = postgres.jdbcUrl,
+            username = postgres.username,
+            password = postgres.password,
+        )
 
     val dataSource = DataSourceBuilder(configuration).build()
 

@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "2.1.10"
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
 }
 
 repositories {
@@ -46,6 +47,22 @@ tasks {
     kotlin {
         jvmToolchain(21)
     }
+    build {
+        doLast {
+            val erLokaltBygg = !System.getenv().containsKey("GITHUB_ACTION")
+            val manglerPreCommitHook = !File(".git/hooks/pre-commit").isFile
+            if (erLokaltBygg && manglerPreCommitHook) {
+                println(
+                    """
+                    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ¯\_(⊙︿⊙)_/¯ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    !            Hei du! Det ser ut til at du mangler en pre-commit-hook :/         !
+                    ! Du kan installere den ved å kjøre './gradlew addKtlintFormatGitPreCommitHook' !
+                    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    """.trimIndent(),
+                )
+            }
+        }
+    }
     test {
         useJUnitPlatform()
     }
@@ -53,9 +70,10 @@ tasks {
         archiveBaseName.set("app")
         manifest {
             attributes["Main-Class"] = "no.nav.helse.spotlight.AppKt"
-            attributes["Class-Path"] = configurations.runtimeClasspath.get().joinToString(separator = " ") {
-                it.name
-            }
+            attributes["Class-Path"] =
+                configurations.runtimeClasspath.get().joinToString(separator = " ") {
+                    it.name
+                }
         }
         doLast {
             configurations.runtimeClasspath.get().forEach {

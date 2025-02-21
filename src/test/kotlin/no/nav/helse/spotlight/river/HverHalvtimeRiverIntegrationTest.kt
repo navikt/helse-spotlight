@@ -9,10 +9,11 @@ class HverHalvtimeRiverIntegrationTest : AbstractIntegrationTest() {
     @Test
     fun `Sender påminnelse når halv_time leses inn`() {
         // Given:
-        val kommandokjede = lagretKommandokjede(
-            opprettet = LocalDateTime.now().minusMinutes(31),
-            antallGangerPåminnet = 0
-        )
+        val kommandokjede =
+            lagretKommandokjede(
+                opprettet = LocalDateTime.now().minusMinutes(31),
+                antallGangerPåminnet = 0,
+            )
         val commandContextId = kommandokjede.commandContextId
 
         // When:

@@ -22,14 +22,15 @@ class KommandokjedeSuspendertRiver(
     }
 
     override fun håndter(message: JsonMessage) {
-        val kommandokjede = Kommandokjede(
-            commandContextId = UUID.fromString(message["commandContextId"].asText()),
-            meldingId = UUID.fromString(message["meldingId"].asText()),
-            command = message["command"].asText(),
-            sti = message["sti"].map { it.asInt() },
-            opprettet = message["@opprettet"].asLocalDateTime(),
-            antallGangerPåminnet = 0
-        )
+        val kommandokjede =
+            Kommandokjede(
+                commandContextId = UUID.fromString(message["commandContextId"].asText()),
+                meldingId = UUID.fromString(message["meldingId"].asText()),
+                command = message["command"].asText(),
+                sti = message["sti"].map { it.asInt() },
+                opprettet = message["@opprettet"].asLocalDateTime(),
+                antallGangerPåminnet = 0,
+            )
         transactionManager.transaction { dao ->
             dao.lagre(kommandokjede)
         }

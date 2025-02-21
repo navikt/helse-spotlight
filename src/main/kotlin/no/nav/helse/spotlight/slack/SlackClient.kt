@@ -22,29 +22,31 @@ class SlackClient(private val configuration: Configuration.Slack) {
                 mapOf(
                     "channel" to configuration.channel,
                     "text" to ":spotlight: Ingen kommandokjeder sitter fast :spotlight:",
-                )
+                ),
             )
         } else {
             // Slack APIet støtter bare 50 blocks pr melding. Hvis det er mer enn 50 stuck kommandokjeder
             // postes resterende i tråd.
             val chunks = kommandokjeder.chunked(49)
-            val response = post(
-                mapOf(
-                    "channel" to configuration.channel,
-                    "attachments" to chunks.first().byggDagligSlackMelding(kommandokjeder.size),
+            val response =
+                post(
+                    mapOf(
+                        "channel" to configuration.channel,
+                        "attachments" to chunks.first().byggDagligSlackMelding(kommandokjeder.size),
+                    ),
                 )
-            )
             val remainingChunks = chunks.drop(1)
             if (remainingChunks.isNotEmpty()) {
-                val threadTs = response["ts"]?.asText()
-                    ?: error("Fikk ingen tråd-ID i svar fra Slack, kan ikke poste resterende kommandokjeder")
+                val threadTs =
+                    response["ts"]?.asText()
+                        ?: error("Fikk ingen tråd-ID i svar fra Slack, kan ikke poste resterende kommandokjeder")
                 remainingChunks.forEach { chunk ->
                     post(
                         mapOf(
                             "channel" to configuration.channel,
                             "attachments" to chunk.byggDagligSlackMelding(),
-                            "thread_ts" to threadTs
-                        )
+                            "thread_ts" to threadTs,
+                        ),
                     )
                 }
             }
@@ -53,17 +55,18 @@ class SlackClient(private val configuration: Configuration.Slack) {
 
     private fun post(payload: Map<String, String>): JsonNode =
         HttpClient.newHttpClient().use { client ->
-            val response = client.send(
-                HttpRequest.newBuilder()
-                    .uri(URI(configuration.url))
-                    .timeout(Duration.ofSeconds(50))
-                    .header("Content-Type", "application/json; charset=utf-8")
-                    .header("Authorization", "Bearer ${configuration.accessToken}")
-                    .header("User-Agent", "navikt/spotlight")
-                    .method("POST", HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(payload)))
-                    .build(),
-                HttpResponse.BodyHandlers.ofString()
-            )
+            val response =
+                client.send(
+                    HttpRequest.newBuilder()
+                        .uri(URI(configuration.url))
+                        .timeout(Duration.ofSeconds(50))
+                        .header("Content-Type", "application/json; charset=utf-8")
+                        .header("Authorization", "Bearer ${configuration.accessToken}")
+                        .header("User-Agent", "navikt/spotlight")
+                        .method("POST", HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(payload)))
+                        .build(),
+                    HttpResponse.BodyHandlers.ofString(),
+                )
 
             val statusCode = response.statusCode()
             val responseBody = response.body()

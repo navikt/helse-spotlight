@@ -13,18 +13,19 @@ import no.nav.helse.spotlight.river.*
 import no.nav.helse.spotlight.slack.SlackClient
 import javax.sql.DataSource
 
-val objectMapper: ObjectMapper = jacksonObjectMapper()
-    .registerModule(JavaTimeModule())
-    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+val objectMapper: ObjectMapper =
+    jacksonObjectMapper()
+        .registerModule(JavaTimeModule())
+        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 
 data class Configuration(
     val database: Database,
-    val slack: Slack
+    val slack: Slack,
 ) {
     data class Database(
         val jdbcUrl: String,
         val username: String,
-        val password: String
+        val password: String,
     )
 
     data class Slack(
@@ -37,19 +38,20 @@ data class Configuration(
 class App(
     slackConfiguration: Configuration.Slack,
     dataSource: DataSource,
-    rapidsConnection: RapidsConnection
+    rapidsConnection: RapidsConnection,
 ) {
     private val transactionManager = TransactionManager(dataSource)
 
     private val slackClient = SlackClient(slackConfiguration)
 
-    private val rivers = listOf(
-        KommandokjedeFerdigstiltRiver(transactionManager),
-        KommandokjedeSuspendertRiver(transactionManager),
-        KommandokjedeAvbruttRiver(transactionManager),
-        KlokkaSeksHverdagerRiver(transactionManager, slackClient),
-        HverHalvtimeRiver(transactionManager, rapidsConnection),
-    )
+    private val rivers =
+        listOf(
+            KommandokjedeFerdigstiltRiver(transactionManager),
+            KommandokjedeSuspendertRiver(transactionManager),
+            KommandokjedeAvbruttRiver(transactionManager),
+            KlokkaSeksHverdagerRiver(transactionManager, slackClient),
+            HverHalvtimeRiver(transactionManager, rapidsConnection),
+        )
 
     fun buildRivers(rapidsConnection: RapidsConnection) {
         rivers.forEach { it.buildRiver(rapidsConnection) }
@@ -58,41 +60,49 @@ class App(
 
 fun main() {
     val env = System.getenv()
-    val configuration = Configuration(
-        Configuration.Database(
-            jdbcUrl = "jdbc:postgresql://" +
-                    env.getRequired("DATABASE_HOST") +
-                    ":" +
-                    env.getRequired("DATABASE_PORT") +
-                    "/" +
-                    env.getRequired("DATABASE_DATABASE"),
-            username = env.getRequired("DATABASE_USERNAME"),
-            password = env.getRequired("DATABASE_PASSWORD")
-        ),
-        Configuration.Slack(
-            accessToken = env.getRequired("SLACK_SPY_ACCESS_TOKEN"),
-            channel = env.getRequired("SLACK_SPOTLIGHT_CHANNEL_ID"),
-            url = "https://slack.com/api/chat.postMessage"
+    val configuration =
+        Configuration(
+            Configuration.Database(
+                jdbcUrl =
+                    "jdbc:postgresql://" +
+                        env.getRequired("DATABASE_HOST") +
+                        ":" +
+                        env.getRequired("DATABASE_PORT") +
+                        "/" +
+                        env.getRequired("DATABASE_DATABASE"),
+                username = env.getRequired("DATABASE_USERNAME"),
+                password = env.getRequired("DATABASE_PASSWORD"),
+            ),
+            Configuration.Slack(
+                accessToken = env.getRequired("SLACK_SPY_ACCESS_TOKEN"),
+                channel = env.getRequired("SLACK_SPOTLIGHT_CHANNEL_ID"),
+                url = "https://slack.com/api/chat.postMessage",
+            ),
         )
-    )
     start(
         dataSource = DataSourceBuilder(configuration.database).build(),
-        rapidsConnection = RapidApplication.create(env).apply {
-            register(object : RapidsConnection.StatusListener {
-                override fun onStartup(rapidsConnection: RapidsConnection) {
-                    FlywayMigrator(configuration.database).migrate()
-                }
-            })
-        },
-        slackConfiguration = configuration.slack
+        rapidsConnection =
+            RapidApplication.create(env).apply {
+                register(
+                    object : RapidsConnection.StatusListener {
+                        override fun onStartup(rapidsConnection: RapidsConnection) {
+                            FlywayMigrator(configuration.database).migrate()
+                        }
+                    },
+                )
+            },
+        slackConfiguration = configuration.slack,
     )
 }
 
-fun start(dataSource: DataSource, rapidsConnection: RapidsConnection, slackConfiguration: Configuration.Slack): App =
+fun start(
+    dataSource: DataSource,
+    rapidsConnection: RapidsConnection,
+    slackConfiguration: Configuration.Slack,
+): App =
     App(slackConfiguration, dataSource, rapidsConnection).also {
         it.buildRivers(rapidsConnection)
         rapidsConnection.start()
     }
 
-fun Map<String, String>.getRequired(name: String) =
-    this[name] ?: error("$name må settes")
+fun Map<String, String>.getRequired(name: String) = this[name] ?: error("$name må settes")

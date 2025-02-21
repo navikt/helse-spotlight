@@ -8,7 +8,7 @@ object Meldingsbygger {
             "kommandokjede_påminnelse",
             mapOf(
                 "commandContextId" to kommandokjede.commandContextId,
-                "meldingId" to kommandokjede.meldingId
-            )
+                "meldingId" to kommandokjede.meldingId,
+            ),
         ).toJson()
 }

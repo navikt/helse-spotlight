@@ -26,7 +26,7 @@ class KommandokjedeSuspendertRiverIntegrationTest : AbstractIntegrationTest() {
               "sti": [0],
               "@opprettet": "$opprettet"
             }
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         // Then:

@@ -19,7 +19,7 @@ class KommandokjedeAvbruttRiverIntegrationTest : AbstractIntegrationTest() {
               "commandContextId": "$commandContextId",
               "meldingId": "${UUID.randomUUID()}"
             }
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         // Then:
