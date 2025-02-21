@@ -15,6 +15,7 @@ abstract class AbstractSimpleRiver(
     private val altEventName: String? = null,
 ) : River.PacketListener {
     protected val logg: Logger = LoggerFactory.getLogger(this::class.java)
+    private val sikkerlogg = LoggerFactory.getLogger("tjenestekall")
 
     protected open fun precondition(message: JsonMessage) {}
 
@@ -52,7 +53,8 @@ abstract class AbstractSimpleRiver(
         metadata: MessageMetadata,
         meterRegistry: MeterRegistry,
     ) {
-        logg.info("Håndterer melding ${packet.toJson()}")
+        logg.info("Håndterer melding i ${javaClass.simpleName}")
+        sikkerlogg.info("Håndterer melding i ${javaClass.simpleName}: ${packet.toJson()}")
         håndter(packet)
     }
 }
