@@ -9,8 +9,11 @@ import java.util.*
 class KommandokjedeSuspendertRiver(
     private val transactionManager: TransactionManager,
 ) : AbstractSimpleRiver("kommandokjede_suspendert") {
+    override fun precondition(message: JsonMessage) {
+        message.forbidValue("command", "OppdaterPersonsnapshotCommand")
+    }
+
     override fun validate(message: JsonMessage) {
-        message.rejectValue("command", "OppdaterPersonsnapshotCommand")
         message.requireKey("commandContextId")
         message.requireKey("meldingId")
         message.requireKey("command")

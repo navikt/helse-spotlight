@@ -15,17 +15,21 @@ abstract class AbstractSimpleRiver(
     private val altEventName: String? = null,
 ) : River.PacketListener {
     protected val logg: Logger = LoggerFactory.getLogger(this::class.java)
-    protected abstract fun validate(message: JsonMessage)
+    protected open fun precondition(message: JsonMessage) {}
+    protected open fun validate(message: JsonMessage) {}
     protected abstract fun håndter(message: JsonMessage)
 
     fun buildRiver(rapidsConnection: RapidsConnection) {
         River(rapidsConnection).apply {
-            validate {
+            precondition {
                 if (altEventName != null) {
-                    it.demandAny("@event_name", listOf(eventName, altEventName))
+                    it.requireAny("@event_name", listOf(eventName, altEventName))
                 } else {
-                    it.demandValue("@event_name", eventName)
+                    it.requireValue("@event_name", eventName)
                 }
+                precondition(it)
+            }
+            validate {
                 validate(it)
             }
         }.register(this)

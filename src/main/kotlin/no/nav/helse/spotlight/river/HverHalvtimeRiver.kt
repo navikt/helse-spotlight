@@ -9,8 +9,6 @@ class HverHalvtimeRiver(
     private val transactionManager: TransactionManager,
     private val rapidsConnection: RapidsConnection,
 ) : AbstractSimpleRiver("halv_time", "påminn_kommandokjeder_som_sitter_fast") {
-    override fun validate(message: JsonMessage) {}
-
     override fun håndter(message: JsonMessage) {
         logg.info("Påminner kommandokjeder som sitter fast")
         val kommandokjeder = transactionManager.transaction { dao ->

@@ -8,9 +8,9 @@ class KlokkaSeksHverdagerRiver(
     private val transactionManager: TransactionManager,
     private val slackClient: SlackClient,
 ) : AbstractSimpleRiver("hel_time", "post_kommandokjeder_til_slack") {
-    override fun validate(message: JsonMessage) {
-        message.demandValue("time", 6)
-        message.demandAny("ukedag", listOf("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"))
+    override fun precondition(message: JsonMessage) {
+        message.requireValue("time", 6)
+        message.requireAny("ukedag", listOf("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"))
     }
 
     override fun håndter(message: JsonMessage) {
