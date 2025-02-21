@@ -52,7 +52,7 @@ tasks {
     withType<Jar> {
         archiveBaseName.set("app")
         manifest {
-            attributes["Main-Class"] = "no.nav.helse.AppKt"
+            attributes["Main-Class"] = "no.nav.helse.spotlight.AppKt"
             attributes["Class-Path"] = configurations.runtimeClasspath.get().joinToString(separator = " ") {
                 it.name
             }
