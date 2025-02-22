@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import no.nav.helse.spotlight.Configuration
 import no.nav.helse.spotlight.SuspendertKommandokjede
 import no.nav.helse.spotlight.objectMapper
-import no.nav.helse.spotlight.slack.SlackMeldingBuilder.byggDagligSlackMelding
+import no.nav.helse.spotlight.slack.SlackMeldingBuilder.byggTrådMedAttachments
 import no.nav.helse.spotlight.slack.SlackMeldingBuilder.gladmelding
 import org.slf4j.LoggerFactory
 import java.net.URI
@@ -28,29 +28,29 @@ class SlackClient(private val configuration: Configuration.Slack) {
     }
 
     fun sendMeldingOmKommandokjederSomSitterFast(kommandokjeder: List<SuspendertKommandokjede>) {
-        // Slack APIet støtter bare 50 blocks pr melding. Hvis det er mer enn 50 stuck kommandokjeder
-        // postes resterende i tråd.
-        val chunks = kommandokjeder.chunked(49)
-        val firstChunk = chunks.first()
-        logg.info("Poster melding til Slack med ${firstChunk.size} kommandokjeder som sitter fast")
+        postSomTråd(byggTrådMedAttachments(kommandokjeder))
+    }
+
+    private fun postSomTråd(attachmentsTråd: List<String>) {
+        logg.info("Poster melding til Slack med kommandokjeder som sitter fast")
         val response =
             post(
                 mapOf(
                     "channel" to configuration.channel,
-                    "attachments" to firstChunk.byggDagligSlackMelding(kommandokjeder.size),
+                    "attachments" to attachmentsTråd.first(),
                 ),
             )
-        val remainingChunks = chunks.drop(1)
-        if (remainingChunks.isNotEmpty()) {
+        val attachmentsSomMåITråd = attachmentsTråd.drop(1)
+        if (attachmentsSomMåITråd.isNotEmpty()) {
             val threadTs =
                 response["ts"]?.asText()
                     ?: error("Fikk ingen tråd-ID i svar fra Slack, kan ikke poste resterende kommandokjeder")
-            remainingChunks.forEach { chunk ->
-                logg.info("Poster melding i tråd til Slack med ytterligere ${chunk.size} kommandokjeder som sitter fast")
+            attachmentsSomMåITråd.forEach { attachments ->
+                logg.info("Poster melding i tråd til Slack med ytterligere kommandokjeder som sitter fast")
                 post(
                     mapOf(
                         "channel" to configuration.channel,
-                        "attachments" to chunk.byggDagligSlackMelding(),
+                        "attachments" to attachments,
                         "thread_ts" to threadTs,
                     ),
                 )

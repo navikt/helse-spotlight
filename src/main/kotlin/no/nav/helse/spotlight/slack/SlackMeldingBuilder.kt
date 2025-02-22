@@ -1,94 +1,130 @@
 package no.nav.helse.spotlight.slack
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.nav.helse.spotlight.SuspendertKommandokjede
-import org.intellij.lang.annotations.Language
+import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 object SlackMeldingBuilder {
-    private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
-
     val gladmelding = ":spotlight: Ingen kommandokjeder sitter fast (4 realz!) :spotlight:"
 
-    fun List<SuspendertKommandokjede>.byggDagligSlackMelding(totaltAntall: Int? = null): String =
-        attachments(buildSections(this), lagDagligMeldingTittel(totaltAntall))
+    fun byggTrådMedAttachments(kommandokjeder: List<SuspendertKommandokjede>): List<String> =
+        kommandokjeder.chunked(49).mapIndexed { index, chunk ->
+            // Slack APIet støtter bare 50 blocks pr melding. Hvis det er mer enn 50 stuck kommandokjeder
+            // postes resterende i tråd.
+            chunk.tilAttachments(
+                if (index == 0) {
+                    ":spotlight: Det er ${kommandokjeder.antallMedBenevning()} som sitter fast (4 realz): :spotlight:"
+                } else {
+                    ":the-more-you-know: Fortsettelse: :the-more-you-know:"
+                },
+            )
+        }.map { it.toJsonString() }
 
-    private fun buildSections(kommandokjeder: List<SuspendertKommandokjede>): String {
-        val iterator = kommandokjeder.iterator()
-        return buildString {
-            iterator.forEach {
-                append(section(it))
-                if (iterator.hasNext()) append(",")
-            }
-        }
-    }
+    private fun List<SuspendertKommandokjede>.antallMedBenevning() = "$size ${if (size == 1) "kommandokjede" else "kommandokjeder"}"
 
-    @Language("JSON")
-    private fun attachments(
-        sections: String,
-        tittel: String,
-    ): String =
-        """
-        [
-          {
-            "color": "#36b528",
-            "blocks": [
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "$tittel"
-                }
-              },
-              $sections
-            ]
-          }
-        ]
-        """.trimIndent()
+    private val objectMapper = jacksonObjectMapper()
 
-    private fun lagDagligMeldingTittel(antall: Int?): String =
-        if (antall != null) {
-            ":spotlight: Det er $antall ${if (antall == 1) "kommandokjede" else "kommandokjeder"} som sitter fast (4 realz): :spotlight:"
-        } else {
-            ":the-more-you-know: Fortsettelse: :the-more-you-know:"
-        }
+    private fun Any.toJsonString(): String = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(this)
 
-    @Language("JSON")
-    private fun section(kommandokjede: SuspendertKommandokjede) =
-        """
-        {
-          "type": "section",
-          "fields": [
-            {
-              "type": "mrkdwn",
-              "text": "*Command context id:*\n<${link(kommandokjede.commandContextId.toString())}|${kommandokjede.commandContextId}>"
-            },
-            {
-              "type": "mrkdwn",
-              "text": "*Melding id:*\n<${link(kommandokjede.sisteMeldingId.toString())}|${kommandokjede.sisteMeldingId}>"
-            },
-            {
-              "type": "mrkdwn",
-              "text": "*Command:*\n${kommandokjede.command}"
-            },
-            {
-              "type": "mrkdwn",
-              "text": "*Sti:*\n${kommandokjede.sistSuspenderteSti.sti}"
-            },
-            {
-              "type": "mrkdwn",
-              "text": "*Opprettet:*\n${
-            kommandokjede.sistSuspenderteSti.førsteTidspunkt.atZone(ZoneId.of("Europe/Oslo")).format(formatter)
-        }"
-            },
-            {
-              "type": "mrkdwn",
-              "text": "*Antall ganger påminnet:*\n${kommandokjede.sistSuspenderteSti.antallGangerPåminnet}"
-            }
-          ]
-        }
-        """.trimIndent()
+    private fun List<SuspendertKommandokjede>.tilAttachments(tittel: String) =
+        listOf(
+            attachment(
+                color = "#36b528",
+                blocks =
+                    listOf(
+                        section(
+                            text =
+                                markdown(
+                                    text = tittel,
+                                ),
+                        ),
+                    ) +
+                        map { kommandokjede ->
+                            section(
+                                fields = kommandokjede.tilFields(),
+                            )
+                        },
+            ),
+        )
 
-    private fun link(query: String) =
+    private fun SuspendertKommandokjede.tilFields(): List<Map<String, String>> =
+        listOf(
+            markdownMedOverskrift(
+                overskrift = "Command context id:",
+                tekst = adeoQueryLink(commandContextId.toString()),
+            ),
+            markdownMedOverskrift(
+                overskrift = "Melding id:",
+                tekst = adeoQueryLink(sisteMeldingId.toString()),
+            ),
+            markdownMedOverskrift(
+                overskrift = "Command:",
+                tekst = command,
+            ),
+            markdownMedOverskrift(
+                overskrift = "Sti:",
+                tekst = sistSuspenderteSti.sti,
+            ),
+            markdownMedOverskrift(
+                overskrift = "Opprettet:",
+                tekst = sistSuspenderteSti.førsteTidspunkt.formattert(),
+            ),
+            markdownMedOverskrift(
+                overskrift = "Antall ganger påminnet:",
+                tekst = sistSuspenderteSti.antallGangerPåminnet.toString(),
+            ),
+        )
+
+    private fun markdownMedOverskrift(
+        overskrift: String,
+        tekst: String,
+    ) = markdown(
+        text = "${Markdown.bold(overskrift)}\n$tekst",
+    )
+
+    private fun attachment(
+        color: String,
+        blocks: List<Map<String, Any>>,
+    ) = mapOf(
+        "color" to color,
+        "blocks" to blocks,
+    )
+
+    private fun section(text: Map<String, Any?>) =
+        mapOf(
+            "type" to "section",
+            "text" to text,
+        )
+
+    private fun section(fields: List<Map<String, Any?>>) =
+        mapOf(
+            "type" to "section",
+            "fields" to fields,
+        )
+
+    private fun markdown(text: String) =
+        mapOf(
+            "type" to "mrkdwn",
+            "text" to text,
+        )
+
+    private fun adeoQueryLink(query: String) = Markdown.link(adeoUrlMedQuery(query), query)
+
+    private fun adeoUrlMedQuery(query: String) =
         "https://logs.adeo.no/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-7d%2Fd,to:now))&_a=(columns:!(level,message,envclass,application,pod),filters:!(),hideChart:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:kuery,query:%22$query%22),sort:!(!('@timestamp',desc)))"
+
+    private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
+
+    private fun Instant.formattert(): String = atZone(ZoneId.of("Europe/Oslo")).format(formatter)
+
+    private object Markdown {
+        fun bold(text: String) = "*$text*"
+
+        fun link(
+            url: String,
+            displayText: String,
+        ) = "<$url|$displayText>"
+    }
 }
