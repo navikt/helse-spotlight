@@ -6,7 +6,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-object SlackMeldingBuilder {
+object SlackMeldingsbygger {
     val gladmelding = ":spotlight: Ingen kommandokjeder sitter fast (4 realz!) :spotlight:"
 
     fun byggTrådMedAttachments(kommandokjeder: List<SuspendertKommandokjede>): List<String> =

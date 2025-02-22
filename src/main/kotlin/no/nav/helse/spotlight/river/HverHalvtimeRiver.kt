@@ -2,7 +2,7 @@ package no.nav.helse.spotlight.river
 
 import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
-import no.nav.helse.spotlight.Meldingsbygger
+import no.nav.helse.spotlight.KafkaMeldingsbygger
 import no.nav.helse.spotlight.SuspendertKommandokjede
 import no.nav.helse.spotlight.db.TransactionManager
 
@@ -20,7 +20,7 @@ class HverHalvtimeRiver(
             }
         kommandokjeder
             .onEach { logg.info("Sender påminnelse for kommandokjede med commandContextId ${it.commandContextId}") }
-            .map(Meldingsbygger::byggKommandokjedePåminnelse)
+            .map(KafkaMeldingsbygger::byggKommandokjedePåminnelse)
             .forEach(rapidsConnection::publish)
     }
 }

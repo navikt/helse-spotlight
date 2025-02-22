@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode
 import no.nav.helse.spotlight.Configuration
 import no.nav.helse.spotlight.SuspendertKommandokjede
 import no.nav.helse.spotlight.objectMapper
-import no.nav.helse.spotlight.slack.SlackMeldingBuilder.byggTrådMedAttachments
-import no.nav.helse.spotlight.slack.SlackMeldingBuilder.gladmelding
+import no.nav.helse.spotlight.slack.SlackMeldingsbygger.byggTrådMedAttachments
+import no.nav.helse.spotlight.slack.SlackMeldingsbygger.gladmelding
 import org.slf4j.LoggerFactory
 import java.net.URI
 import java.net.http.HttpClient
