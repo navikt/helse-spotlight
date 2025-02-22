@@ -19,6 +19,11 @@ class KlokkaSeksHverdagerRiver(
             transactionManager.transaction { dao ->
                 dao.finnAlleEldreEnnEnHalvtime().filter { it.sistSuspenderteSti.antallGangerPåminnet > 0 }
             }
-        slackClient.fortellOmKommandokjeder(kommandokjeder)
+        logg.info("Fant ${kommandokjeder.size} kommandokjeder som sitter fast")
+        if (kommandokjeder.isEmpty()) {
+            slackClient.sendGladmelding()
+        } else {
+            slackClient.sendMeldingOmKommandokjederSomSitterFast(kommandokjeder)
+        }
     }
 }

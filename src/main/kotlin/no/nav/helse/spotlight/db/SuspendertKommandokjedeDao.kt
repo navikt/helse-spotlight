@@ -2,10 +2,14 @@ package no.nav.helse.spotlight.db
 
 import kotliquery.Row
 import no.nav.helse.spotlight.SuspendertKommandokjede
+import org.slf4j.LoggerFactory
 import java.util.*
 
 class SuspendertKommandokjedeDao(private val runner: SqlRunner) {
+    private val logg = LoggerFactory.getLogger(javaClass)
+
     fun insert(kommandokjede: SuspendertKommandokjede) {
+        logg.info("Lagrer ny suspendert kommandokjede med commandContextId ${kommandokjede.commandContextId}")
         runner.update(
             """
             INSERT INTO suspendert_kommandokjede (
@@ -43,12 +47,13 @@ class SuspendertKommandokjedeDao(private val runner: SqlRunner) {
             mapOf("command_context_id" to commandContextId),
         ) { it.tilKommandokjede() }
 
-    fun finnAlleEldreEnnEnHalvtime() =
+    fun finnAlleEldreEnnEnHalvtime(): List<SuspendertKommandokjede> =
         runner.queryList(
             "SELECT * FROM suspendert_kommandokjede WHERE sist_suspenderte_sti_første_tidspunkt < CURRENT_TIMESTAMP - INTERVAL '30 minutes'",
         ) { it.tilKommandokjede() }
 
     fun update(kommandokjede: SuspendertKommandokjede) {
+        logg.info("Oppdaterer eksisterende suspendert kommandokjede med commandContextId ${kommandokjede.commandContextId}")
         runner.update(
             """
             UPDATE suspendert_kommandokjede SET
@@ -67,6 +72,7 @@ class SuspendertKommandokjedeDao(private val runner: SqlRunner) {
     }
 
     fun slett(commandContextId: UUID) {
+        logg.info("Sletter suspendert kommandokjede med commandContextId $commandContextId")
         runner.update(
             "DELETE FROM suspendert_kommandokjede WHERE command_context_id = :command_context_id",
             mapOf("command_context_id" to commandContextId),

@@ -14,6 +14,7 @@ class KommandokjedeFerdigstiltRiver(
     override fun håndter(message: JsonMessage) {
         val commandContextId = UUID.fromString(message["commandContextId"].asText())
         transactionManager.transaction { dao ->
+            logg.info("Sletter ferdigstilt kommandokjede med commandContextId $commandContextId")
             dao.slett(commandContextId)
         }
     }

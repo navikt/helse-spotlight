@@ -30,64 +30,49 @@ class KommandokjedeSuspendertRiver(
         val sti = message["sti"].toPrettyString()
         val opprettetTidspunkt = message["@opprettet"].asLocalDateTime().atZone(ZoneId.of("Europe/Oslo")).toInstant()
 
+        logg.info("Mottok suspendert kommandokjede $command$sti med commandContextId $commandContextId")
+
         transactionManager.transaction { dao ->
             val eksisterendeKommandokjede = dao.finn(commandContextId)
             if (eksisterendeKommandokjede == null) {
+                logg.info("Dette er en kommandokjede vi ikke tidligere har sett")
                 dao.insert(
-                    nyKommandokjede(
+                    SuspendertKommandokjede(
                         commandContextId = commandContextId,
                         command = command,
-                        tidspunkt = opprettetTidspunkt,
-                        meldingId = meldingId,
-                        sti = sti,
+                        førsteTidspunkt = opprettetTidspunkt,
+                        sisteTidspunkt = opprettetTidspunkt,
+                        sisteMeldingId = meldingId,
+                        totaltAntallGangerPåminnet = 0,
+                        sistSuspenderteSti = nySti(sti = sti, førsteTidspunkt = opprettetTidspunkt),
                     ),
                 )
             } else {
+                val oppdatertSti =
+                    if (sti == eksisterendeKommandokjede.sistSuspenderteSti.sti) {
+                        logg.info("Dette er en ny melding for kjent kommandokjede og sti")
+                        eksisterendeKommandokjede.sistSuspenderteSti
+                    } else {
+                        logg.info("Kommandokjeden har fått ny sti (${eksisterendeKommandokjede.sistSuspenderteSti.sti} -> $sti)")
+                        nySti(sti = sti, førsteTidspunkt = opprettetTidspunkt)
+                    }
                 dao.update(
-                    eksisterendeKommandokjede.oppdatertMedNyMelding(
-                        tidspunkt = opprettetTidspunkt,
-                        meldingId = meldingId,
-                        sti = sti,
+                    eksisterendeKommandokjede.copy(
+                        sisteTidspunkt = opprettetTidspunkt,
+                        sisteMeldingId = meldingId,
+                        sistSuspenderteSti = oppdatertSti,
                     ),
                 )
             }
         }
     }
 
-    private fun nyKommandokjede(
-        commandContextId: UUID,
-        command: String,
-        tidspunkt: Instant,
-        meldingId: UUID,
+    private fun nySti(
         sti: String,
-    ) = SuspendertKommandokjede(
-        commandContextId = commandContextId,
-        command = command,
-        førsteTidspunkt = tidspunkt,
-        sisteTidspunkt = tidspunkt,
-        sisteMeldingId = meldingId,
-        totaltAntallGangerPåminnet = 0,
-        sistSuspenderteSti =
-            SuspendertKommandokjede.Sti(
-                sti = sti,
-                førsteTidspunkt = tidspunkt,
-                antallGangerPåminnet = 0,
-            ),
-    )
-
-    private fun SuspendertKommandokjede.oppdatertMedNyMelding(
-        tidspunkt: Instant,
-        meldingId: UUID,
-        sti: String,
-    ) = copy(
-        sisteTidspunkt = tidspunkt,
-        sisteMeldingId = meldingId,
-        sistSuspenderteSti =
-            sistSuspenderteSti.takeIf { it.sti == sti }
-                ?: SuspendertKommandokjede.Sti(
-                    sti = sti,
-                    førsteTidspunkt = tidspunkt,
-                    antallGangerPåminnet = 0,
-                ),
+        førsteTidspunkt: Instant,
+    ) = SuspendertKommandokjede.Sti(
+        sti = sti,
+        førsteTidspunkt = førsteTidspunkt,
+        antallGangerPåminnet = 0,
     )
 }

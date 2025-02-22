@@ -16,39 +16,43 @@ class SlackClient(private val configuration: Configuration.Slack) {
     private val logg = LoggerFactory.getLogger(this::class.java)
     private val sikkerlogg = LoggerFactory.getLogger("tjenestekall")
 
-    fun fortellOmKommandokjeder(kommandokjeder: List<SuspendertKommandokjede>) {
-        if (kommandokjeder.isEmpty()) {
+    fun sendGladmelding() {
+        logg.info("Poster gladmelding til Slack")
+        post(
+            mapOf(
+                "channel" to configuration.channel,
+                "text" to ":spotlight: Ingen kommandokjeder sitter fast :spotlight:",
+            ),
+        )
+    }
+
+    fun sendMeldingOmKommandokjederSomSitterFast(kommandokjeder: List<SuspendertKommandokjede>) {
+        // Slack APIet støtter bare 50 blocks pr melding. Hvis det er mer enn 50 stuck kommandokjeder
+        // postes resterende i tråd.
+        val chunks = kommandokjeder.chunked(49)
+        val firstChunk = chunks.first()
+        logg.info("Poster melding til Slack med ${firstChunk.size} kommandokjeder som sitter fast")
+        val response =
             post(
                 mapOf(
                     "channel" to configuration.channel,
-                    "text" to ":spotlight: Ingen kommandokjeder sitter fast :spotlight:",
+                    "attachments" to firstChunk.byggDagligSlackMelding(kommandokjeder.size),
                 ),
             )
-        } else {
-            // Slack APIet støtter bare 50 blocks pr melding. Hvis det er mer enn 50 stuck kommandokjeder
-            // postes resterende i tråd.
-            val chunks = kommandokjeder.chunked(49)
-            val response =
+        val remainingChunks = chunks.drop(1)
+        if (remainingChunks.isNotEmpty()) {
+            val threadTs =
+                response["ts"]?.asText()
+                    ?: error("Fikk ingen tråd-ID i svar fra Slack, kan ikke poste resterende kommandokjeder")
+            remainingChunks.forEach { chunk ->
+                logg.info("Poster melding i tråd til Slack med ytterligere ${chunk.size} kommandokjeder som sitter fast")
                 post(
                     mapOf(
                         "channel" to configuration.channel,
-                        "attachments" to chunks.first().byggDagligSlackMelding(kommandokjeder.size),
+                        "attachments" to chunk.byggDagligSlackMelding(),
+                        "thread_ts" to threadTs,
                     ),
                 )
-            val remainingChunks = chunks.drop(1)
-            if (remainingChunks.isNotEmpty()) {
-                val threadTs =
-                    response["ts"]?.asText()
-                        ?: error("Fikk ingen tråd-ID i svar fra Slack, kan ikke poste resterende kommandokjeder")
-                remainingChunks.forEach { chunk ->
-                    post(
-                        mapOf(
-                            "channel" to configuration.channel,
-                            "attachments" to chunk.byggDagligSlackMelding(),
-                            "thread_ts" to threadTs,
-                        ),
-                    )
-                }
             }
         }
     }
