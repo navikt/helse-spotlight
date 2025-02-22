@@ -33,7 +33,7 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
             """
             {
               "channel" : "${slackConfiguration.channel}",
-              "text" : ":spotlight: Ingen kommandokjeder sitter fast :spotlight:"
+              "text" : ":spotlight: Ingen kommandokjeder sitter fast (4 realz!) :spotlight:"
             }
             """.trimIndent().parseJson().toPrettyString(),
             requestJson.toPrettyString(),
@@ -69,7 +69,7 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
                 "type" : "section",
                 "text" : {
                   "type" : "mrkdwn",
-                  "text" : ":spotlight: Det er 1 kommandokjede som sitter fast: :spotlight:"
+                  "text" : ":spotlight: Det er 1 kommandokjede som sitter fast (4 realz): :spotlight:"
                 }
               }, {
                 "type" : "section",

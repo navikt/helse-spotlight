@@ -5,6 +5,7 @@ import no.nav.helse.spotlight.Configuration
 import no.nav.helse.spotlight.SuspendertKommandokjede
 import no.nav.helse.spotlight.objectMapper
 import no.nav.helse.spotlight.slack.SlackMeldingBuilder.byggDagligSlackMelding
+import no.nav.helse.spotlight.slack.SlackMeldingBuilder.gladmelding
 import org.slf4j.LoggerFactory
 import java.net.URI
 import java.net.http.HttpClient
@@ -21,7 +22,7 @@ class SlackClient(private val configuration: Configuration.Slack) {
         post(
             mapOf(
                 "channel" to configuration.channel,
-                "text" to ":spotlight: Ingen kommandokjeder sitter fast :spotlight:",
+                "text" to gladmelding,
             ),
         )
     }

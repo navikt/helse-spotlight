@@ -8,6 +8,8 @@ import java.time.format.DateTimeFormatter
 object SlackMeldingBuilder {
     private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
 
+    val gladmelding = ":spotlight: Ingen kommandokjeder sitter fast (4 realz!) :spotlight:"
+
     fun List<SuspendertKommandokjede>.byggDagligSlackMelding(totaltAntall: Int? = null): String =
         attachments(buildSections(this), lagDagligMeldingTittel(totaltAntall))
 
@@ -46,7 +48,7 @@ object SlackMeldingBuilder {
 
     private fun lagDagligMeldingTittel(antall: Int?): String =
         if (antall != null) {
-            ":spotlight: Det er $antall ${if (antall == 1) "kommandokjede" else "kommandokjeder"} som sitter fast: :spotlight:"
+            ":spotlight: Det er $antall ${if (antall == 1) "kommandokjede" else "kommandokjeder"} som sitter fast (4 realz): :spotlight:"
         } else {
             ":the-more-you-know: Fortsettelse: :the-more-you-know:"
         }
