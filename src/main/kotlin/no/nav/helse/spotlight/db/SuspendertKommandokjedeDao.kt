@@ -68,7 +68,7 @@ class SuspendertKommandokjedeDao(private val runner: SqlRunner) {
             WHERE command_context_id = :command_context_id
             """.trimIndent(),
             kommandokjede.tilParameterMap(),
-        )
+        ).also { if (it == 0) error("Kommandokjeden som skulle oppdateres lå ikke i databasen") }
     }
 
     fun slett(commandContextId: UUID) {
@@ -76,7 +76,7 @@ class SuspendertKommandokjedeDao(private val runner: SqlRunner) {
         runner.update(
             "DELETE FROM suspendert_kommandokjede WHERE command_context_id = :command_context_id",
             mapOf("command_context_id" to commandContextId),
-        )
+        ).also { if (it == 0) logg.info("Kommandoen som skulle slettes lå ikke i databasen") }
     }
 
     private fun SuspendertKommandokjede.tilParameterMap(): Map<String, Any?> =
