@@ -2,6 +2,7 @@ package no.nav.helse.spotlight.river
 
 import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
 import no.nav.helse.spotlight.db.TransactionManager
+import no.nav.helse.spotlight.withMDC
 import java.util.*
 
 class KommandokjedeAvbruttRiver(
@@ -13,9 +14,10 @@ class KommandokjedeAvbruttRiver(
 
     override fun håndter(message: JsonMessage) {
         val commandContextId = UUID.fromString(message["commandContextId"].asText())
-        transactionManager.transaction { dao ->
-            logg.info("Sletter avbrutt kommandokjede med commandContextId $commandContextId")
-            dao.slett(commandContextId)
+        withMDC(mapOf("commandContextId" to commandContextId)) {
+            transactionManager.transaction { dao ->
+                dao.slett(commandContextId)
+            }
         }
     }
 }

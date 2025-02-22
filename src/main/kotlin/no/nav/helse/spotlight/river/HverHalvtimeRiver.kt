@@ -2,9 +2,10 @@ package no.nav.helse.spotlight.river
 
 import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
-import no.nav.helse.spotlight.KafkaMeldingsbygger
+import no.nav.helse.spotlight.KafkaMeldingsbygger.byggKommandokjedePåminnelse
 import no.nav.helse.spotlight.SuspendertKommandokjede
 import no.nav.helse.spotlight.db.TransactionManager
+import no.nav.helse.spotlight.withMDC
 
 class HverHalvtimeRiver(
     private val transactionManager: TransactionManager,
@@ -16,12 +17,18 @@ class HverHalvtimeRiver(
                 dao.finnAlleEldreEnnEnHalvtime()
                     .also { logg.info("Fant ${it.size} kommandokjeder som sitter fast") }
                     .map { it.medØktAntallGangerPåminnet() }
-                    .onEach(dao::update)
+                    .onEach {
+                        withMDC(mapOf("commandContextId" to it.commandContextId)) {
+                            dao.update(it)
+                        }
+                    }
             }
-        kommandokjeder
-            .onEach { logg.info("Sender påminnelse for kommandokjede med commandContextId ${it.commandContextId}") }
-            .map(KafkaMeldingsbygger::byggKommandokjedePåminnelse)
-            .forEach(rapidsConnection::publish)
+        kommandokjeder.forEach {
+            withMDC(mapOf("commandContextId" to it.commandContextId)) {
+                logg.info("Sender påminnelse for kommandokjede")
+                rapidsConnection.publish(byggKommandokjedePåminnelse(it))
+            }
+        }
     }
 }
 

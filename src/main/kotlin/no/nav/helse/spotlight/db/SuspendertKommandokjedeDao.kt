@@ -9,7 +9,7 @@ class SuspendertKommandokjedeDao(private val runner: SqlRunner) {
     private val logg = LoggerFactory.getLogger(javaClass)
 
     fun insert(kommandokjede: SuspendertKommandokjede) {
-        logg.info("Lagrer ny suspendert kommandokjede med commandContextId ${kommandokjede.commandContextId}")
+        logg.info("Lagrer ny kommandokjede i databasen")
         runner.update(
             """
             INSERT INTO suspendert_kommandokjede (
@@ -53,7 +53,7 @@ class SuspendertKommandokjedeDao(private val runner: SqlRunner) {
         ) { it.tilKommandokjede() }
 
     fun update(kommandokjede: SuspendertKommandokjede) {
-        logg.info("Oppdaterer eksisterende suspendert kommandokjede med commandContextId ${kommandokjede.commandContextId}")
+        logg.info("Oppdaterer kommandokjede i databasen")
         runner.update(
             """
             UPDATE suspendert_kommandokjede SET
@@ -72,7 +72,7 @@ class SuspendertKommandokjedeDao(private val runner: SqlRunner) {
     }
 
     fun slett(commandContextId: UUID) {
-        logg.info("Sletter suspendert kommandokjede med commandContextId $commandContextId")
+        logg.info("Sletter kommandokjede i databasen")
         runner.update(
             "DELETE FROM suspendert_kommandokjede WHERE command_context_id = :command_context_id",
             mapOf("command_context_id" to commandContextId),

@@ -7,6 +7,7 @@ import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageMetadata
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageProblems
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import io.micrometer.core.instrument.MeterRegistry
+import no.nav.helse.spotlight.withMDC
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -53,8 +54,10 @@ abstract class AbstractSimpleRiver(
         metadata: MessageMetadata,
         meterRegistry: MeterRegistry,
     ) {
-        logg.info("Håndterer melding i ${javaClass.simpleName}")
-        sikkerlogg.info("Håndterer melding i ${javaClass.simpleName}: ${packet.toJson()}")
-        håndter(packet)
+        withMDC(mapOf("river" to javaClass.simpleName)) {
+            logg.info("Mottok melding")
+            sikkerlogg.info("Mottok melding: ${packet.toJson()}")
+            håndter(packet)
+        }
     }
 }
