@@ -3,6 +3,7 @@ package no.nav.helse.spotlight.river
 import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import no.nav.helse.spotlight.Meldingsbygger
+import no.nav.helse.spotlight.SuspendertKommandokjede
 import no.nav.helse.spotlight.db.TransactionManager
 
 class HverHalvtimeRiver(
@@ -14,9 +15,18 @@ class HverHalvtimeRiver(
         val kommandokjeder =
             transactionManager.transaction { dao ->
                 dao.finnAlleEldreEnnEnHalvtime()
-                    .map { it.copy(antallGangerPåminnet = it.antallGangerPåminnet + 1) }
-                    .onEach(dao::lagre)
+                    .map { it.medØktAntallGangerPåminnet() }
+                    .onEach(dao::update)
             }
         kommandokjeder.map(Meldingsbygger::byggKommandokjedePåminnelse).forEach(rapidsConnection::publish)
     }
 }
+
+private fun SuspendertKommandokjede.medØktAntallGangerPåminnet(): SuspendertKommandokjede =
+    copy(
+        totaltAntallGangerPåminnet = totaltAntallGangerPåminnet + 1,
+        sistSuspenderteSti =
+            sistSuspenderteSti.copy(
+                antallGangerPåminnet = sistSuspenderteSti.antallGangerPåminnet + 1,
+            ),
+    )

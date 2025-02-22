@@ -4,10 +4,10 @@ import kotliquery.sessionOf
 import javax.sql.DataSource
 
 class TransactionManager(private val dataSource: DataSource) {
-    fun <T> transaction(block: (dao: KommandokjederDao) -> T): T =
+    fun <T> transaction(block: (dao: SuspendertKommandokjedeDao) -> T): T =
         sessionOf(dataSource, strict = true).use { session ->
             session.transaction { tx ->
-                block(KommandokjederDao(SqlRunner(tx)))
+                block(SuspendertKommandokjedeDao(SqlRunner(tx)))
             }
         }
 }

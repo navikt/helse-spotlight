@@ -7,7 +7,8 @@ import no.nav.helse.spotlight.AbstractIntegrationTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
-import java.time.LocalDateTime
+import java.time.Instant
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -45,7 +46,7 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
         wireMockSlack.stubFor(post(urlEqualTo("/")).willReturn(ok()))
         val kommandokjede =
             lagretKommandokjede(
-                opprettet = LocalDateTime.now().minusMinutes(31),
+                mottattTidspunkt = Instant.now().minusMinutes(31),
                 antallGangerPåminnet = 1337,
             )
         checkNotNull(dao.finn(kommandokjede.commandContextId))
@@ -77,19 +78,22 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
                   "text" : "*Command context id:*\n<https://logs.adeo.no/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-7d%2Fd,to:now))&_a=(columns:!(level,message,envclass,application,pod),filters:!(),hideChart:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:kuery,query:%22${kommandokjede.commandContextId}%22),sort:!(!('@timestamp',desc)))|${kommandokjede.commandContextId}>"
                 }, {
                   "type" : "mrkdwn",
-                  "text" : "*Melding id:*\n<https://logs.adeo.no/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-7d%2Fd,to:now))&_a=(columns:!(level,message,envclass,application,pod),filters:!(),hideChart:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:kuery,query:%22${kommandokjede.meldingId}%22),sort:!(!('@timestamp',desc)))|${kommandokjede.meldingId}>"
+                  "text" : "*Melding id:*\n<https://logs.adeo.no/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-7d%2Fd,to:now))&_a=(columns:!(level,message,envclass,application,pod),filters:!(),hideChart:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:kuery,query:%22${kommandokjede.sisteMeldingId}%22),sort:!(!('@timestamp',desc)))|${kommandokjede.sisteMeldingId}>"
                 }, {
                   "type" : "mrkdwn",
                   "text" : "*Command:*\n${kommandokjede.command}"
                 }, {
                   "type" : "mrkdwn",
-                  "text" : "*Sti:*\n[${kommandokjede.sti.joinToString { it.toString() }}]"
+                  "text" : "*Sti:*\n${kommandokjede.sistSuspenderteSti.sti}"
                 }, {
                   "type" : "mrkdwn",
-                  "text" : "*Opprettet:*\n${kommandokjede.opprettet.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))}"
+                  "text" : "*Opprettet:*\n${
+                kommandokjede.sistSuspenderteSti.førsteTidspunkt.atZone(ZoneId.of("Europe/Oslo"))
+                    .format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))
+            }"
                 }, {
                   "type" : "mrkdwn",
-                  "text" : "*Antall ganger påminnet:*\n${kommandokjede.antallGangerPåminnet}"
+                  "text" : "*Antall ganger påminnet:*\n${kommandokjede.sistSuspenderteSti.antallGangerPåminnet}"
                 } ]
               } ]
             } ]
@@ -105,7 +109,7 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
         wireMockSlack.stubFor(post(urlEqualTo("/")).willReturn(okJson("""{ "ts" : "$ts" }""")))
         (1..80).forEach { index ->
             lagretKommandokjede(
-                opprettet = LocalDateTime.now().minusMinutes(31L + index),
+                mottattTidspunkt = Instant.now().minusMinutes(31L + index),
                 antallGangerPåminnet = index,
             )
         }

@@ -1,16 +1,17 @@
 package no.nav.helse.spotlight.slack
 
-import no.nav.helse.spotlight.Kommandokjede
+import no.nav.helse.spotlight.SuspendertKommandokjede
 import org.intellij.lang.annotations.Language
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 object SlackMeldingBuilder {
     private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
 
-    fun List<Kommandokjede>.byggDagligSlackMelding(totaltAntall: Int? = null): String =
+    fun List<SuspendertKommandokjede>.byggDagligSlackMelding(totaltAntall: Int? = null): String =
         attachments(buildSections(this), lagDagligMeldingTittel(totaltAntall))
 
-    private fun buildSections(kommandokjeder: List<Kommandokjede>): String {
+    private fun buildSections(kommandokjeder: List<SuspendertKommandokjede>): String {
         val iterator = kommandokjeder.iterator()
         return buildString {
             iterator.forEach {
@@ -51,7 +52,7 @@ object SlackMeldingBuilder {
         }
 
     @Language("JSON")
-    private fun section(kommandokjede: Kommandokjede) =
+    private fun section(kommandokjede: SuspendertKommandokjede) =
         """
         {
           "type": "section",
@@ -62,7 +63,7 @@ object SlackMeldingBuilder {
             },
             {
               "type": "mrkdwn",
-              "text": "*Melding id:*\n<${link(kommandokjede.meldingId.toString())}|${kommandokjede.meldingId}>"
+              "text": "*Melding id:*\n<${link(kommandokjede.sisteMeldingId.toString())}|${kommandokjede.sisteMeldingId}>"
             },
             {
               "type": "mrkdwn",
@@ -70,15 +71,17 @@ object SlackMeldingBuilder {
             },
             {
               "type": "mrkdwn",
-              "text": "*Sti:*\n${kommandokjede.sti}"
+              "text": "*Sti:*\n${kommandokjede.sistSuspenderteSti.sti}"
             },
             {
               "type": "mrkdwn",
-              "text": "*Opprettet:*\n${kommandokjede.opprettet.format(formatter)}"
+              "text": "*Opprettet:*\n${
+            kommandokjede.sistSuspenderteSti.førsteTidspunkt.atZone(ZoneId.of("Europe/Oslo")).format(formatter)
+        }"
             },
             {
               "type": "mrkdwn",
-              "text": "*Antall ganger påminnet:*\n${kommandokjede.antallGangerPåminnet}"
+              "text": "*Antall ganger påminnet:*\n${kommandokjede.sistSuspenderteSti.antallGangerPåminnet}"
             }
           ]
         }

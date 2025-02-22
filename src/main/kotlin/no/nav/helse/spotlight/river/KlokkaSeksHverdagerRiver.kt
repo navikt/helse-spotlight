@@ -17,7 +17,7 @@ class KlokkaSeksHverdagerRiver(
         logg.info("Klokka er 6 🐔. Forteller om kommandokjeder som sitter fast på slack.")
         val kommandokjeder =
             transactionManager.transaction { dao ->
-                dao.finnAlleEldreEnnEnHalvtime().filter { it.antallGangerPåminnet > 0 }
+                dao.finnAlleEldreEnnEnHalvtime().filter { it.sistSuspenderteSti.antallGangerPåminnet > 0 }
             }
         slackClient.fortellOmKommandokjeder(kommandokjeder)
     }

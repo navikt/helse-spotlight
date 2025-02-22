@@ -2,7 +2,7 @@ package no.nav.helse.spotlight.slack
 
 import com.fasterxml.jackson.databind.JsonNode
 import no.nav.helse.spotlight.Configuration
-import no.nav.helse.spotlight.Kommandokjede
+import no.nav.helse.spotlight.SuspendertKommandokjede
 import no.nav.helse.spotlight.objectMapper
 import no.nav.helse.spotlight.slack.SlackMeldingBuilder.byggDagligSlackMelding
 import org.slf4j.LoggerFactory
@@ -16,7 +16,7 @@ class SlackClient(private val configuration: Configuration.Slack) {
     private val logg = LoggerFactory.getLogger(this::class.java)
     private val sikkerlogg = LoggerFactory.getLogger("tjenestekall")
 
-    fun fortellOmKommandokjeder(kommandokjeder: List<Kommandokjede>) {
+    fun fortellOmKommandokjeder(kommandokjeder: List<SuspendertKommandokjede>) {
         if (kommandokjeder.isEmpty()) {
             post(
                 mapOf(

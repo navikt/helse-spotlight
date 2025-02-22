@@ -1,40 +1,61 @@
 package no.nav.helse.spotlight.db
 
 import no.nav.helse.spotlight.AbstractIntegrationTest
-import no.nav.helse.spotlight.Kommandokjede
+import no.nav.helse.spotlight.SuspendertKommandokjede
+import no.nav.helse.spotlight.SuspendertKommandokjede.Sti
 import org.junit.jupiter.api.Test
-import java.time.LocalDateTime
+import java.time.Instant
+import java.time.temporal.ChronoField
 import java.util.*
 import kotlin.test.assertEquals
 
-class KommandokjederDaoTest : AbstractIntegrationTest() {
+class SuspendertKommandokjedeDaoTest : AbstractIntegrationTest() {
     @Test
     fun `Lagrer ny kommandokjede`() {
         // Given:
         val kommandokjede =
-            Kommandokjede(
+            SuspendertKommandokjede(
                 commandContextId = UUID.randomUUID(),
-                meldingId = UUID.randomUUID(),
                 command = "EnCommand",
-                sti = listOf(0),
-                opprettet = LocalDateTime.now(),
-                antallGangerPåminnet = 0,
+                førsteTidspunkt = Instant.now(),
+                sisteTidspunkt = Instant.now(),
+                sisteMeldingId = UUID.randomUUID(),
+                totaltAntallGangerPåminnet = 0,
+                sistSuspenderteSti =
+                    Sti(
+                        sti = "[ 0 ]",
+                        førsteTidspunkt = Instant.now(),
+                        antallGangerPåminnet = 0,
+                    ),
             )
         val commandContextId = kommandokjede.commandContextId
 
         // When:
-        dao.lagre(kommandokjede)
+        dao.insert(kommandokjede)
 
         // Then:
-        assertEquals(kommandokjede.roundedToMicros(), dao.finn(commandContextId))
+        assertEquals(kommandokjede.rundetTilMikrosekunder(), dao.finn(commandContextId))
     }
+
+    private fun SuspendertKommandokjede.rundetTilMikrosekunder() =
+        copy(
+            førsteTidspunkt = førsteTidspunkt.rundetTilMikrosekunder(),
+            sisteTidspunkt = sisteTidspunkt.rundetTilMikrosekunder(),
+            sistSuspenderteSti =
+                sistSuspenderteSti.copy(
+                    førsteTidspunkt = sistSuspenderteSti.førsteTidspunkt.rundetTilMikrosekunder(),
+                ),
+        )
+
+    private fun Instant.rundetTilMikrosekunder(): Instant =
+        with(ChronoField.MICRO_OF_SECOND, nano / 1000L + if (nano % 1000 >= 500) 1 else 0)
 
     @Test
     fun `Henter kommandokjede som er mer enn 30 minutter gammel`() {
         // Given:
         val kommandokjede =
             lagretKommandokjede(
-                opprettet = LocalDateTime.now().minusMinutes(31),
+                mottattTidspunkt = Instant.now().minusMinutes(31),
             )
 
         // When:
@@ -42,14 +63,14 @@ class KommandokjederDaoTest : AbstractIntegrationTest() {
 
         // Then:
         assertEquals(1, kommandokjederEldreEnnEnHalvtime.size)
-        assertEquals(kommandokjede.roundedToMicros(), kommandokjederEldreEnnEnHalvtime.first())
+        assertEquals(kommandokjede, kommandokjederEldreEnnEnHalvtime.first())
     }
 
     @Test
     fun `Henter ikke kommandokjede som er mindre enn 30 minutter gammel`() {
         // Given:
         lagretKommandokjede(
-            opprettet = LocalDateTime.now().minusMinutes(29),
+            mottattTidspunkt = Instant.now().minusMinutes(29),
         )
 
         // When:
@@ -67,10 +88,10 @@ class KommandokjederDaoTest : AbstractIntegrationTest() {
         val oppdatertKommandokjede = kommandokjede.copy(command = "EnAnnenCommand")
 
         // When:
-        dao.lagre(oppdatertKommandokjede)
+        dao.update(oppdatertKommandokjede)
 
         // Then:
-        assertEquals(oppdatertKommandokjede.roundedToMicros(), dao.finn(commandContextId))
+        assertEquals(oppdatertKommandokjede, dao.finn(commandContextId))
     }
 
     @Test
