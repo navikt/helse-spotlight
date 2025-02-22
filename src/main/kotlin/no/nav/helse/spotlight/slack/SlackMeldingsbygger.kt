@@ -52,11 +52,11 @@ object SlackMeldingsbygger {
     private fun SuspendertKommandokjede.tilFields(): List<Map<String, String>> =
         listOf(
             markdownMedOverskrift(
-                overskrift = "Command context id:",
+                overskrift = "commandContextId:",
                 tekst = adeoQueryLink(commandContextId.toString()),
             ),
             markdownMedOverskrift(
-                overskrift = "Melding id:",
+                overskrift = "Siste meldingId:",
                 tekst = adeoQueryLink(sisteMeldingId.toString()),
             ),
             markdownMedOverskrift(
@@ -68,7 +68,7 @@ object SlackMeldingsbygger {
                 tekst = sistSuspenderteSti.sti,
             ),
             markdownMedOverskrift(
-                overskrift = "Opprettet:",
+                overskrift = "Suspendert siden:",
                 tekst = sistSuspenderteSti.førsteTidspunkt.formattert(),
             ),
             markdownMedOverskrift(
