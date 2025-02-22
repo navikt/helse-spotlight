@@ -45,7 +45,7 @@ abstract class AbstractSimpleRiver(
         context: MessageContext,
         metadata: MessageMetadata,
     ) {
-        logg.error("Forstod ikke ${altEventName?.let { "melding" } ?: eventName}:\n${problems.toExtendedReport()}")
+        logg.error("Forstod ikke melding:\n${problems.toExtendedReport()}")
     }
 
     override fun onPacket(
@@ -55,8 +55,9 @@ abstract class AbstractSimpleRiver(
         meterRegistry: MeterRegistry,
     ) {
         withMDC(mapOf("river" to javaClass.simpleName)) {
-            logg.info("Mottok melding")
-            sikkerlogg.info("Mottok melding: ${packet.toJson()}")
+            val eventName = packet["@event_name"].asText()
+            logg.info("Mottok $eventName")
+            sikkerlogg.info("Mottok $eventName: ${packet.toJson()}")
             håndter(packet)
         }
     }
