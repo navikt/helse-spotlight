@@ -17,7 +17,11 @@ class KommandokjedeFerdigstiltRiver(
         withMDC(mapOf("commandContextId" to commandContextId)) {
             logg.info("Kommandokjeden er ferdigstilt")
             transactionManager.transaction { dao ->
-                dao.slett(commandContextId)
+                if (dao.finn(commandContextId) == null) {
+                    logg.info("Kommandokjeden var aldri suspendert")
+                } else {
+                    dao.slett(commandContextId)
+                }
             }
         }
     }

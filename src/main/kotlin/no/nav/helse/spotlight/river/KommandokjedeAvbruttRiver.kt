@@ -17,7 +17,11 @@ class KommandokjedeAvbruttRiver(
         withMDC(mapOf("commandContextId" to commandContextId)) {
             logg.info("Kommandokjeden er avbrutt")
             transactionManager.transaction { dao ->
-                dao.slett(commandContextId)
+                if (dao.finn(commandContextId) == null) {
+                    logg.info("Kommandokjeden var aldri suspendert")
+                } else {
+                    dao.slett(commandContextId)
+                }
             }
         }
     }
