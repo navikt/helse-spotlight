@@ -38,7 +38,7 @@ dependencies {
     testImplementation("com.github.navikt.tbd-libs:rapids-and-rivers-test:2025.02.25-15.45-523b4479")
     testImplementation("org.testcontainers:postgresql:1.20.4")
     testImplementation("io.mockk:mockk:1.13.16")
-    testImplementation(platform("org.junit:junit-bom:5.11.4"))
+    testImplementation(platform("org.junit:junit-bom:5.12.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation(kotlin("test"))
 }
