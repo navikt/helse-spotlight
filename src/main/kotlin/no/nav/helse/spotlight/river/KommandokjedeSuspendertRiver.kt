@@ -5,6 +5,8 @@ import com.github.navikt.tbd_libs.rapids_and_rivers.asLocalDateTime
 import no.nav.helse.spotlight.SuspendertKommandokjede
 import no.nav.helse.spotlight.db.TransactionManager
 import no.nav.helse.spotlight.withMDC
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.time.Instant
 import java.time.ZoneId
 import java.util.*
@@ -24,7 +26,11 @@ class KommandokjedeSuspendertRiver(
         message.requireKey("@opprettet")
     }
 
-    override fun håndter(message: JsonMessage) {
+    override fun håndter(message: JsonMessage, partisjonsnøkkel: String?) {
+        if (partisjonsnøkkel == null) {
+            logg.error("Støtter ikke å behandle melding om suspendert kommandokjede som mangler partisjonsnøkkel")
+            return
+        }
         val commandContextId = UUID.fromString(message["commandContextId"].asText())
         withMDC(mapOf("commandContextId" to commandContextId)) {
             val meldingId = UUID.fromString(message["meldingId"].asText())
@@ -41,6 +47,7 @@ class KommandokjedeSuspendertRiver(
                     logg.info("Dette er en kommandokjede vi ikke tidligere har sett")
                     dao.insert(
                         SuspendertKommandokjede(
+                            partisjonsnøkkel = partisjonsnøkkel,
                             commandContextId = commandContextId,
                             command = command,
                             førsteTidspunkt = opprettetTidspunkt,

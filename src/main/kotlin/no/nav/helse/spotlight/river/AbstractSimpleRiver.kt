@@ -22,7 +22,7 @@ abstract class AbstractSimpleRiver(
 
     protected open fun validate(message: JsonMessage) {}
 
-    protected abstract fun håndter(message: JsonMessage)
+    protected abstract fun håndter(message: JsonMessage, partisjonsnøkkel: String?)
 
     fun buildRiver(rapidsConnection: RapidsConnection) {
         River(rapidsConnection).apply {
@@ -58,7 +58,7 @@ abstract class AbstractSimpleRiver(
             val eventName = packet["@event_name"].asText()
             logg.info("Mottok $eventName")
             sikkerlogg.info("Mottok $eventName: ${packet.toJson()}")
-            håndter(packet)
+            håndter(packet, metadata.key)
         }
     }
 }

@@ -15,6 +15,7 @@ class SuspendertKommandokjedeDaoTest : AbstractIntegrationTest() {
         // Given:
         val kommandokjede =
             SuspendertKommandokjede(
+                partisjonsnøkkel = "${UUID.randomUUID()}",
                 commandContextId = UUID.randomUUID(),
                 command = "EnCommand",
                 førsteTidspunkt = Instant.now(),

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import java.time.Instant
 import java.util.*
+import kotlin.random.Random.Default.nextInt
 
 abstract class AbstractIntegrationTest {
     private val session = sessionOf(TestDatabase.dataSource, strict = true)
@@ -51,6 +52,7 @@ abstract class AbstractIntegrationTest {
         sti: String = "[ 0 ]",
     ): SuspendertKommandokjede =
         SuspendertKommandokjede(
+            partisjonsnøkkel = "${nextInt()}",
             commandContextId = UUID.randomUUID(),
             command = "EnCommand",
             førsteTidspunkt = mottattTidspunkt,

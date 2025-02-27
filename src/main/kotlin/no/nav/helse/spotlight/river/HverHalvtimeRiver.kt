@@ -11,7 +11,7 @@ class HverHalvtimeRiver(
     private val transactionManager: TransactionManager,
     private val rapidsConnection: RapidsConnection,
 ) : AbstractSimpleRiver("halv_time", "påminn_kommandokjeder_som_sitter_fast") {
-    override fun håndter(message: JsonMessage) {
+    override fun håndter(message: JsonMessage, partisjonsnøkkel: String?) {
         val kommandokjeder =
             transactionManager.transaction { dao ->
                 dao.finnAlleEldreEnnEnHalvtime()

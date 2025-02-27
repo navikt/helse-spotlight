@@ -15,16 +15,17 @@ class KommandokjedeSuspendertRiverIntegrationTest : AbstractIntegrationTest() {
 
         // When:
         testRapid.sendTestMessage(
-            """
-            {
-              "@event_name": "kommandokjede_suspendert",
-              "commandContextId": "$commandContextId",
-              "meldingId": "$meldingId",
-              "command": "EnCommand",
-              "sti": [0],
-              "@opprettet": "2022-02-22T12:34:56.789101987"
-            }
-            """.trimIndent(),
+            message = """
+                        {
+                          "@event_name": "kommandokjede_suspendert",
+                          "commandContextId": "$commandContextId",
+                          "meldingId": "$meldingId",
+                          "command": "EnCommand",
+                          "sti": [0],
+                          "@opprettet": "2022-02-22T12:34:56.789101987"
+                        }
+                        """.trimIndent(),
+            key = UUID.randomUUID().toString()
         )
 
         // Then:
@@ -49,16 +50,17 @@ class KommandokjedeSuspendertRiverIntegrationTest : AbstractIntegrationTest() {
 
         // When:
         testRapid.sendTestMessage(
-            """
-            {
-              "@event_name": "kommandokjede_suspendert",
-              "commandContextId": "${eksisterendeKommandokjede.commandContextId}",
-              "meldingId": "$nyMeldingId",
-              "command": "${eksisterendeKommandokjede.command}",
-              "sti": ${eksisterendeKommandokjede.sistSuspenderteSti.sti},
-              "@opprettet": "2022-02-22T13:04:56.789101987"
-            }
-            """.trimIndent(),
+            message = """
+                        {
+                          "@event_name": "kommandokjede_suspendert",
+                          "commandContextId": "${eksisterendeKommandokjede.commandContextId}",
+                          "meldingId": "$nyMeldingId",
+                          "command": "${eksisterendeKommandokjede.command}",
+                          "sti": ${eksisterendeKommandokjede.sistSuspenderteSti.sti},
+                          "@opprettet": "2022-02-22T13:04:56.789101987"
+                        }
+                        """.trimIndent(),
+            key = UUID.randomUUID().toString()
         )
 
         // Then:
@@ -80,16 +82,17 @@ class KommandokjedeSuspendertRiverIntegrationTest : AbstractIntegrationTest() {
 
         // When:
         testRapid.sendTestMessage(
-            """
-            {
-              "@event_name": "kommandokjede_suspendert",
-              "commandContextId": "${eksisterendeKommandokjede.commandContextId}",
-              "meldingId": "$nyMeldingId",
-              "command": "${eksisterendeKommandokjede.command}",
-              "sti": [1,2],
-              "@opprettet": "2022-02-22T13:04:56.789101987"
-            }
-            """.trimIndent(),
+            message = """
+                        {
+                          "@event_name": "kommandokjede_suspendert",
+                          "commandContextId": "${eksisterendeKommandokjede.commandContextId}",
+                          "meldingId": "$nyMeldingId",
+                          "command": "${eksisterendeKommandokjede.command}",
+                          "sti": [1,2],
+                          "@opprettet": "2022-02-22T13:04:56.789101987"
+                        }
+                        """.trimIndent(),
+            key = UUID.randomUUID().toString()
         )
 
         // Then:

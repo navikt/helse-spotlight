@@ -4,6 +4,7 @@ import java.time.Instant
 import java.util.*
 
 data class SuspendertKommandokjede(
+    val partisjonsnøkkel: String?,
     val commandContextId: UUID,
     val command: String,
     val førsteTidspunkt: Instant,

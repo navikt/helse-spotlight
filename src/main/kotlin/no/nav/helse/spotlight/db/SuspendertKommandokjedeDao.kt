@@ -13,6 +13,7 @@ class SuspendertKommandokjedeDao(private val runner: SqlRunner) {
         runner.update(
             """
             INSERT INTO suspendert_kommandokjede (
+              partisjonsnøkkel,
               command_context_id,
               command,
               første_tidspunkt,
@@ -24,6 +25,7 @@ class SuspendertKommandokjedeDao(private val runner: SqlRunner) {
               sist_suspenderte_sti_antall_ganger_påminnet
             )
             VALUES (
+              :partisjonsnokkel,
               :command_context_id,
               :command,
               :foerste_tidspunkt,
@@ -81,6 +83,7 @@ class SuspendertKommandokjedeDao(private val runner: SqlRunner) {
 
     private fun SuspendertKommandokjede.tilParameterMap(): Map<String, Any?> =
         mapOf(
+            "partisjonsnokkel" to partisjonsnøkkel,
             "command_context_id" to commandContextId,
             "command" to command,
             "foerste_tidspunkt" to førsteTidspunkt,
@@ -94,6 +97,7 @@ class SuspendertKommandokjedeDao(private val runner: SqlRunner) {
 
     private fun Row.tilKommandokjede() =
         SuspendertKommandokjede(
+            partisjonsnøkkel = stringOrNull("partisjonsnøkkel"),
             commandContextId = uuid("command_context_id"),
             command = string("command"),
             førsteTidspunkt = instant("første_tidspunkt"),
