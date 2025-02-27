@@ -13,7 +13,7 @@ class KlokkaSeksHverdagerRiver(
         message.requireAny("ukedag", listOf("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"))
     }
 
-    override fun håndter(message: JsonMessage) {
+    override fun håndter(message: JsonMessage, partisjonsnøkkel: String?) {
         logg.info("Klokka er 6 🐔. Forteller om kommandokjeder som sitter fast på slack.")
         val kommandokjeder =
             transactionManager.transaction { dao ->

@@ -12,7 +12,7 @@ class KommandokjedeFerdigstiltRiver(
         message.requireKey("commandContextId")
     }
 
-    override fun håndter(message: JsonMessage) {
+    override fun håndter(message: JsonMessage, partisjonsnøkkel: String?) {
         val commandContextId = UUID.fromString(message["commandContextId"].asText())
         withMDC(mapOf("commandContextId" to commandContextId)) {
             logg.info("Kommandokjeden er ferdigstilt")

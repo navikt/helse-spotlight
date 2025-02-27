@@ -20,6 +20,7 @@ class SuspendertKommandokjedeDaoTest : AbstractIntegrationTest() {
                 førsteTidspunkt = Instant.now(),
                 sisteTidspunkt = Instant.now(),
                 sisteMeldingId = UUID.randomUUID(),
+                sistePartisjonsnøkkel = "${UUID.randomUUID()}",
                 totaltAntallGangerPåminnet = 0,
                 sistSuspenderteSti =
                     Sti(

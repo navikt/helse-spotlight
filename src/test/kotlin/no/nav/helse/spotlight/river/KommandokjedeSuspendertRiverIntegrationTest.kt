@@ -12,19 +12,22 @@ class KommandokjedeSuspendertRiverIntegrationTest : AbstractIntegrationTest() {
         // Given:
         val commandContextId = UUID.randomUUID()
         val meldingId = UUID.randomUUID()
+        val partisjonsnøkkel = UUID.randomUUID().toString()
 
         // When:
         testRapid.sendTestMessage(
-            """
-            {
-              "@event_name": "kommandokjede_suspendert",
-              "commandContextId": "$commandContextId",
-              "meldingId": "$meldingId",
-              "command": "EnCommand",
-              "sti": [0],
-              "@opprettet": "2022-02-22T12:34:56.789101987"
-            }
-            """.trimIndent(),
+            message =
+                """
+                {
+                  "@event_name": "kommandokjede_suspendert",
+                  "commandContextId": "$commandContextId",
+                  "meldingId": "$meldingId",
+                  "command": "EnCommand",
+                  "sti": [0],
+                  "@opprettet": "2022-02-22T12:34:56.789101987"
+                }
+                """.trimIndent(),
+            key = partisjonsnøkkel,
         )
 
         // Then:
@@ -34,6 +37,7 @@ class KommandokjedeSuspendertRiverIntegrationTest : AbstractIntegrationTest() {
             assertEquals("2022-02-22T11:34:56.789102Z", it.førsteTidspunkt.toString())
             assertEquals("2022-02-22T11:34:56.789102Z", it.sisteTidspunkt.toString())
             assertEquals(meldingId, it.sisteMeldingId)
+            assertEquals(partisjonsnøkkel, it.sistePartisjonsnøkkel)
             assertEquals(0, it.totaltAntallGangerPåminnet)
             assertEquals("[ 0 ]", it.sistSuspenderteSti.sti)
             assertEquals("2022-02-22T11:34:56.789102Z", it.sistSuspenderteSti.førsteTidspunkt.toString())
@@ -46,19 +50,22 @@ class KommandokjedeSuspendertRiverIntegrationTest : AbstractIntegrationTest() {
         // Given:
         val eksisterendeKommandokjede = lagretKommandokjede()
         val nyMeldingId = UUID.randomUUID()
+        val partisjonsnøkkel = UUID.randomUUID().toString()
 
         // When:
         testRapid.sendTestMessage(
-            """
-            {
-              "@event_name": "kommandokjede_suspendert",
-              "commandContextId": "${eksisterendeKommandokjede.commandContextId}",
-              "meldingId": "$nyMeldingId",
-              "command": "${eksisterendeKommandokjede.command}",
-              "sti": ${eksisterendeKommandokjede.sistSuspenderteSti.sti},
-              "@opprettet": "2022-02-22T13:04:56.789101987"
-            }
-            """.trimIndent(),
+            message =
+                """
+                {
+                  "@event_name": "kommandokjede_suspendert",
+                  "commandContextId": "${eksisterendeKommandokjede.commandContextId}",
+                  "meldingId": "$nyMeldingId",
+                  "command": "${eksisterendeKommandokjede.command}",
+                  "sti": ${eksisterendeKommandokjede.sistSuspenderteSti.sti},
+                  "@opprettet": "2022-02-22T13:04:56.789101987"
+                }
+                """.trimIndent(),
+            key = partisjonsnøkkel,
         )
 
         // Then:
@@ -67,6 +74,7 @@ class KommandokjedeSuspendertRiverIntegrationTest : AbstractIntegrationTest() {
             assertEquals(eksisterendeKommandokjede.førsteTidspunkt, it.førsteTidspunkt)
             assertEquals("2022-02-22T12:04:56.789102Z", it.sisteTidspunkt.toString())
             assertEquals(nyMeldingId, it.sisteMeldingId)
+            assertEquals(partisjonsnøkkel, it.sistePartisjonsnøkkel)
             assertEquals(eksisterendeKommandokjede.totaltAntallGangerPåminnet, it.totaltAntallGangerPåminnet)
             assertEquals(eksisterendeKommandokjede.sistSuspenderteSti, it.sistSuspenderteSti)
         }
@@ -77,19 +85,22 @@ class KommandokjedeSuspendertRiverIntegrationTest : AbstractIntegrationTest() {
         // Given:
         val eksisterendeKommandokjede = lagretKommandokjede(sti = "[ 0 ]", antallGangerPåminnet = 1)
         val nyMeldingId = UUID.randomUUID()
+        val partisjonsnøkkel = UUID.randomUUID().toString()
 
         // When:
         testRapid.sendTestMessage(
-            """
-            {
-              "@event_name": "kommandokjede_suspendert",
-              "commandContextId": "${eksisterendeKommandokjede.commandContextId}",
-              "meldingId": "$nyMeldingId",
-              "command": "${eksisterendeKommandokjede.command}",
-              "sti": [1,2],
-              "@opprettet": "2022-02-22T13:04:56.789101987"
-            }
-            """.trimIndent(),
+            message =
+                """
+                {
+                  "@event_name": "kommandokjede_suspendert",
+                  "commandContextId": "${eksisterendeKommandokjede.commandContextId}",
+                  "meldingId": "$nyMeldingId",
+                  "command": "${eksisterendeKommandokjede.command}",
+                  "sti": [1,2],
+                  "@opprettet": "2022-02-22T13:04:56.789101987"
+                }
+                """.trimIndent(),
+            key = partisjonsnøkkel,
         )
 
         // Then:
@@ -98,6 +109,7 @@ class KommandokjedeSuspendertRiverIntegrationTest : AbstractIntegrationTest() {
             assertEquals(eksisterendeKommandokjede.førsteTidspunkt, it.førsteTidspunkt)
             assertEquals("2022-02-22T12:04:56.789102Z", it.sisteTidspunkt.toString())
             assertEquals(nyMeldingId, it.sisteMeldingId)
+            assertEquals(partisjonsnøkkel, it.sistePartisjonsnøkkel)
             assertEquals(eksisterendeKommandokjede.totaltAntallGangerPåminnet, it.totaltAntallGangerPåminnet)
             assertEquals("[ 1, 2 ]", it.sistSuspenderteSti.sti)
             assertEquals("2022-02-22T12:04:56.789102Z", it.sistSuspenderteSti.førsteTidspunkt.toString())

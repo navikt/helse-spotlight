@@ -56,6 +56,7 @@ abstract class AbstractIntegrationTest {
             førsteTidspunkt = mottattTidspunkt,
             sisteTidspunkt = mottattTidspunkt,
             sisteMeldingId = UUID.randomUUID(),
+            sistePartisjonsnøkkel = "${UUID.randomUUID()}",
             totaltAntallGangerPåminnet = antallGangerPåminnet,
             sistSuspenderteSti =
                 SuspendertKommandokjede.Sti(

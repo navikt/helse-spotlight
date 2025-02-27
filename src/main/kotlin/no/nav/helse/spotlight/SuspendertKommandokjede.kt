@@ -9,6 +9,7 @@ data class SuspendertKommandokjede(
     val førsteTidspunkt: Instant,
     val sisteTidspunkt: Instant,
     val sisteMeldingId: UUID,
+    val sistePartisjonsnøkkel: String?,
     val totaltAntallGangerPåminnet: Int,
     val sistSuspenderteSti: Sti,
 ) {

@@ -24,7 +24,14 @@ class KommandokjedeSuspendertRiver(
         message.requireKey("@opprettet")
     }
 
-    override fun håndter(message: JsonMessage) {
+    override fun håndter(
+        message: JsonMessage,
+        partisjonsnøkkel: String?,
+    ) {
+        if (partisjonsnøkkel == null) {
+            logg.error("Støtter ikke å behandle melding om suspendert kommandokjede som mangler partisjonsnøkkel")
+            return
+        }
         val commandContextId = UUID.fromString(message["commandContextId"].asText())
         withMDC(mapOf("commandContextId" to commandContextId)) {
             val meldingId = UUID.fromString(message["meldingId"].asText())
@@ -46,6 +53,7 @@ class KommandokjedeSuspendertRiver(
                             førsteTidspunkt = opprettetTidspunkt,
                             sisteTidspunkt = opprettetTidspunkt,
                             sisteMeldingId = meldingId,
+                            sistePartisjonsnøkkel = partisjonsnøkkel,
                             totaltAntallGangerPåminnet = 0,
                             sistSuspenderteSti = nySti(sti = sti, førsteTidspunkt = opprettetTidspunkt),
                         ),
@@ -66,6 +74,7 @@ class KommandokjedeSuspendertRiver(
                         eksisterendeKommandokjede.copy(
                             sisteTidspunkt = opprettetTidspunkt,
                             sisteMeldingId = meldingId,
+                            sistePartisjonsnøkkel = partisjonsnøkkel,
                             sistSuspenderteSti = oppdatertSti,
                         ),
                     )
