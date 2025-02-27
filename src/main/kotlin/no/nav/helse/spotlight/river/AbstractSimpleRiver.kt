@@ -22,7 +22,10 @@ abstract class AbstractSimpleRiver(
 
     protected open fun validate(message: JsonMessage) {}
 
-    protected abstract fun håndter(message: JsonMessage, partisjonsnøkkel: String?)
+    protected abstract fun håndter(
+        message: JsonMessage,
+        partisjonsnøkkel: String?,
+    )
 
     fun buildRiver(rapidsConnection: RapidsConnection) {
         River(rapidsConnection).apply {

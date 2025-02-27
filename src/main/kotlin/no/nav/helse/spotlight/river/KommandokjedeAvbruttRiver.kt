@@ -12,7 +12,10 @@ class KommandokjedeAvbruttRiver(
         message.requireKey("commandContextId")
     }
 
-    override fun håndter(message: JsonMessage, partisjonsnøkkel: String?) {
+    override fun håndter(
+        message: JsonMessage,
+        partisjonsnøkkel: String?,
+    ) {
         val commandContextId = UUID.fromString(message["commandContextId"].asText())
         withMDC(mapOf("commandContextId" to commandContextId)) {
             logg.info("Kommandokjeden er avbrutt")
