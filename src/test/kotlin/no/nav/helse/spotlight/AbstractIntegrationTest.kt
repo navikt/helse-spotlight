@@ -47,7 +47,7 @@ abstract class AbstractIntegrationTest {
 
     protected fun lagretKommandokjede(
         mottattTidspunkt: Instant = Instant.now().minusMinutes(5),
-        sistePartisjonsnøkkel: String? = "${UUID.randomUUID()}",
+        sistePartisjonsnøkkel: String = "${UUID.randomUUID()}",
         antallGangerPåminnet: Int = 0,
         sti: String = "[ 0 ]",
     ): SuspendertKommandokjede =

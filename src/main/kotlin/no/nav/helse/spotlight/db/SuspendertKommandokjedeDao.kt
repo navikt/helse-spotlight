@@ -103,7 +103,7 @@ class SuspendertKommandokjedeDao(private val runner: SqlRunner) {
             førsteTidspunkt = instant("første_tidspunkt"),
             sisteTidspunkt = instant("siste_tidspunkt"),
             sisteMeldingId = uuid("siste_melding_id"),
-            sistePartisjonsnøkkel = stringOrNull("siste_partisjonsnøkkel"),
+            sistePartisjonsnøkkel = string("siste_partisjonsnøkkel"),
             totaltAntallGangerPåminnet = int("totalt_antall_ganger_påminnet"),
             sistSuspenderteSti =
                 SuspendertKommandokjede.Sti(

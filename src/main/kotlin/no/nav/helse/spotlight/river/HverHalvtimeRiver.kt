@@ -29,12 +29,7 @@ class HverHalvtimeRiver(
         kommandokjeder.forEach {
             withMDC(mapOf("commandContextId" to it.commandContextId)) {
                 logg.info("Sender påminnelse for kommandokjede")
-                val kommandokjedePåminnelse = byggKommandokjedePåminnelse(it)
-                if (it.sistePartisjonsnøkkel != null) {
-                    rapidsConnection.publish(it.sistePartisjonsnøkkel, kommandokjedePåminnelse)
-                } else {
-                    rapidsConnection.publish(kommandokjedePåminnelse)
-                }
+                rapidsConnection.publish(key = it.sistePartisjonsnøkkel, message = byggKommandokjedePåminnelse(it))
             }
         }
     }
