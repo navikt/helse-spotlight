@@ -7,7 +7,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 object SlackMeldingsbygger {
-    val gladmelding = ":spotlight: Ingen kommandokjeder sitter fast (4 realz!) :spotlight:"
+    val gladmelding = ":spotlight: Ingen kommandokjeder sitter fast :spotlight:"
 
     fun byggTrådMedAttachments(kommandokjeder: List<SuspendertKommandokjede>): List<String> =
         kommandokjeder.chunked(49).mapIndexed { index, chunk ->
@@ -15,7 +15,7 @@ object SlackMeldingsbygger {
             // postes resterende i tråd.
             chunk.tilAttachments(
                 if (index == 0) {
-                    ":spotlight: Det er ${kommandokjeder.antallMedBenevning()} som sitter fast (4 realz): :spotlight:"
+                    ":spotlight: Det er ${kommandokjeder.antallMedBenevning()} som sitter fast: :spotlight:"
                 } else {
                     ":the-more-you-know: Fortsettelse: :the-more-you-know:"
                 },
