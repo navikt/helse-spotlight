@@ -11,11 +11,12 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
     cancel-in-progress: true
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   build:
-    permissions:
-      contents: "read"
-      id-token: "write"
     name: Bygg, test og lag docker image
     runs-on: ubuntu-latest
     steps:
@@ -52,7 +53,6 @@ jobs:
       - name: Deploy til NAIS
         uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: deploy/dev.yml
           IMAGE: ${{ needs.build.outputs.image }}
@@ -67,7 +67,6 @@ jobs:
       - name: Deploy til NAIS
         uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
           RESOURCE: deploy/prod.yml
           IMAGE: ${{ needs.build.outputs.image }}
