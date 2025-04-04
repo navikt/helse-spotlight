@@ -1,16 +1,23 @@
 package no.nav.helse.spotlight.river
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import no.nav.helse.spotlight.KafkaMeldingsbygger.byggKommandokjedePåminnelse
 import no.nav.helse.spotlight.SuspendertKommandokjede
 import no.nav.helse.spotlight.db.TransactionManager
 import no.nav.helse.spotlight.withMDC
+import java.time.LocalTime
 
 class HverHalvtimeRiver(
     private val transactionManager: TransactionManager,
     private val rapidsConnection: RapidsConnection,
 ) : AbstractSimpleRiver("halv_time", "påminn_kommandokjeder_som_sitter_fast") {
+    override fun precondition(message: JsonMessage) {
+        message.require("klokkeslett") {
+            check(it.asLocalTime().isAfter(LocalTime.now().minusMinutes(30)))
+        }
+    }
     override fun håndter(
         message: JsonMessage,
         partisjonsnøkkel: String?,
@@ -43,3 +50,5 @@ private fun SuspendertKommandokjede.medØktAntallGangerPåminnet(): SuspendertKo
                 antallGangerPåminnet = sistSuspenderteSti.antallGangerPåminnet + 1,
             ),
     )
+
+private fun JsonNode.asLocalTime() = LocalTime.parse(asText())

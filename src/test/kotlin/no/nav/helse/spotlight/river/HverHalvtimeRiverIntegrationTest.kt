@@ -4,6 +4,7 @@ import no.nav.helse.spotlight.AbstractIntegrationTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Instant
+import java.time.LocalTime
 import java.util.*
 import kotlin.test.assertNotNull
 
@@ -21,7 +22,7 @@ class HverHalvtimeRiverIntegrationTest : AbstractIntegrationTest() {
         val commandContextId = kommandokjede.commandContextId
 
         // When:
-        testRapid.sendTestMessage("""{ "@event_name": "halv_time" }""")
+        testRapid.sendTestMessage("""{ "@event_name": "halv_time", "klokkeslett": "${LocalTime.now().minusMinutes(1)}" }""")
 
         // Then:
         val lagretKommandokjede = dao.finn(commandContextId)
