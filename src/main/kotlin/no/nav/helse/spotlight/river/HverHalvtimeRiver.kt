@@ -18,6 +18,7 @@ class HverHalvtimeRiver(
             check(it.asLocalTime().isAfter(LocalTime.now().minusMinutes(30)))
         }
     }
+
     override fun håndter(
         message: JsonMessage,
         partisjonsnøkkel: String?,
