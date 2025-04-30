@@ -37,7 +37,7 @@ dependencies {
     testImplementation("org.wiremock:wiremock-jetty12:3.13.0")
     testImplementation("com.github.navikt.tbd-libs:rapids-and-rivers-test:2025.04.04-09.18-7cc3badf")
     testImplementation("org.testcontainers:postgresql:1.21.0")
-    testImplementation("io.mockk:mockk:1.14.0")
+    testImplementation("io.mockk:mockk:1.14.2")
     testImplementation(platform("org.junit:junit-bom:5.12.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation(kotlin("test"))
