@@ -38,6 +38,9 @@ spec:
       external:
         - host: slack.com
         - host: api.slack.com
+      rules:
+        - application: logging
+          namespace: nais-system
   envFrom:
     - secret: spotlight-slack
   env:
