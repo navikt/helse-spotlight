@@ -10,17 +10,19 @@ object SlackMeldingsbygger {
     val gladmelding = ":spotlight: Ingen kommandokjeder sitter fast :spotlight:"
 
     fun byggTrådMedAttachments(kommandokjeder: List<SuspendertKommandokjede>): List<String> =
-        kommandokjeder.chunked(49).mapIndexed { index, chunk ->
-            // Slack APIet støtter bare 50 blocks pr melding. Hvis det er mer enn 50 stuck kommandokjeder
-            // postes resterende i tråd.
-            chunk.tilAttachments(
-                if (index == 0) {
-                    ":spotlight: Det er ${kommandokjeder.antallMedBenevning()} som sitter fast: :spotlight:"
-                } else {
-                    ":the-more-you-know: Fortsettelse: :the-more-you-know:"
-                },
-            )
-        }.map { it.toJsonString() }
+        kommandokjeder
+            .chunked(49)
+            .mapIndexed { index, chunk ->
+                // Slack APIet støtter bare 50 blocks pr melding. Hvis det er mer enn 50 stuck kommandokjeder
+                // postes resterende i tråd.
+                chunk.tilAttachments(
+                    if (index == 0) {
+                        ":spotlight: Det er ${kommandokjeder.antallMedBenevning()} som sitter fast: :spotlight:"
+                    } else {
+                        ":the-more-you-know: Fortsettelse: :the-more-you-know:"
+                    },
+                )
+            }.map { it.toJsonString() }
 
     private fun List<SuspendertKommandokjede>.antallMedBenevning() = "$size ${if (size == 1) "kommandokjede" else "kommandokjeder"}"
 
@@ -112,8 +114,7 @@ object SlackMeldingsbygger {
 
     private fun adeoQueryLink(query: String) = Markdown.link(adeoUrlMedQuery(query), query)
 
-    private fun adeoUrlMedQuery(query: String) =
-        "https://logs.adeo.no/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-7d%2Fd,to:now))&_a=(columns:!(level,message,envclass,application,pod),filters:!(),hideChart:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:kuery,query:%22$query%22),sort:!(!('@timestamp',desc)))"
+    private fun adeoUrlMedQuery(query: String) = "https://logs.adeo.no/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-7d%2Fd,to:now))&_a=(columns:!(level,message,envclass,application,pod),filters:!(),hideChart:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:kuery,query:%22$query%22),sort:!(!('@timestamp',desc)))"
 
     private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
 

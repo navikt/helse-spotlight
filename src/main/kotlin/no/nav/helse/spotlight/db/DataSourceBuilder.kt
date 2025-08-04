@@ -8,7 +8,9 @@ import no.nav.helse.spotlight.Configuration
 import java.time.Duration
 import javax.sql.DataSource
 
-class DataSourceBuilder(configuration: Configuration.Database) {
+class DataSourceBuilder(
+    configuration: Configuration.Database,
+) {
     private val hikariConfig =
         HikariConfig().apply {
             jdbcUrl = configuration.jdbcUrl

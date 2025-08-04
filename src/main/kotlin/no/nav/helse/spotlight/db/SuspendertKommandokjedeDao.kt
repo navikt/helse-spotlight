@@ -5,7 +5,9 @@ import no.nav.helse.spotlight.SuspendertKommandokjede
 import org.slf4j.LoggerFactory
 import java.util.*
 
-class SuspendertKommandokjedeDao(private val runner: SqlRunner) {
+class SuspendertKommandokjedeDao(
+    private val runner: SqlRunner,
+) {
     private val logg = LoggerFactory.getLogger(javaClass)
 
     fun insert(kommandokjede: SuspendertKommandokjede) {
@@ -56,30 +58,32 @@ class SuspendertKommandokjedeDao(private val runner: SqlRunner) {
 
     fun update(kommandokjede: SuspendertKommandokjede) {
         logg.info("Oppdaterer kommandokjede i databasen")
-        runner.update(
-            """
-            UPDATE suspendert_kommandokjede SET
-              command = :command,
-              første_tidspunkt = :foerste_tidspunkt,
-              siste_tidspunkt = :siste_tidspunkt,
-              siste_melding_id = :siste_melding_id,
-              siste_partisjonsnøkkel = :siste_partisjonsnoekkel,
-              totalt_antall_ganger_påminnet = :totalt_antall_ganger_paaminnet,
-              sist_suspenderte_sti = :sist_suspenderte_sti,
-              sist_suspenderte_sti_første_tidspunkt = :sist_suspenderte_sti_foerste_tidspunkt,
-              sist_suspenderte_sti_antall_ganger_påminnet = :sist_suspenderte_sti_antall_ganger_paaminnet
-            WHERE command_context_id = :command_context_id
-            """.trimIndent(),
-            kommandokjede.tilParameterMap(),
-        ).also { if (it == 0) error("Kommandokjeden som skulle oppdateres lå ikke i databasen") }
+        runner
+            .update(
+                """
+                UPDATE suspendert_kommandokjede SET
+                  command = :command,
+                  første_tidspunkt = :foerste_tidspunkt,
+                  siste_tidspunkt = :siste_tidspunkt,
+                  siste_melding_id = :siste_melding_id,
+                  siste_partisjonsnøkkel = :siste_partisjonsnoekkel,
+                  totalt_antall_ganger_påminnet = :totalt_antall_ganger_paaminnet,
+                  sist_suspenderte_sti = :sist_suspenderte_sti,
+                  sist_suspenderte_sti_første_tidspunkt = :sist_suspenderte_sti_foerste_tidspunkt,
+                  sist_suspenderte_sti_antall_ganger_påminnet = :sist_suspenderte_sti_antall_ganger_paaminnet
+                WHERE command_context_id = :command_context_id
+                """.trimIndent(),
+                kommandokjede.tilParameterMap(),
+            ).also { if (it == 0) error("Kommandokjeden som skulle oppdateres lå ikke i databasen") }
     }
 
     fun slett(commandContextId: UUID) {
         logg.info("Sletter kommandokjede i databasen")
-        runner.update(
-            "DELETE FROM suspendert_kommandokjede WHERE command_context_id = :command_context_id",
-            mapOf("command_context_id" to commandContextId),
-        ).also { if (it == 0) logg.warn("Kommandoen som skulle slettes lå ikke i databasen") }
+        runner
+            .update(
+                "DELETE FROM suspendert_kommandokjede WHERE command_context_id = :command_context_id",
+                mapOf("command_context_id" to commandContextId),
+            ).also { if (it == 0) logg.warn("Kommandoen som skulle slettes lå ikke i databasen") }
     }
 
     private fun SuspendertKommandokjede.tilParameterMap(): Map<String, Any?> =

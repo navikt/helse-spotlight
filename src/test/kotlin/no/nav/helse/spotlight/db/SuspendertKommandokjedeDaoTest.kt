@@ -48,8 +48,7 @@ class SuspendertKommandokjedeDaoTest : AbstractIntegrationTest() {
                 ),
         )
 
-    private fun Instant.rundetTilMikrosekunder(): Instant =
-        with(ChronoField.MICRO_OF_SECOND, nano / 1000L + if (nano % 1000 >= 500) 1 else 0)
+    private fun Instant.rundetTilMikrosekunder(): Instant = with(ChronoField.MICRO_OF_SECOND, nano / 1000L + if (nano % 1000 >= 500) 1 else 0)
 
     @Test
     fun `Henter kommandokjede som er mer enn 30 minutter gammel`() {
