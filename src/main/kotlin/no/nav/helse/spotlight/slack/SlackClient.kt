@@ -13,7 +13,9 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.time.Duration
 
-class SlackClient(private val configuration: Configuration.Slack) {
+class SlackClient(
+    private val configuration: Configuration.Slack,
+) {
     private val logg = LoggerFactory.getLogger(this::class.java)
     private val sikkerlogg = LoggerFactory.getLogger("tjenestekall")
 
@@ -62,7 +64,8 @@ class SlackClient(private val configuration: Configuration.Slack) {
         HttpClient.newHttpClient().use { client ->
             val response =
                 client.send(
-                    HttpRequest.newBuilder()
+                    HttpRequest
+                        .newBuilder()
                         .uri(URI(configuration.url))
                         .timeout(Duration.ofSeconds(50))
                         .header("Content-Type", "application/json; charset=utf-8")

@@ -38,7 +38,8 @@ abstract class AbstractIntegrationTest {
 
     @AfterEach
     fun tearDown() {
-        dao.finnAlle()
+        dao
+            .finnAlle()
             .map(SuspendertKommandokjede::commandContextId)
             .forEach(dao::slett)
         session.close()

@@ -5,7 +5,9 @@ import kotliquery.Session
 import kotliquery.queryOf
 import org.intellij.lang.annotations.Language
 
-class SqlRunner(private val session: Session) {
+class SqlRunner(
+    private val session: Session,
+) {
     fun update(
         @Language("postgresql") sql: String,
         params: Map<String, Any?>,

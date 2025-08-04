@@ -25,7 +25,8 @@ class HverHalvtimeRiver(
     ) {
         val kommandokjeder =
             transactionManager.transaction { dao ->
-                dao.finnAlleEldreEnnEnHalvtime()
+                dao
+                    .finnAlleEldreEnnEnHalvtime()
                     .also { logg.info("Fant ${it.size} kommandokjeder som sitter fast") }
                     .map { it.medØktAntallGangerPåminnet() }
                     .onEach {

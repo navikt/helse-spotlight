@@ -28,7 +28,11 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
                 .withHeader("Authorization", equalTo("Bearer ${slackConfiguration.accessToken}"))
                 .withHeader("User-Agent", equalTo("navikt/spotlight")),
         )
-        val requestJson = wireMockSlack.allServeEvents.first().request.bodyAsString.parseJson()
+        val requestJson =
+            wireMockSlack.allServeEvents
+                .first()
+                .request.bodyAsString
+                .parseJson()
         assertEquals(
             """
             {
@@ -59,7 +63,11 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
             postRequestedFor(urlEqualTo("/"))
                 .withHeader("Content-Type", equalTo("application/json; charset=UTF-8")),
         )
-        val requestJson = wireMockSlack.allServeEvents.first().request.bodyAsString.parseJson()
+        val requestJson =
+            wireMockSlack.allServeEvents
+                .first()
+                .request.bodyAsString
+                .parseJson()
         assertEquals(slackConfiguration.channel, requestJson["channel"]?.asText())
         assertEquals(
             """
@@ -124,13 +132,35 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
                 .withHeader("Content-Type", equalTo("application/json; charset=UTF-8")),
         )
 
-        val førsteRequest = wireMockSlack.allServeEvents[1].request.bodyAsString.parseJson()
+        val førsteRequest =
+            wireMockSlack.allServeEvents[1]
+                .request.bodyAsString
+                .parseJson()
         assertNull(førsteRequest["thread_ts"])
-        assertEquals(50, førsteRequest["attachments"]?.asText()?.parseJson()?.first()?.get("blocks")?.size())
+        assertEquals(
+            50,
+            førsteRequest["attachments"]
+                ?.asText()
+                ?.parseJson()
+                ?.first()
+                ?.get("blocks")
+                ?.size(),
+        )
 
-        val sisteRequest = wireMockSlack.allServeEvents[0].request.bodyAsString.parseJson()
+        val sisteRequest =
+            wireMockSlack.allServeEvents[0]
+                .request.bodyAsString
+                .parseJson()
         assertEquals(ts, sisteRequest["thread_ts"]?.asText())
-        assertEquals(32, sisteRequest["attachments"]?.asText()?.parseJson()?.first()?.get("blocks")?.size())
+        assertEquals(
+            32,
+            sisteRequest["attachments"]
+                ?.asText()
+                ?.parseJson()
+                ?.first()
+                ?.get("blocks")
+                ?.size(),
+        )
     }
 
     private fun sendTestMelding() {

@@ -6,7 +6,9 @@ import no.nav.helse.spotlight.Configuration
 import org.flywaydb.core.Flyway
 import java.time.Duration
 
-class FlywayMigrator(configuration: Configuration.Database) {
+class FlywayMigrator(
+    configuration: Configuration.Database,
+) {
     private val hikariConfig =
         HikariConfig().apply {
             jdbcUrl = configuration.jdbcUrl
@@ -19,7 +21,8 @@ class FlywayMigrator(configuration: Configuration.Database) {
 
     fun migrate() {
         HikariDataSource(hikariConfig).use { dataSource ->
-            Flyway.configure()
+            Flyway
+                .configure()
                 .dataSource(dataSource)
                 .lockRetryCount(-1)
                 .load()

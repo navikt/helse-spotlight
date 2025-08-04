@@ -28,19 +28,20 @@ abstract class AbstractSimpleRiver(
     )
 
     fun buildRiver(rapidsConnection: RapidsConnection) {
-        River(rapidsConnection).apply {
-            precondition {
-                if (altEventName != null) {
-                    it.requireAny("@event_name", listOf(eventName, altEventName))
-                } else {
-                    it.requireValue("@event_name", eventName)
+        River(rapidsConnection)
+            .apply {
+                precondition {
+                    if (altEventName != null) {
+                        it.requireAny("@event_name", listOf(eventName, altEventName))
+                    } else {
+                        it.requireValue("@event_name", eventName)
+                    }
+                    precondition(it)
                 }
-                precondition(it)
-            }
-            validate {
-                validate(it)
-            }
-        }.register(this)
+                validate {
+                    validate(it)
+                }
+            }.register(this)
     }
 
     override fun onError(
