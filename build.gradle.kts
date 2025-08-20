@@ -22,7 +22,7 @@ dependencies {
     implementation("com.github.navikt:rapids-and-rivers:2025080508591754377187.3bb45f5904cf")
 
     implementation("org.postgresql:postgresql:42.7.7")
-    implementation("com.zaxxer:HikariCP:7.0.1")
+    implementation("com.zaxxer:HikariCP:7.0.2")
     implementation("org.flywaydb:flyway-core:$flywayVersion")
     implementation("org.flywaydb:flyway-database-postgresql:$flywayVersion")
     implementation("com.github.seratch:kotliquery:1.9.1")
