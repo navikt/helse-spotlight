@@ -19,7 +19,7 @@ repositories {
 
 private val flywayVersion = "11.13.1"
 dependencies {
-    implementation("com.github.navikt:rapids-and-rivers:2025080508591754377187.3bb45f5904cf")
+    implementation("com.github.navikt:rapids-and-rivers:2025091914191758284377.e07ac23cddbd")
 
     implementation("org.postgresql:postgresql:42.7.8")
     implementation("com.zaxxer:HikariCP:7.0.2")
@@ -35,7 +35,7 @@ dependencies {
     }
 
     testImplementation("org.wiremock:wiremock-jetty12:3.13.1")
-    testImplementation("com.github.navikt.tbd-libs:rapids-and-rivers-test:2025.09.19-13.31-61342e73")
+    testImplementation("com.github.navikt.tbd-libs:rapids-and-rivers-test:2025.09.19-15.24-1a9c113f")
     testImplementation("org.testcontainers:postgresql:1.21.3")
     testImplementation("io.mockk:mockk:1.14.5")
     testImplementation(platform("org.junit:junit-bom:5.13.4"))
