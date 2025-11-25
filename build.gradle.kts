@@ -34,7 +34,7 @@ dependencies {
         exclude("com.fasterxml.jackson.dataformat")
     }
 
-    testImplementation("org.wiremock:wiremock-jetty12:3.13.1")
+    testImplementation("org.wiremock:wiremock-jetty12:3.13.2")
     testImplementation("com.github.navikt.tbd-libs:rapids-and-rivers-test:2025.11.04-10.54-c831038e")
     testImplementation("org.testcontainers:postgresql:1.21.3")
     testImplementation("io.mockk:mockk:1.14.6")
