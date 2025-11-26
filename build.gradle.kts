@@ -29,7 +29,7 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus:1.16.0")
 
     implementation("ch.qos.logback:logback-classic:1.5.20")
-    implementation("net.logstash.logback:logstash-logback-encoder:8.1") {
+    implementation("net.logstash.logback:logstash-logback-encoder:9.0") {
         exclude("com.fasterxml.jackson.core")
         exclude("com.fasterxml.jackson.dataformat")
     }
