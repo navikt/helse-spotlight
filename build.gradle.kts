@@ -17,7 +17,7 @@ repositories {
     maven("https://github-package-registry-mirror.gc.nav.no/cached/maven-release")
 }
 
-private val flywayVersion = "11.17.2"
+private val flywayVersion = "11.18.0"
 dependencies {
     implementation("com.github.navikt:rapids-and-rivers:2025091914191758284377.e07ac23cddbd")
 
