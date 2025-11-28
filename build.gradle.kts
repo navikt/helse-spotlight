@@ -19,7 +19,7 @@ repositories {
 
 private val flywayVersion = "11.18.0"
 dependencies {
-    implementation("com.github.navikt:rapids-and-rivers:2025091914191758284377.e07ac23cddbd")
+    implementation("com.github.navikt:rapids-and-rivers:2025110410541762250064.d7e58c3fad81")
 
     implementation("org.postgresql:postgresql:42.7.8")
     implementation("com.zaxxer:HikariCP:7.0.2")
