@@ -1,5 +1,5 @@
 # Spotlight
-[![Bygg og deploy Spinnvill](https://github.com/navikt/helse-spotlight/actions/workflows/main.yml/badge.svg)](https://github.com/navikt/helse-spotlight/actions/workflows/main.yml)
+[![Bygg og deploy Spotlight](https://github.com/navikt/helse-spotlight/actions/workflows/bygg-og-deploy-main.yml/badge.svg)](https://github.com/navikt/helse-spotlight/actions/workflows/bygg-og-deploy-main.yml)
 
 ## Beskrivelse
 Backend som lagrer ned kommandokjeder som sitter fast i [Spesialist](https://github.com/navikt/helse-spotlight) og påminner dem.
