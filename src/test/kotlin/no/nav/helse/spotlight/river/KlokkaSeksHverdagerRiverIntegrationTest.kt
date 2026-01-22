@@ -83,10 +83,10 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
                 "type" : "section",
                 "fields" : [ {
                   "type" : "mrkdwn",
-                  "text" : "*commandContextId:*\n<https://logs.adeo.no/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-7d%2Fd,to:now))&_a=(columns:!(level,message,envclass,application,pod),filters:!(),hideChart:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:kuery,query:%22${kommandokjede.commandContextId}%22),sort:!(!('@timestamp',desc)))|${kommandokjede.commandContextId}>"
+                  "text" : "*commandContextId:*\n<https://console.cloud.google.com/logs/query;query=%22${kommandokjede.commandContextId}%22;duration=P7D?project=tbd-prod-eacd|${kommandokjede.commandContextId}>"
                 }, {
                   "type" : "mrkdwn",
-                  "text" : "*Siste meldingId:*\n<https://logs.adeo.no/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-7d%2Fd,to:now))&_a=(columns:!(level,message,envclass,application,pod),filters:!(),hideChart:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:kuery,query:%22${kommandokjede.sisteMeldingId}%22),sort:!(!('@timestamp',desc)))|${kommandokjede.sisteMeldingId}>"
+                  "text" : "*Siste meldingId:*\n<https://console.cloud.google.com/logs/query;query=%22${kommandokjede.sisteMeldingId}%22;duration=P7D?project=tbd-prod-eacd|${kommandokjede.sisteMeldingId}>"
                 }, {
                   "type" : "mrkdwn",
                   "text" : "*Command:*\n${kommandokjede.command}"

@@ -55,11 +55,11 @@ object SlackMeldingsbygger {
         listOf(
             markdownMedOverskrift(
                 overskrift = "commandContextId:",
-                tekst = adeoQueryLink(commandContextId.toString()),
+                tekst = teamLogsQueryLink(commandContextId.toString()),
             ),
             markdownMedOverskrift(
                 overskrift = "Siste meldingId:",
-                tekst = adeoQueryLink(sisteMeldingId.toString()),
+                tekst = teamLogsQueryLink(sisteMeldingId.toString()),
             ),
             markdownMedOverskrift(
                 overskrift = "Command:",
@@ -112,9 +112,9 @@ object SlackMeldingsbygger {
             "text" to text,
         )
 
-    private fun adeoQueryLink(query: String) = Markdown.link(adeoUrlMedQuery(query), query)
+    private fun teamLogsQueryLink(query: String) = Markdown.link(teamLogsUrlMedQuery(query), query)
 
-    private fun adeoUrlMedQuery(query: String) = "https://logs.adeo.no/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-7d%2Fd,to:now))&_a=(columns:!(level,message,envclass,application,pod),filters:!(),hideChart:!f,index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:kuery,query:%22$query%22),sort:!(!('@timestamp',desc)))"
+    private fun teamLogsUrlMedQuery(query: String) = "https://console.cloud.google.com/logs/query;query=%22$query%22;duration=P7D?project=tbd-prod-eacd"
 
     private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
 
