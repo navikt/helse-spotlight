@@ -21,7 +21,7 @@ private val flywayVersion = "11.20.2"
 dependencies {
     implementation("com.github.navikt:rapids-and-rivers:2025091914191758284377.e07ac23cddbd")
 
-    implementation("org.postgresql:postgresql:42.7.8")
+    implementation("org.postgresql:postgresql:42.7.9")
     implementation("com.zaxxer:HikariCP:7.0.2")
     implementation("org.flywaydb:flyway-core:$flywayVersion")
     implementation("org.flywaydb:flyway-database-postgresql:$flywayVersion")
