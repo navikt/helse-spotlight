@@ -28,7 +28,7 @@ dependencies {
     implementation("com.github.seratch:kotliquery:1.9.1")
     implementation("io.micrometer:micrometer-registry-prometheus:1.16.2")
 
-    implementation("ch.qos.logback:logback-classic:1.5.24")
+    implementation("ch.qos.logback:logback-classic:1.5.25")
     implementation("net.logstash.logback:logstash-logback-encoder:8.1") {
         exclude("com.fasterxml.jackson.core")
         exclude("com.fasterxml.jackson.dataformat")
