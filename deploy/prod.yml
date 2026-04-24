@@ -40,7 +40,8 @@ spec:
         - application: logging
           namespace: nais-system
   envFrom:
-    - secret: spotlight-slack
+    - configmap: slack-channels
+    - secret: slack-bot-user
   env:
     - name: KAFKA_RAPID_TOPIC
       value: tbd.rapid.v1

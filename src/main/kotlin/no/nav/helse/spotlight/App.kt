@@ -74,8 +74,8 @@ fun main() {
                 password = env.getRequired("DATABASE_PASSWORD"),
             ),
             Configuration.Slack(
-                accessToken = env.getRequired("SLACK_SPY_ACCESS_TOKEN"),
-                channel = env.getRequired("SLACK_SPOTLIGHT_CHANNEL_ID"),
+                accessToken = env.getRequired("SLACK_BOT_USER_OAUTH_TOKEN"),
+                channel = env.getRequired("SLACK_CHANNEL_ID_ALERTS"),
                 url = "https://slack.com/api/chat.postMessage",
             ),
         )
