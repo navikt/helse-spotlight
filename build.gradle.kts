@@ -3,20 +3,6 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
 }
 
-repositories {
-    val githubPassword: String by project
-
-    mavenCentral()
-    maven {
-        url = uri("https://maven.pkg.github.com/navikt/*")
-        credentials {
-            username = "x-access-token"
-            password = githubPassword
-        }
-    }
-    maven("https://github-package-registry-mirror.gc.nav.no/cached/maven-release")
-}
-
 private val flywayVersion = "11.20.3"
 dependencies {
     implementation("com.github.navikt:rapids-and-rivers:2025091914191758284377.e07ac23cddbd")
