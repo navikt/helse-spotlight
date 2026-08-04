@@ -5,7 +5,7 @@ sasGradlePlugins = "20260804.1151"
 [libraries]
 rapidsAndRivers = "com.github.navikt:rapids-and-rivers:2025091914191758284377.e07ac23cddbd"
 
-postgresql = "org.postgresql:postgresql:42.7.9"
+postgresql = "org.postgresql:postgresql:42.7.12"
 hikaricp = "com.zaxxer:HikariCP:7.0.2"
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
 flyway-databasePostgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
