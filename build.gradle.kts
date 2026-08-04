@@ -1,71 +1,29 @@
 plugins {
-    kotlin("jvm") version "2.3.0"
-    id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
+    alias(libs.plugins.sas.deployable)
 }
 
-private val flywayVersion = "11.20.3"
+sasDeployable {
+    mainClass = "no.nav.helse.spotlight.AppKt"
+}
+
 dependencies {
-    implementation("com.github.navikt:rapids-and-rivers:2025091914191758284377.e07ac23cddbd")
+    implementation(libs.rapidsAndRivers)
 
-    implementation("org.postgresql:postgresql:42.7.9")
-    implementation("com.zaxxer:HikariCP:7.0.2")
-    implementation("org.flywaydb:flyway-core:$flywayVersion")
-    implementation("org.flywaydb:flyway-database-postgresql:$flywayVersion")
-    implementation("com.github.seratch:kotliquery:1.9.1")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.16.2")
+    implementation(libs.postgresql)
+    implementation(libs.hikaricp)
+    implementation(libs.flyway.core)
+    implementation(libs.flyway.databasePostgresql)
+    implementation(libs.kotliquery)
+    implementation(libs.micrometer.registryPrometheus)
 
-    implementation("ch.qos.logback:logback-classic:1.5.26")
-    implementation("net.logstash.logback:logstash-logback-encoder:8.1") {
+    implementation(libs.logback.classic)
+    implementation(libs.logback.logstashEncoder) {
         exclude("com.fasterxml.jackson.core")
         exclude("com.fasterxml.jackson.dataformat")
     }
 
-    testImplementation("org.wiremock:wiremock-jetty12:3.13.2")
-    testImplementation("com.github.navikt.tbd-libs:rapids-and-rivers-test:2025.11.04-10.54-c831038e")
-    testImplementation("org.testcontainers:testcontainers-postgresql:2.0.3")
-    testImplementation("io.mockk:mockk:1.14.9")
-    testImplementation(platform("org.junit:junit-bom:5.13.4"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation(kotlin("test"))
-}
-
-tasks {
-    kotlin {
-        jvmToolchain(21)
-    }
-    build {
-        doLast {
-            val erLokaltBygg = !System.getenv().containsKey("GITHUB_ACTION")
-            val manglerPreCommitHook = !File(".git/hooks/pre-commit").isFile
-            if (erLokaltBygg && manglerPreCommitHook) {
-                println(
-                    """
-                    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ¯\_(⊙︿⊙)_/¯ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    !            Hei du! Det ser ut til at du mangler en pre-commit-hook :/         !
-                    ! Du kan installere den ved å kjøre './gradlew addKtlintFormatGitPreCommitHook' !
-                    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    """.trimIndent(),
-                )
-            }
-        }
-    }
-    test {
-        useJUnitPlatform()
-    }
-    withType<Jar> {
-        archiveBaseName.set("app")
-        manifest {
-            attributes["Main-Class"] = "no.nav.helse.spotlight.AppKt"
-            attributes["Class-Path"] =
-                configurations.runtimeClasspath.get().joinToString(separator = " ") {
-                    it.name
-                }
-        }
-        doLast {
-            configurations.runtimeClasspath.get().forEach {
-                val file = File("${layout.buildDirectory.get()}/libs/${it.name}")
-                if (!file.exists()) it.copyTo(file)
-            }
-        }
-    }
+    testImplementation(libs.wiremock)
+    testImplementation(libs.tbdLibs.rapidsAndRiversTest)
+    testImplementation(libs.testcontainers.postgresql)
+    testImplementation(libs.mockk)
 }

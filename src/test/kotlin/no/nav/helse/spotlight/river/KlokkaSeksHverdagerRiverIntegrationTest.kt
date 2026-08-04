@@ -24,7 +24,7 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
         // Then:
         wireMockSlack.verify(
             postRequestedFor(urlEqualTo("/"))
-                .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
+                .withHeader("Content-Type", equalToIgnoreCase("application/json; charset=UTF-8"))
                 .withHeader("Authorization", equalTo("Bearer ${slackConfiguration.accessToken}"))
                 .withHeader("User-Agent", equalTo("navikt/spotlight")),
         )
@@ -61,7 +61,7 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
         // Then:
         wireMockSlack.verify(
             postRequestedFor(urlEqualTo("/"))
-                .withHeader("Content-Type", equalTo("application/json; charset=UTF-8")),
+                .withHeader("Content-Type", equalToIgnoreCase("application/json; charset=UTF-8")),
         )
         val requestJson =
             wireMockSlack.allServeEvents
@@ -129,7 +129,7 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
         wireMockSlack.verify(
             2,
             postRequestedFor(urlEqualTo("/"))
-                .withHeader("Content-Type", equalTo("application/json; charset=UTF-8")),
+                .withHeader("Content-Type", equalToIgnoreCase("application/json; charset=UTF-8")),
         )
 
         val førsteRequest =

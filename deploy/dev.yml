@@ -6,7 +6,6 @@ metadata:
   name: spotlight
   namespace: tbd
 spec:
-  image: {{image}}
   port: 8080
   replicas:
     min: 1

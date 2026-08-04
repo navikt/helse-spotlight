@@ -1,0 +1,24 @@
+[versions]
+flyway = "11.20.3"
+sasGradlePlugins = "20260804.1151"
+
+[libraries]
+rapidsAndRivers = "com.github.navikt:rapids-and-rivers:2025091914191758284377.e07ac23cddbd"
+
+postgresql = "org.postgresql:postgresql:42.7.9"
+hikaricp = "com.zaxxer:HikariCP:7.0.2"
+flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
+flyway-databasePostgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
+kotliquery = "com.github.seratch:kotliquery:1.9.1"
+micrometer-registryPrometheus = "io.micrometer:micrometer-registry-prometheus:1.16.2"
+
+logback-classic = "ch.qos.logback:logback-classic:1.5.26"
+logback-logstashEncoder = "net.logstash.logback:logstash-logback-encoder:8.1"
+
+mockk = "io.mockk:mockk:1.14.9"
+testcontainers-postgresql = "org.testcontainers:testcontainers-postgresql:2.0.3"
+wiremock = "org.wiremock:wiremock-jetty12:3.13.2"
+tbdLibs-rapidsAndRiversTest = "com.github.navikt.tbd-libs:rapids-and-rivers-test:2025.11.04-10.54-c831038e"
+
+[plugins]
+sas-deployable = { id = "no.nav.helse.sas.sas-deployable", version.ref = "sasGradlePlugins" }
