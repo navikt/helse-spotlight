@@ -1,5 +1,5 @@
 [versions]
-flyway = "13.1.0"
+flyway = "13.2.0"
 sasGradlePlugins = "20260807.0944"
 
 [libraries]
