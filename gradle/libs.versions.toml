@@ -12,7 +12,7 @@ flyway-databasePostgresql = { module = "org.flywaydb:flyway-database-postgresql"
 kotliquery = "com.github.seratch:kotliquery:1.9.1"
 micrometer-registryPrometheus = "io.micrometer:micrometer-registry-prometheus:1.17.0"
 
-logback-classic = "ch.qos.logback:logback-classic:1.6.1"
+logback-classic = "ch.qos.logback:logback-classic:1.6.2"
 logback-logstashEncoder = "net.logstash.logback:logstash-logback-encoder:9.0"
 
 mockk = "io.mockk:mockk:1.14.11"
