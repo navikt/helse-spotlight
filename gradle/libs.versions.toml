@@ -10,7 +10,7 @@ hikaricp = "com.zaxxer:HikariCP:7.1.0"
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
 flyway-databasePostgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
 kotliquery = "com.github.seratch:kotliquery:1.9.1"
-micrometer-registryPrometheus = "io.micrometer:micrometer-registry-prometheus:1.17.0"
+micrometer-registryPrometheus = "io.micrometer:micrometer-registry-prometheus:1.17.1"
 
 logback-classic = "ch.qos.logback:logback-classic:1.6.3"
 logback-logstashEncoder = "net.logstash.logback:logstash-logback-encoder:9.0"
