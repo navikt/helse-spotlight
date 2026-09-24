@@ -3,7 +3,7 @@ flyway = "13.7.0"
 sasGradlePlugins = "20260923.0907"
 
 [libraries]
-rapidsAndRivers = "com.github.navikt:rapids-and-rivers:2025091914191758284377.e07ac23cddbd"
+rapidsAndRivers = "com.github.navikt:rapids-and-rivers:2026091610031789545782"
 
 postgresql = "org.postgresql:postgresql:42.7.13"
 hikaricp = "com.zaxxer:HikariCP:7.1.0"
