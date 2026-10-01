@@ -1,6 +1,6 @@
 [versions]
 flyway = "13.7.0"
-sasGradlePlugins = "20260930.1152"
+sykepengerGradlePlugins = "20261001.1830"
 
 [libraries]
 rapidsAndRivers = "com.github.navikt:rapids-and-rivers:2025091914191758284377.e07ac23cddbd"
@@ -21,4 +21,4 @@ wiremock = "org.wiremock:wiremock-jetty12:3.13.2"
 tbdLibs-rapidsAndRiversTest = "com.github.navikt.tbd-libs:rapids-and-rivers-test:20260930.1309"
 
 [plugins]
-sas-deployable = { id = "no.nav.helse.sas.sas-deployable", version.ref = "sasGradlePlugins" }
+sykepenger-deployable = { id = "no.nav.sykepenger.deployable", version.ref = "sykepengerGradlePlugins" }
