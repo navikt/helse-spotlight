@@ -32,9 +32,9 @@ class HverHalvtimeRiverIntegrationTest : AbstractIntegrationTest() {
 
         assertEquals(sistePartisjonsnøkkel, testRapid.inspektør.key(0))
         val påminnelseMelding = testRapid.inspektør.message(0)
-        assertEquals("kommandokjede_påminnelse", påminnelseMelding["@event_name"].asText())
-        assertEquals(kommandokjede.commandContextId.toString(), påminnelseMelding["commandContextId"].asText())
-        assertEquals(kommandokjede.sisteMeldingId.toString(), påminnelseMelding["meldingId"].asText())
+        assertEquals("kommandokjede_påminnelse", påminnelseMelding["@event_name"].asString())
+        assertEquals(kommandokjede.commandContextId.toString(), påminnelseMelding["commandContextId"].asString())
+        assertEquals(kommandokjede.sisteMeldingId.toString(), påminnelseMelding["meldingId"].asString())
         assertEquals(1, testRapid.inspektør.size)
     }
 

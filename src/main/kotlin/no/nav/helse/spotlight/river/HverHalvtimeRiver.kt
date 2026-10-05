@@ -1,12 +1,12 @@
 package no.nav.helse.spotlight.river
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import no.nav.helse.spotlight.KafkaMeldingsbygger.byggKommandokjedePåminnelse
 import no.nav.helse.spotlight.SuspendertKommandokjede
 import no.nav.helse.spotlight.db.TransactionManager
 import no.nav.helse.spotlight.withMDC
+import tools.jackson.databind.JsonNode
 import java.time.LocalTime
 
 class HverHalvtimeRiver(
@@ -53,4 +53,4 @@ private fun SuspendertKommandokjede.medØktAntallGangerPåminnet(): SuspendertKo
             ),
     )
 
-private fun JsonNode.asLocalTime() = LocalTime.parse(asText())
+private fun JsonNode.asLocalTime() = LocalTime.parse(asString())
