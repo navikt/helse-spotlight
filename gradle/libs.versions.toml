@@ -3,7 +3,7 @@ flyway = "13.8.0"
 sykepengerGradlePlugins = "20261001.1830"
 
 [libraries]
-rapidsAndRivers = "com.github.navikt:rapids-and-rivers:2025091914191758284377.e07ac23cddbd"
+rapidsAndRivers = "com.github.navikt:rapids-and-rivers:2026091610031789545782"
 
 postgresql = "org.postgresql:postgresql:42.7.13"
 hikaricp = "com.zaxxer:HikariCP:7.1.0"
@@ -18,7 +18,7 @@ logback-logstashEncoder = "net.logstash.logback:logstash-logback-encoder:9.0"
 mockk = "io.mockk:mockk:1.14.11"
 testcontainers-postgresql = "org.testcontainers:testcontainers-postgresql:2.0.5"
 wiremock = "org.wiremock:wiremock-jetty12:3.13.2"
-tbdLibs-rapidsAndRiversTest = "com.github.navikt.tbd-libs:rapids-and-rivers-test:20261001.2041"
+tbdLibs-rapidsAndRiversTest = "com.github.navikt.tbd-libs:rapids-and-rivers-test:20261002.1227"
 
 [plugins]
 sykepenger-deployable = { id = "no.nav.sykepenger.deployable", version.ref = "sykepengerGradlePlugins" }
