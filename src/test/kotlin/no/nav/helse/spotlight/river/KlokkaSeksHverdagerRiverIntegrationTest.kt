@@ -1,12 +1,12 @@
 package no.nav.helse.spotlight.river
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import no.nav.helse.spotlight.AbstractIntegrationTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import tools.jackson.databind.JsonNode
+import tools.jackson.module.kotlin.jacksonObjectMapper
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -68,7 +68,7 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
                 .first()
                 .request.bodyAsString
                 .parseJson()
-        assertEquals(slackConfiguration.channel, requestJson["channel"]?.asText())
+        assertEquals(slackConfiguration.channel, requestJson["channel"]?.asString())
         assertEquals(
             """
             [ {
@@ -106,7 +106,7 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
               } ]
             } ]
             """.trimIndent().parseJson().toPrettyString(),
-            requestJson["attachments"]?.asText()?.parseJson()?.toPrettyString(),
+            requestJson["attachments"]?.asString()?.parseJson()?.toPrettyString(),
         )
     }
 
@@ -140,7 +140,7 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
         assertEquals(
             50,
             førsteRequest["attachments"]
-                ?.asText()
+                ?.asString()
                 ?.parseJson()
                 ?.first()
                 ?.get("blocks")
@@ -151,11 +151,11 @@ class KlokkaSeksHverdagerRiverIntegrationTest : AbstractIntegrationTest() {
             wireMockSlack.allServeEvents[0]
                 .request.bodyAsString
                 .parseJson()
-        assertEquals(ts, sisteRequest["thread_ts"]?.asText())
+        assertEquals(ts, sisteRequest["thread_ts"]?.asString())
         assertEquals(
             32,
             sisteRequest["attachments"]
-                ?.asText()
+                ?.asString()
                 ?.parseJson()
                 ?.first()
                 ?.get("blocks")

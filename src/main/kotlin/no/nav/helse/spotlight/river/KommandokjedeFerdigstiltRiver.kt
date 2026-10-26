@@ -16,7 +16,7 @@ class KommandokjedeFerdigstiltRiver(
         message: JsonMessage,
         partisjonsnøkkel: String?,
     ) {
-        val commandContextId = UUID.fromString(message["commandContextId"].asText())
+        val commandContextId = UUID.fromString(message["commandContextId"].asString())
         withMDC(mapOf("commandContextId" to commandContextId)) {
             logg.info("Kommandokjeden er ferdigstilt")
             transactionManager.transaction { dao ->

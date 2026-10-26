@@ -59,7 +59,7 @@ abstract class AbstractSimpleRiver(
         meterRegistry: MeterRegistry,
     ) {
         withMDC(mapOf("river" to javaClass.simpleName)) {
-            val eventName = packet["@event_name"].asText()
+            val eventName = packet["@event_name"].asString()
             logg.info("Mottok $eventName")
             sikkerlogg.info("Mottok $eventName: ${packet.toJson()}")
             håndter(packet, metadata.key)
