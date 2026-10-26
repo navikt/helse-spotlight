@@ -1,7 +1,7 @@
 package no.nav.helse.spotlight.slack
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.nav.helse.spotlight.SuspendertKommandokjede
+import tools.jackson.module.kotlin.jacksonObjectMapper
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter

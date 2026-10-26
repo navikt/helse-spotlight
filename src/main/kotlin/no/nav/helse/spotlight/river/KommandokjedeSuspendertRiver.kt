@@ -32,10 +32,10 @@ class KommandokjedeSuspendertRiver(
             logg.error("Støtter ikke å behandle melding om suspendert kommandokjede som mangler partisjonsnøkkel")
             return
         }
-        val commandContextId = UUID.fromString(message["commandContextId"].asText())
+        val commandContextId = UUID.fromString(message["commandContextId"].asString())
         withMDC(mapOf("commandContextId" to commandContextId)) {
-            val meldingId = UUID.fromString(message["meldingId"].asText())
-            val command = message["command"].asText()
+            val meldingId = UUID.fromString(message["meldingId"].asString())
+            val command = message["command"].asString()
             val sti = message["sti"].toPrettyString()
             val opprettetTidspunkt =
                 message["@opprettet"].asLocalDateTime().atZone(ZoneId.of("Europe/Oslo")).toInstant()

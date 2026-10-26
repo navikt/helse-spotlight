@@ -1,12 +1,12 @@
 package no.nav.helse.spotlight.slack
 
-import com.fasterxml.jackson.databind.JsonNode
 import no.nav.helse.spotlight.Configuration
 import no.nav.helse.spotlight.SuspendertKommandokjede
 import no.nav.helse.spotlight.objectMapper
 import no.nav.helse.spotlight.slack.SlackMeldingsbygger.byggTrådMedAttachments
 import no.nav.helse.spotlight.slack.SlackMeldingsbygger.gladmelding
 import org.slf4j.LoggerFactory
+import tools.jackson.databind.JsonNode
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -45,7 +45,7 @@ class SlackClient(
         val attachmentsSomMåITråd = attachmentsTråd.drop(1)
         if (attachmentsSomMåITråd.isNotEmpty()) {
             val threadTs =
-                response["ts"]?.asText()
+                response["ts"]?.asString()
                     ?: error("Fikk ingen tråd-ID i svar fra Slack, kan ikke poste resterende kommandokjeder")
             attachmentsSomMåITråd.forEach { attachments ->
                 logg.info("Poster melding i tråd til Slack med ytterligere kommandokjeder som sitter fast")
