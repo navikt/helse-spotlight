@@ -1,6 +1,6 @@
 [versions]
 flyway = "13.11.1"
-sykepengerGradlePlugins = "20261028.1441"
+sykepengerGradlePlugins = "20261029.1945"
 
 [libraries]
 rapidsAndRivers = "com.github.navikt:rapids-and-rivers:2026091610031789545782"
@@ -10,7 +10,7 @@ hikaricp = "com.zaxxer:HikariCP:7.1.0"
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
 flyway-databasePostgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
 kotliquery = "com.github.seratch:kotliquery:1.9.1"
-micrometer-registryPrometheus = "io.micrometer:micrometer-registry-prometheus:1.17.1"
+micrometer-registryPrometheus = "io.micrometer:micrometer-registry-prometheus:1.17.2"
 
 logback-classic = "ch.qos.logback:logback-classic:1.6.5"
 logback-logstashEncoder = "net.logstash.logback:logstash-logback-encoder:9.0"
@@ -18,7 +18,7 @@ logback-logstashEncoder = "net.logstash.logback:logstash-logback-encoder:9.0"
 mockk = "io.mockk:mockk:1.14.11"
 testcontainers-postgresql = "org.testcontainers:testcontainers-postgresql:2.0.5"
 wiremock = "org.wiremock:wiremock-jetty12:3.13.2"
-tbdLibs-rapidsAndRiversTest = "com.github.navikt.tbd-libs:rapids-and-rivers-test:20261013.1613"
+tbdLibs-rapidsAndRiversTest = "com.github.navikt.tbd-libs:rapids-and-rivers-test:20261029.1843"
 
 [plugins]
 sykepenger-deployable = { id = "no.nav.sykepenger.deployable", version.ref = "sykepengerGradlePlugins" }
