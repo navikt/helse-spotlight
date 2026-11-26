@@ -18,7 +18,7 @@ logback-logstashEncoder = "net.logstash.logback:logstash-logback-encoder:9.0"
 mockk = "io.mockk:mockk:1.14.12"
 testcontainers-postgresql = "org.testcontainers:testcontainers-postgresql:2.0.5"
 wiremock = "org.wiremock:wiremock-jetty12:3.13.2"
-tbdLibs-rapidsAndRiversTest = "com.github.navikt.tbd-libs:rapids-and-rivers-test:20261123.1112"
+tbdLibs-rapidsAndRiversTest = "com.github.navikt.tbd-libs:rapids-and-rivers-test:20261125.1015"
 
 [plugins]
 sykepenger-deployable = { id = "no.nav.sykepenger.deployable", version.ref = "sykepengerGradlePlugins" }
