@@ -1,18 +1,18 @@
 [versions]
-flyway = "13.12.2"
+flyway = "13.13.0"
 sykepengerGradlePlugins = "20261029.1945"
 
 [libraries]
-rapidsAndRivers = "com.github.navikt:rapids-and-rivers:2026110308421793691732"
+rapidsAndRivers = "com.github.navikt:rapids-and-rivers:2026111908531795074794"
 
 postgresql = "org.postgresql:postgresql:42.7.14"
 hikaricp = "com.zaxxer:HikariCP:7.1.0"
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
 flyway-databasePostgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
 kotliquery = "com.github.seratch:kotliquery:1.9.1"
-micrometer-registryPrometheus = "io.micrometer:micrometer-registry-prometheus:1.17.2"
+micrometer-registryPrometheus = "io.micrometer:micrometer-registry-prometheus:1.18.0"
 
-logback-classic = "ch.qos.logback:logback-classic:1.6.7"
+logback-classic = "ch.qos.logback:logback-classic:1.6.8"
 logback-logstashEncoder = "net.logstash.logback:logstash-logback-encoder:9.0"
 
 mockk = "io.mockk:mockk:1.14.12"
